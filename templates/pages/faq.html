@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}TUFIDCO Schemes | FAQ{% endblock %}
+{% block content %}
+  {% include 'includes/header.html' %}
+  <div class="container tm-container-content tm-mt-60">
+    <div class="contain-box">
+      <h2 class="tm-text-primary">KNMT</h2>
+      <div class="accordion" id="myAccordion" >
+        {% for i in Scheme_name %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ i.question_id }}">
+            <button type="button" class="accordion-button accordion-button-style collapsed" data-bs-toggle="collapse" data-bs-target="#collapse{{ i.question_id }}">{{ i.question }}</button>
+          </h2>
+          <div id="collapse{{ i.question_id }}" class="accordion-collapse collapse " data-bs-parent="#myAccordion">
+            <div class="card-body">
+              <p>{{ i.answer|linebreaks  }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="contain-box">
+      <h2 class="tm-text-primary">Singara Chennai 2.0</h2>
+      <div class="accordion" id="myAccordion" >
+        {% for i in scheme_name2 %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ i.question_id }}">
+            <button type="button" class="accordion-button accordion-button-style collapsed" data-bs-toggle="collapse" data-bs-target="#collapse{{ i.question_id }}">{{ i.question }}</button>
+          </h2>
+          <div id="collapse{{ i.question_id }}" class="accordion-collapse collapse " data-bs-parent="#myAccordion">
+            <div class="card-body">
+              <p>{{ i.answer|linebreaks}}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% include 'includes/footer.html' %}
+{% endblock %}

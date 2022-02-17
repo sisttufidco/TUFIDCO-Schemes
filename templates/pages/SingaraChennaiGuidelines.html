@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% url 'SChennai2.0' as Singara_Chennai_url %}
+{% block title %}Singara Chennai 2.0 | Guidelines{% endblock %}
+{% block content %}
+  {% include 'includes/header.html' %}
+  <div class="container container-scheme">
+     <div class="row">
+        <div class="col-sm-4">
+          <div class="scheme-link">
+            <div class="con">&nbsp;<i class="icon fa fa-eye"></i><a class="scheme-href{% if request.path ==  Singara_Chennai_url%}active-text{% endif %}" href="{% url 'SChennai2.0' %}">At glance</a></div>
+            <div class="con">&nbsp;<i class="icon fa fa-book"></i><a class="scheme-href" href="{% url 'SChennaiGuidelines' %}">Guidelines</a></div>
+            <div class="con">&nbsp;<i class="icon fa fa-user"></i><a class="scheme-href{% if request.path == knmtAS_url %}active-text{% endif %}" href="{% url 'SChennaiAS' %}">Administrative Sanction</a></div>
+          </div>
+        </div>
+       <div class="col-sm-8">
+           {% for i in scheme %}
+           <h1 class="scheme-h1">{{ i.name }}</h1>
+           <h2>Guidelines</h2>
+           <p class="scheme-p">
+             <span>Introduction<br><br></span>
+             {{ i.introduction }}
+           </p>
+           &raquo;&nbsp;<span  style="font-family: 'palatinolinotype';"></span> &nbsp;<a href="{{ i.pdf_guidelines }}" download style="text-decoration: none;">{{ i.pdf_guidelines2 }}&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a>
+         {% endfor %}
+       </div>
+     </div>
+  </div>
+  {% include 'includes/footer.html' %}
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Admin Login{% endblock %}
+{% block extrastyle %}
+<style>
+    .form-control {
+  background: #f4f7fa;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  background: #f4f7fa;
+}
+
+.form-control::-moz-placeholder {
+  color: #aaaeb3;
+  opacity: 1;
+}
+.custom-select:-ms-input-placeholder,
+.form-control:-ms-input-placeholder {
+  color: #aaaeb3;
+}
+.form-control::-webkit-input-placeholder {
+  color: #aaaeb3;
+}
+
+.input-group {
+  background: #f4f7fa;
+}
+.input-group .input-group-text {
+  padding-left: 15px;
+  padding-right: 15px;
+  background: transparent;
+}
+.input-group .input-group-text i {
+  font-size: 20px;
+}
+.input-group .custom-file-label {
+  margin-bottom: 0;
+}
+.input-group .btn {
+  margin-bottom: 0;
+  margin-right: 0;
+}
+.form-control {
+  background: #f4f7fa !important;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+.form-control:focus {
+  background: #f4f7fa;
+  border-color: rgba(20, 95, 142, 0.65);
+  box-shadow: 0 0 5px #145F8E!important;
+}
+.form-control::-moz-placeholder {
+  color: #aaaeb3;
+  opacity: 1;
+}
+.form-control:-ms-input-placeholder {
+  color: #aaaeb3;
+}
+.form-control::-webkit-input-placeholder {
+  color: #aaaeb3;
+}
+</style>
+{% endblock %}
+{% block content %}
+  <div class="auth-wrapper">
+    <div class="auth-content">
+      <div class="auth-bg">
+        <span class="r"></span>
+        <span class="r s"></span>
+        <span class="r s"></span>
+        <span class="r"></span>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <br><br>
+          <div class="mb-4">
+            <i class="fa fa-unlock auth-icon"></i>
+          </div>
+          <h3 class="mb-4">Login</h3>
+          <form role="form" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <input type="text" name="username" placeholder="Username" class="form-control"  required="" id="id_username">
+            </div>
+            <div class="input-group mb-4">
+              <input type="password" name="password" placeholder="Password" class="form-control" required="" id="id_password">
+            </div>
+            {% if form.non_field_errors %}
+                <div class='form-errors'>
+                  {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                      Wrong Username or Password<br>Please enter again! or Click on <a class="forgotPass" href="#">forgot password?</a>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            <button type="submit" name="login" class="btn btn-grad mb-4">Login</button>
+          </form>
+          <br><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

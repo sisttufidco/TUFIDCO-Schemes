@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% url 'knmt' as knmtatglance_url %}
+{% url 'knmtAS' as knmtAS_url %}
+{% block title %}TUFIDCO Schemes | KNMT{% endblock %}
+{% block content %}
+  {% include 'includes/header.html' %}
+  <div class="container container-scheme">
+     <div class="row">
+        <div class="col-sm-4">
+          <div class="scheme-link">
+            <div class="con">&nbsp;<i class="icon fa fa-eye"></i><a class="scheme-href{% if request.path == knmtatglance_url %}active-text{% endif %}" href="{% url 'knmt' %}">At glance</a></div>
+            <div class="con">&nbsp;<i class="icon fa fa-book"></i><a class="scheme-href" href="{% url 'knmt_g' %}">Guidelines</a></div>
+            <div class="con">&nbsp;<i class="icon fa fa-user"></i><a class="scheme-href{% if request.path == knmtAS_url %}active-text{% endif %}" href="{% url 'knmtAS' %}">Administrative Sanction</a></div>
+          </div>
+        </div>
+       <div class="col-sm-8">
+        <h1 class="scheme-h1">Kalaignar Nagarpura Mempattu Thittam (KNMT)</h1>
+         <h2>AT GLANCE</h2>
+         <p class="scheme-p">
+           <span>Introduction<br><br></span>
+           In Tamil Nadu, there are 14 Corporations (except Greater Chennal Corporation), 121 Municipalities and 528 Town Panchayats. Many schemes taken up in the recent years such as Smart Cities Mission, AMRUT are aimed at improving the infrastructure facilities of Corporations and major towns alone. Smart Cities Mission is being implemented only in 11 Corporations. AMRUT is also being implemented in 28 Towns only. The coverage of schemes in Corporations is relatively high when compared to Municipalities and Town Panchayats. Hence it has been decided to introduce a new Scheme "Kalaignar Nagarpura Mempattu Thittam"(KNMT) in all 121 Municipalities and 528 Town Panchayats so as to fulfil the infrastructural gaps in these Urban Local Bodies.</p>
+
+
+   &raquo;&nbsp;<span  style="font-family: 'palatinolinotype';;"></span> &nbsp;<a href="KNMT ADD.pdf" download style="text-decoration: none;">Download the ppt&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
+
+   &raquo;&nbsp;<span style="font-family: 'palatinolinotype';;" ></span>&nbsp; <a href="KNMT ADD2.pdf" download style="text-decoration: none;">Download the pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
+    </div>
+
+  </div>
+  </div>
+  {% include 'includes/footer.html' %}
+{% endblock %}

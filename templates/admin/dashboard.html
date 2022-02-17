@@ -1,0 +1,1534 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+  <style>
+      .object-tools a.addlink {
+          display: none;
+      }
+  </style>
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" >
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+{% endblock %}
+{% block result_list %}
+{% for group in request.user.groups.all %}
+  {% if group.name == 'Admin' or group.name == 'CMD_DGM' %}
+    <div id="carousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner carousel-t">
+        <div class="carousel-item active">
+          <div class="row row-card">
+            <p class="p-details">KNMT Project Details - Overall</p>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p class="card-title">Total Projects</p>
+                  <h3 class="card-info"> {{ total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p class="card-title">Total Cost</p>
+                  <h3 class="card-info">&#8377; {{ project_cost.project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p class="card-title">KNMT Share</p>
+                  <h3 class="card-info">&#8377; {{ knmt.knmt_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p class="card-title">ULB Share</p>
+                  <h3 class="card-info">&#8377; {{ ulb_share.ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row row-card">
+            <p class="p-details">KNMT Project Details - Directorate of Municipalities</p>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p class="card-title">Total Projects</p>
+                  <h3 class="card-info"> {{ dmp_total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p class="card-title">Total Cost</p>
+                  <h3 class="card-info"> &#8377; {{ dmp_project_cost.dmp_project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p class="card-title">KNMT Share</p>
+                  <h3 class="card-info">&#8377; {{ dmp_knmt.dmp_knmt }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p class="card-title">ULB Share</p>
+                  <h3 class="card-info">&#8377; {{ dmp_ulb_share.dmp_ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row row-card">
+            <h3 class="p-details">KNMT Project Details - Commissionerate of Town Panchayats</h3>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p class="card-title">Total Projects</p>
+                  <h3 class="card-info"> {{ ctp_total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p class="card-title">Total Cost</p>
+                  <h3 class="card-info">&#8377; {{ ctp_project_cost.ctp_project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p class="card-title">KNMT Share</p>
+                  <h3 class="card-info">&#8377; {{ ctp_knmt.ctp_knmt }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p class="card-title">ULB Share</p>
+                  <h3 class="card-info">&#8377; {{ ctp_ulb_share.ctp_ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="charts">
+        <div class="row">
+            <div class="col piechart pl-150" style="margin-left:13px;">
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall</p>
+                <div id="pieSector"></div>
+            </div>
+            <div class="col piechart pl-150" style="margin-right:13px;">
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall</p>
+                <div id="donutSector"></div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="charts">
+        <div class="row">
+            <div class="col piechart pl-150" style="margin-left:13px;">
+                <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Directorate of Municipalities</p>
+                <div id="pieSectorDMA"></div>
+            </div>
+            <div class="col piechart pl-150" style="margin-right:13px;">
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Directorate of Municipalities</p>
+                <div id="donutSectoDMA"></div>
+            </div>
+        </div>
+    </div>     
+    <div class="charts">
+        <div class="row">
+            <div class="col piechart pl-150" style="margin-left:13px;">
+                <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats</p>
+                <div id="pieSectorCTP"></div>
+            </div>
+            <div class="col piechart pl-150" style="margin-right:13px;">
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Commissionerate of Town Panchayats</p>
+                <div id="donutSectorCTP"></div>
+            </div>
+        </div>
+    </div>             
+    <div id="carousels" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active"> 
+          <div class="row row-card">
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Overall</p>
+            <div id="SectorProjectCost" class="pl-230"></div>
+            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row row-card">
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Directorate of Municipal Administration</p>
+            <div id="SectorProjectCostDMA" class="pl-230"></div>
+            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row row-card">
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats</p>
+            <div id="SectorProjectCostCTP" class="pl-230"></div>
+            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row row-card2 table-sector">
+      <table class="border-grey" style="border-radius:5px;">
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Projects Sanctioned - Cost in lakhs</p>
+        <col>
+          <colgroup span="2"></colgroup>
+          <colgroup span="2"></colgroup>
+          <tr class="border-grey">
+            <th class="border-grey th-t1-center">S.No</th>
+            <th class="border-grey th-t1-center">Name of the Sector</th>
+            <th class="border-grey th-t1-center"  colspan="3">Overall</th>
+            <th class="border-grey th-t1-center" colspan="3">DMA</th>
+            <th class="border-grey th-t1-center" colspan="3">CTP</th> 
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right" colspan="1" scope="colgroup">No. of Works</th>
+          <th class="border-grey th-t2-center" colspan="2" scope="col">Project Cost</th>
+          <th class="border-grey th-t2-right" scope="col">No of Works</th>
+          <th class="border-grey th-t2-center" colspan="2" scope="col">Project Cost</th>
+          <th class="border-grey th-t2-right" scope="col">No. of Works</th>
+          <th class="border-grey th-t2-center" colspan="2" scope="col">Project Cost</th>
+        </tr>
+        <tr class="border-grey">
+            <th class="border-grey th-t3-right"></th>
+            <th class="border-grey th-t3-right"></th>
+            <th class="border-grey th-t3-right"></th>
+            <th class="border-grey th-t3-right" scope="col">Rs. in Lakhs</th>
+            <th class="border-grey th-t3-right" scope="col">Percentage</th>
+            <th class="border-grey th-t3-right" scope="col"></th>
+            <th class="border-grey th-t3-right" scope="col">Rs. in Lakhs</th>
+            <th class="border-grey th-t3-right" scope="col">Percentage</th>
+            <th class="border-grey th-t3-right" scope="col"></th>
+            <th class="border-grey th-t3-right" scope="col">Rs. in Lakhs</th>
+            <th class="border-grey th-t3-right" scope="col">Percentage</th>
+          </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">1</td>
+            <td class="border-grey" style="text-align:center">Bus Stand</td>
+            <td class="border-grey" style="text-align:right">{{ busstand_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ busstand.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ busstand_percentage }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ busstandDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ busstandDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMAbusstand_percentage }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ busstandCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ busstandCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPbusstand_percentage }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">2</td>
+            <td class="border-grey" style="text-align:center">Community Hall</td>
+            <td class="border-grey" style="text-align:right">{{ ch_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ ch.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ ch_percent }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ chDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ chDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMAch_percent }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ chCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ chCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPch_percent }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">3</td>
+            <td class="border-grey" style="text-align:center">Crematorium</td>
+            <td class="border-grey" style="text-align:right">{{ crematorium_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ crematorium.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ crematorium_pt }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ crematoriumDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ crematoriumDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMAcrematorium_pt }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ crematoriumCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ crematoriumCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPcrematorium_pt }} &percnt;</td> 
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">4</td>
+            <td class="border-grey" style="text-align:center">Knowledge Centre</td>
+            <td class="border-grey" style="text-align:right">{{ KC_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ KC.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ KC_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ KCDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ KCDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMAKC_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ KCCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ KCCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPKC_pt }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">5</td>
+            <td class="border-grey" style="text-align:center">Market</td>
+            <td class="border-grey" style="text-align:right">{{ market_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ market.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ market_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ marketDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ marketDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMAmarket_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ marketCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ marketCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPmarket_pt }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">6</td>
+            <td class="border-grey" style="text-align:center">Park</td>
+            <td class="border-grey" style="text-align:right">{{ park_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ park.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ park_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ parkDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ parkDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMApark_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ parkCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ parkCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPpark_pt }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+          <td class="border-grey" style="text-align:right">7</td>
+          <td class="border-grey" style="text-align:center">Road Works</td>
+          <td class="border-grey" style="text-align:right">{{ road_total }}</td>
+          <td class="border-grey" style="text-align:right">&#8377; {{ road.project_cost }}</td> 
+          <td class="border-grey" style="text-align:right">{{ road_pt }} &percnt;</td>
+          <td class="border-grey" style="text-align:right">{{ roadDMA_total }}</td>
+          <td class="border-grey" style="text-align:right">&#8377; {{ roadDMA.project_cost }}</td>
+          <td class="border-grey" style="text-align:right">{{ DMAroad_pt }} &percnt;</td>
+          <td class="border-grey" style="text-align:right">{{ roadCTP_total }}</td>
+          <td class="border-grey" style="text-align:right">&#8377; {{ roadCTP.project_cost }}</td>
+          <td class="border-grey" style="text-align:right">{{ CTProad_pt }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">8</td>
+            <td class="border-grey" style="text-align:center">Solid Waste Mgt.</td>
+            <td class="border-grey" style="text-align:right">{{ SWM_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ SWM.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ SWM_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ SWMDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ SWMDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMASWM_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ SWMCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ SWMCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPSWM_pt }} &percnt;</td>
+        </tr>
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">9</td>
+            <td class="border-grey" style="text-align:center">Water Bodies</td>
+            <td class="border-grey" style="text-align:right">{{ WB_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ WB.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">{{ WB_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ WBDMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ WBDMA.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMAWB_pt }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ WBCTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ WBCTP.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTPWB_pt }} &percnt;</td>
+        </tr>
+        <tr class="border-grey" style="font-weight:bold; border-top:2px solid #DDDDDD;">
+            <td class="border-grey" ></td>
+            <td class="border-grey" style="text-align:right">Total </td>
+            <td class="border-grey" style="text-align:right">{{ total_projects }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ project_cost.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">100 &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ dmp_total_projects }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ dmp_project_cost.dmp_project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ DMA_total_percent }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ ctp_total_projects }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ ctp_project_cost.ctp_project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ CTP_total_percent }} &percnt;</td> 
+        </tr>
+      </table>
+      <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam Crash Barrier.</p>
+    </div>
+    <div class="row-card2 table-sector">
+      <div id="map"></div>
+    </div>
+    <script>
+	    mapboxgl.accessToken = 'pk.eyJ1IjoiYXJ5YW5iaGF0dDEwMDIiLCJhIjoiY2tqaDFmcnloNDFpYTJybnFvbmk0cTliNyJ9.ImW_FZl5b1VBm1bYaLyziA';
+      var map = new mapboxgl.Map({
+          container: 'map',
+          style: 'mapbox://styles/mapbox/outdoors-v11',
+          center: [78.7,10.7801579], // starting position
+          zoom: 6.3 // starting zoom
+      });
+      // Set marker options.
+      map.addControl(new mapboxgl.NavigationControl());
+      // Add geolocate control to the map.
+      map.addControl(
+          new mapboxgl.GeolocateControl({
+              positionOptions: {
+                enableHighAccuracy: true
+              },
+              // When active the map will receive updates to the device's location as it changes.
+              trackUserLocation: true,
+              // Draw an arrow next to the location dot to indicate which direction the device is heading.
+              showUserHeading: true
+          })
+      );
+      map.on('load', () => {
+          map.addSource('places', {
+              'type': 'geojson',
+              'data': {
+                  'type': 'FeatureCollection',
+                  'features': [{
+                      'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Coimbatore</strong><br><br><strong>Project Cost : </strong>&#8377; {{ coimbatore_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ coimbatore_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [76.96355, 10.9998]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Chengalpattu</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Chengalpattu_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Chengalpattu_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.78898, 12.3165205]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Ariyalur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Ariyalur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Ariyalur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.5331827, 10.9032295]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Chengalpet</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Chengalpet_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Chengalpet_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.9624581, 12.6730563]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Cuddalore</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Cuddalore_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Cuddalore_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.7491655, 11.7509064]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Dharmapuri</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Dharmapuri_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Dharmapuri_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.13, 12.09]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Dindigul</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Dindigul_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Dindigul_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.96, 10.4]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Erode</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Erode_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Erode_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.71, 11.3410]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Kallakurichi</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Kallakurichi_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Kallakurichi_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.96, 11.73]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Kancheepuram</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Kancheepuram_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Kancheepuram_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.7036402, 12.8341735]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Kanyakumari</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Kanyakumari_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Kanyakumari_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.54993, 8.11925]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Karur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Karur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Karur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.076604, 10.960078]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Krishnagiri</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Krishnagiri_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Krishnagiri_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.19, 12.51]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Madurai</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Madurai_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Madurai_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.119775, 9.925201]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Mayiladuthurai</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Mayiladuthurai_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Mayiladuthurai_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.652222, 11.10184]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Nagapattinam</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Nagapattinam_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Nagapattinam_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.8428, 10.7906]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Namakkal</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Namakkal_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Namakkal_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.167724, 11.219439]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Nilgiris</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Nilgiris_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Nilgiris_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [76.683334, 11.416667]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Perambalur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Perambalur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Perambalur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.879997, 11.230000]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Pudukkottai</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Pudukkottai_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Pudukkottai_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.820847, 10.379663]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Ramanathapuram</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Ramanathapuram_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Ramanathapuram_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.8308, 9.3716]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Ranipet</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Ranipet_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Ranipet_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.303085, 12.9597595]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Salem</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Salem_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Salem_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.146011, 11.664325]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Tenkasi</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Tenkasi_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Tenkasi_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.3, 8.97]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Thanjavur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Thanjavur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Thanjavur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.137827, 10.786999]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Theni</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Theni_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Theni_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.476814, 10.010366]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Thirupathur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Thirupathur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Thirupathur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.560196, 12.498351]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Thiruvallur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Thiruvallur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Thiruvallur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.894005, 13.144443]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Thiruvannamalai</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Thiruvannamalai_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Thiruvannamalai_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.0747, 12.2253]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Thoothukudi</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Thoothukudi_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Thoothukudi_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.1348, 8.7642]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Tiruchirappalli</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Tiruchirappalli_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Tiruchirappalli_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.7047, 10.7905]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Tirunelveli</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Tirunelveli_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Tirunelveli_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.7567, 8.7139]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Thiruvarur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Thiruvarur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Thiruvarur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.6344, 10.7661]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Tirupathur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Tirupathur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Tirupathur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.5678, 12.4950]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Tiruppur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Tiruppur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Tiruppur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.3411, 11.1085]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Trichy</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Trichy_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Trichy_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [78.7047, 10.7905]
+                    }
+                },	
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Trivallur</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Trivallur_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Trivallur_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.9120, 13.1231]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Vellore</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Vellore_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Vellore_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.1325, 12.9165]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Villupuram</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Villupuram_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Villupuram_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [79.4861, 11.9401]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':'<p><strong>Virudhunagar</strong><br><br><strong>Project Cost : </strong>&#8377; {{ Virudhunagar_project_cost.project_cost }}<br><strong>Total No of Works : </strong> {{ Virudhunagar_total_projects }}</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [77.9624, 9.5680]
+                    }
+                },
+                ]
+            }
+         });
+        // Add a layer showing the places.
+        map.addLayer({
+        'id': 'places',
+        'type': 'circle',
+        'source': 'places',
+        'paint': {
+        'circle-color': '#145F8E',
+        'circle-radius': 8,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff'
+        }
+        });
+         
+        // Create a popup, but don't add it to the map yet.
+        const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+        });
+         
+        map.on('mouseenter', 'places', (e) => {
+        // Change the cursor style as a UI indicator.
+        map.getCanvas().style.cursor = 'pointer';
+         
+        // Copy coordinates array.
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+         
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+         
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+        });
+         
+        map.on('mouseleave', 'places', () => {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+        });
+        });
+</script>
+<script>
+    var options = {
+        series: [{% for i, j in donut_chart_sectorDMA.items %} {{ j }}, {% endfor %}],
+        dataLabels: {
+            formatter: function(val, opts){
+                return opts.w.config.series[opts.seriesIndex]
+            },
+        },
+        chart: {
+            width: 410,
+            type: 'donut',
+            toolbar: {
+                show: true
+              }
+            
+        },
+        theme:{
+            palette: 'palette2',
+        },
+        plotOptions:{
+            pie:{
+                donut:{
+                    labels:{
+                        show: true,
+                    },
+                    total: {
+                        showAlways: true,
+                        label: 'Total',
+                        fontSize: '22px',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        fontWeight: 600,
+                        color: '#373d3f',
+                        formatter: function (w) {
+                            return w.globals.seriesTotals.reduce((a, b) => {
+                                return a + b
+                            }, 0)
+                        },
+                    },
+                },
+            },
+        },
+        labels: [{% for i, j in donut_chart_sectorDMA.items %} '{{ i }}', {% endfor %}],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#donutSectoDMA"), options);
+    chart.render();
+</script>
+<script>
+    var options = {
+        series: [{% for i, j in donut_chart_CTP.items %} {{ j }}, {% endfor %}],
+        dataLabels: {
+            formatter: function(val, opts){
+                return opts.w.config.series[opts.seriesIndex]
+            },
+        },
+        chart: {
+            width: 410,
+            type: 'donut',
+            toolbar: {
+                show: true
+              }
+            
+        },
+        theme:{
+            palette: 'palette2',
+        },
+        plotOptions:{
+            pie:{
+                donut:{
+                    labels:{
+                        show: true,
+                    },
+                    total: {
+                        showAlways: true,
+                        label: 'Total',
+                        fontSize: '22px',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        fontWeight: 600,
+                        color: '#373d3f',
+                        formatter: function (w) {
+                            return w.globals.seriesTotals.reduce((a, b) => {
+                                return a + b
+                            }, 0)
+                        },
+                    },
+                },
+            },
+        },
+        labels: [{% for i, j in donut_chart_CTP.items %} '{{ i }}', {% endfor %}],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#donutSectorCTP"), options);
+    chart.render();
+</script>
+<script>
+    var options = {
+        series: [{% for i, j in pie_chart_CTP.items %} {{ j }}, {% endfor %}],
+        chart: {
+        width: 410,
+        type: 'pie',
+        toolbar: {
+            show: true
+          }
+        
+        
+      },  
+      labels: [{% for i, j in pie_chart_CTP.items %} '{{ i }}', {% endfor %}],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+      };
+      var chart = new ApexCharts(document.querySelector("#pieSectorCTP"), options);
+      chart.render();
+</script>
+<script>
+    var options = {
+        series: [{% for i, j in donut_chart_sector.items %} {{ j }}, {% endfor %}],
+        dataLabels: {
+            formatter: function(val, opts){
+                return opts.w.config.series[opts.seriesIndex]
+            },
+        },
+        chart: {
+            width: 410,
+            type: 'donut',
+            toolbar: {
+                show: true
+              }
+            
+        },
+        theme:{
+            palette: 'palette2',
+        },
+        plotOptions:{
+            pie:{
+                donut:{
+                    labels:{
+                        show: true,
+                    },
+                    total: {
+                        showAlways: true,
+                        label: 'Total',
+                        fontSize: '22px',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        fontWeight: 600,
+                        color: '#373d3f',
+                        formatter: function (w) {
+                            return w.globals.seriesTotals.reduce((a, b) => {
+                                return a + b
+                            }, 0)
+                        },
+                    },
+                },
+            },
+        },
+        labels: [{% for i, j in donut_chart_sector.items %} '{{ i }}', {% endfor %}],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                
+            }
+        }]
+    };
+
+    var chart = new ApexCharts(document.querySelector("#donutSector"), options);
+    chart.render();
+</script>
+
+<script>
+    var options = {
+        series: [{% for i, j in pie_chart_sectorDMA.items %} {{ j }}, {% endfor %}],
+        chart: {
+        width: 410,
+        type: 'pie',
+        toolbar: {
+            show: true
+          }
+        
+        
+      },  
+      labels: [{% for i, j in pie_chart_sectorDMA.items %} '{{ i }}', {% endfor %}],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+      };
+      var chart = new ApexCharts(document.querySelector("#pieSectorDMA"), options);
+      chart.render();
+</script>
+<script>
+    var options = {
+        series: [{% for i, j in pie_chart_sector.items %} {{ j }}, {% endfor %}],
+        chart: {
+        width: 410,
+        type: 'pie',
+        toolbar: {
+            show: true
+          }
+        
+      },  
+      labels: [{% for i, j in pie_chart_sector.items %} '{{ i }}', {% endfor %}],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+      };
+      var chart = new ApexCharts(document.querySelector("#pieSector"), options);
+      chart.render();
+</script>
+<script>
+    var options = 
+    {
+        series: [
+        {
+            name: 'Cost',
+            data: [{{ road.project_cost }},{% for row in sectorbarchartCTP %} {{row.project_cost}}, {% endfor %}]
+        }],
+        chart: 
+        {
+            height: 380,
+            width:900,
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                distributed: true,
+                dataLabels: {
+                    position: 'top', // top, center, bottom
+                    enabled: false
+                },
+            }
+        },
+        legend: {
+            show:false,
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            },
+            offsetY: -20,
+            style: {
+                fontSize: '12px',
+                colors: ["#304758"]
+            }
+        },
+      
+        xaxis: {
+            categories: ["Road Works", {% for row in sectorbarchartCTP %} "{{ row.Sector }}", {% endfor %}],
+            axisBorder: {
+                show: true
+            },
+            axisTicks: {
+                show: false
+            },
+            title: {
+                text: 'Name of the Sector',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Cost',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            },
+            axisBorder: {
+            show: false
+        },
+        axisTicks: {
+            show: false,
+        },
+        labels: {
+            show: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            }
+        }
+        },
+    };
+    var chart = new ApexCharts(document.querySelector("#SectorProjectCostCTP"), options);
+    chart.render();
+    
+</script>  
+<script>
+    var options = 
+    {
+        series: [
+        {
+            name: 'Cost',
+            data: [{{ roadDMA.project_cost }},{% for row in sectorbarchartDMA %} {{row.project_cost}}, {% endfor %}]
+        }],
+        chart: 
+        {
+            height: 380,
+            width:900,
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                distributed: true,
+                dataLabels: {
+                    position: 'top', // top, center, bottom
+                    enabled: false
+                },
+            }
+        },
+        legend: {
+            show:false,
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            },
+            offsetY: -20,
+            style: {
+                fontSize: '12px',
+                colors: ["#304758"]
+            }
+        },
+      
+        xaxis: {
+            categories: ["Road Works", {% for row in sectorbarchartDMA %} "{{ row.Sector }}", {% endfor %}],
+            axisBorder: {
+                show: true
+            },
+            axisTicks: {
+                show: false
+            },
+            title: {
+                text: 'Name of the Sector',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Cost',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            },
+            axisBorder: {
+            show: false
+        },
+        axisTicks: {
+            show: false,
+        },
+        labels: {
+            show: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            }
+        }
+        },
+    };
+    var chart = new ApexCharts(document.querySelector("#SectorProjectCostDMA"), options);
+    chart.render();
+    
+</script>
+<script>
+    var options = 
+    {
+        series: [
+        {
+            name: 'Cost',
+            data: [{{ road.project_cost }},{% for row in sectorbarchart %} {{row.project_cost}}, {% endfor %}]
+        }],
+        chart: 
+        {
+            height: 380,
+            width:900,
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                distributed: true,
+                dataLabels: {
+                    position: 'top', // top, center, bottom
+                    enabled: false
+                },
+            }
+        },
+        legend: {
+            show:false,
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            },
+            offsetY: -20,
+            style: {
+                fontSize: '12px',
+                colors: ["#304758"]
+            }
+        },
+      
+        xaxis: {
+            categories: ["Road Works", {% for row in sectorbarchart %} "{{ row.Sector }}", {% endfor %}],
+            axisBorder: {
+                show: true
+            },
+            axisTicks: {
+                show: false
+            },
+            title: {
+                text: 'Name of the Sector',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Cost',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            },
+            axisBorder: {
+            show: false
+        },
+        axisTicks: {
+            show: false,
+        },
+        labels: {
+            show: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            }
+        }
+        },
+    };
+
+
+    var chart = new ApexCharts(document.querySelector("#SectorProjectCost"), options);
+    chart.render();
+    
+</script>
+    {% elif group.name == 'Agency' %}
+        <div class="row row-card ulb-project-details">
+            <p class="p-details">Project Details</p>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-blue">
+                    <div class="inner">
+                        <p class="card-title">Total Projects</p>
+                        <h3 class="card-info"> {{ ulb_total_project }} </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-green">
+                    <div class="inner">
+                    <p class="card-title">Total Cost</p>
+                    <h3 class="card-info">&#8377; {{ ulb_project_cost.project_cost }} lakhs</h3>
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-orange">
+                    <div class="inner">
+                        <p class="card-title">KNMT Share</p>
+                        <h3 class="card-info">&#8377; {{ ulb_knmt_share.knmt_share }} lakhs</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-red">
+                    <div class="inner">
+                        <p class="card-title">ULB Share</p>
+                        <h3 class="card-info">&#8377; {{ ulb_share_ulb.ulb_share }} lakhs</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="charts">
+            <div class="row">
+                <div class="col piechart" style="margin-left:13px;">
+                    <div id="pieSector"></div>
+                </div>
+                <div class="col piechart" style="margin-right:13px;">
+                    <div id="donutSector"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var options = {
+                series: [{% for i in ulbdonutchart %} {{ i.ulb_works }}, {% endfor %}],
+                title: {
+                    text: 'Sector Wise Number of Works Sanctioned',
+                    align: 'center',
+                    margin: 10,
+                    offsetX: 30,
+                    offsetY: 0,
+                    floating: false,
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        fontFamily: 'Roboto',
+                        color: '#145F8E'
+                  }
+                },
+                dataLabels: {
+                    formatter: function(val, opts){
+                        return opts.w.config.series[opts.seriesIndex]
+                    },
+                },
+                chart: {
+                    width: 410,
+                    type: 'donut',
+                },
+                theme:{
+                    palette: 'palette2',
+                },
+                plotOptions:{
+                    pie:{
+                        donut:{
+                            labels:{
+                                show: true,
+                            },
+                            total: {
+                                showAlways: true,
+                                label: 'Total',
+                                fontSize: '22px',
+                                fontFamily: 'Helvetica, Arial, sans-serif',
+                                fontWeight: 600,
+                                color: '#373d3f',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => {
+                                        return a + b
+                                    }, 0)
+                                },
+                            },
+                        },
+                    },
+                },
+                labels: [{% for i in ulbdonutchart %} '{{ i.Sector }}', {% endfor %}],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+                        
+                    }
+                }]
+            };
+        
+            var chart = new ApexCharts(document.querySelector("#donutSector"), options);
+            chart.render();
+        </script>
+        <script>
+            var options = {
+                series: [{% for i in ulbpiechart %} {{ i.ulb_project_cost}}, {% endfor %}],
+                chart: {
+                width: 410,
+                type: 'pie',
+                
+              },  
+              title: {
+                  text: 'Sector Wise Projects Sanctioned - Cost in lakhs',
+                  align: 'left',
+                  margin: 10,
+                  offsetX: 30,
+                  offsetY: 0,
+                  floating: false,
+                  style: {
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      fontFamily: 'Roboto',
+                      color: '#145F8E'
+                }
+              },
+              labels: [{% for i in ulbpiechart %} '{{ i.Sector }}', {% endfor %}],
+              responsive: [{
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200
+                  },
+                  legend: {
+                    position: 'bottom'
+                  }
+                }
+              }]
+              };
+              var chart = new ApexCharts(document.querySelector("#pieSector"), options);
+              chart.render();
+        </script>
+        {% elif group.name == 'Website Admin' %}
+        
+    {% endif%}
+{% endfor %}
+{% endblock %}
+
+{% block pagination %}{% endblock  %}

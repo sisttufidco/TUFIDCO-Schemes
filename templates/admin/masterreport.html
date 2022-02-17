@@ -1,0 +1,101 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}<h1> Physical and Financial Progress Report</h1>{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+  <style>
+      .object-tools a.addlink{
+          display: none;
+      }
+      .border-grey {
+          border: 1px solid #babebe;
+      }
+  </style>
+{% endblock %}
+
+{% block result_list %}
+  <div class="results" id="results">
+    <table class="border-grey">
+      <col>
+        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup>
+        <tr class="border-grey">
+          <th class="border-grey" >S.No</th>
+          <th class="border-grey"> Name of the Sector</th>
+          <th class="border-grey" colspan="5">Financial Progress (Rs.in Cr)</th>
+          <th class="border-grey" colspan="5">Physical Progress</th>
+        </tr>
+      <tr class="border-grey">
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey" colspan="3" scope="colgroup">Amount Sanctioned</th>
+        <th class="border-grey" scope="col">Amount Spend</th>
+        <th class="border-grey" scope="col">Balance</th>
+        <th class="border-grey" scope="col">No. of <br>works<br>approved</th>
+        <th class="border-grey" scope="col">No. of <br>works<br>taken</th>
+        <th class="border-grey" scope="col">No. of <br>works<br>completed</th>
+        <th  class="border-grey" scope="col">No. of <br>works<br>in progress</th>
+        <th class="border-grey" scope="col">Dropped,<br>if any</th>
+      </tr>
+      <tr class="border-grey">
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey" scope="col">Scheme Share</th>
+        <th class="border-grey" scope="col">ULB Share</th>
+        <th class="border-grey" scope="col">Total</th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+      </tr>
+      {% for row in report %}
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+          <td class="border-grey" >{{ forloop.counter }}</td>
+          <td class="border-grey" >{{ row.Sector }}</td>
+          <td class="border-grey" >{{ row.SchemeShare }}</td>
+          <td class="border-grey" >{{ row.ULBShare }}</td>
+          <td class="border-grey" >{{ row.total }}</td>
+          <td class="border-grey" >{{ row.amountspend }}</td>
+          <td class="border-grey" >{{ row.balance }}</td>
+          <td class="border-grey" >{{ row.workapproved }}</td>
+          <td class="border-grey" >{{ row.worktaken }}</td>
+          <td class="border-grey" >{{ row.workcompleted }}</td>
+          <td class="border-grey" >{{ row.inprogress }}</td>
+          <td class="border-grey" >{{ row.dropped }}</td>
+        </tr>
+      {% endfor %}
+      <tr class="border-grey" style="font-weight:bold; border-top:2px solid #DDDDDD;">
+        <td class="border-grey" ></td>
+        <td class="border-grey">Total </td>
+        <td class="border-grey"> {{ report_total.SchemeShare }} </td>
+        <td class="border-grey"> {{ report_total.ULBShare }} </td>
+        <td class="border-grey"> {{ report_total.total }} </td>
+        <td class="border-grey"> {{ report_total.amountspend }} </td>
+        <td class="border-grey"> {{ report_total.balance }} </td>
+        <td class="border-grey"> {{ report_total.workapproved }} </td>
+        <td class="border-grey"> {{ report_total.worktaken }} </td>
+        <td class="border-grey"> {{ report_total.workcompleted }} </td>
+        <td class="border-grey"> {{ report_total.inprogrss }} </td>
+        <td class="border-grey"> {{ report_total.dropped }} </td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}
+
+{% block pagination %}{% endblock  %}

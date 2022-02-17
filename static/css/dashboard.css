@@ -1,0 +1,115 @@
+.piechart{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding:10px;
+    border-radius: 10px;
+}
+.carousel-caption{
+    color: black;
+    top: 50%;
+}
+.carousel-inner{
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.bg-blue {
+    background-color: #00c0ef !important;
+}
+.bg-green {
+    background-color: #00a65a !important;
+}
+.bg-orange {
+    background-color: #f39c12 !important;
+}
+.bg-red {
+    background-color: #d9534f !important;
+}
+.card-box {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+}
+.card-title{
+    text-align: center;
+    font-size: large;
+    color:white;
+    margin-bottom: 0px !important;
+}
+.card-info{
+    text-align: center;
+    font-size:larger;
+    color: white
+}
+.row-card{   
+    padding:10px;
+    padding-bottom: 45px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.row-card2{   
+    padding:10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+.p-details{
+    text-align: center;
+    font-size: 14px;
+    font-weight: bolder;
+    color:#145F8E;
+    font-family: 'Roboto';
+}
+.footnote{
+    font-family: 'Roboto';
+    color: rgb(78, 76, 76);
+    font-weight: bold;
+    font-size: small;
+    margin-top: 10px;
+}
+.table-sector{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.th-t1-center{
+    text-align:center; 
+    background-color: rgb(0, 52, 97);
+    color:#fff;
+}
+.th-t2-right{
+    text-align:right; 
+    background-color: #00539cff;
+    color:#fff;
+}
+.th-t3-right{
+    text-align:right; 
+    background-color:rgb(27, 110, 179); 
+    color:#fff;
+}
+.caption{
+    text-align:center !important; 
+    background-color: #00539cff !important; 
+    font-size: xx-large;
+    font-weight: bolder;
+    color:#fff !important;
+}
+.th-t2-center{
+    text-align:center; 
+    background-color:#00539cff; 
+    color:#fff;
+}
+#map{
+    overflow:hidden;
+    width: auto;
+    height: 650px;
+    border-radius: 10px;
+}
+.ulb-project-details{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    border-radius: 10px;
+}

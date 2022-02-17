@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% block title %}TUFIDCO Schemes | Home{% endblock %}
+{% block content %}
+  {% include 'includes/header.html' %}
+  <!-- Carousel -->
+  <div id="carouselIndicators" class="carousel slider" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+      <li data-target="#carouselIndicators" data-slide-to="1"></li>
+      <li data-target="#carouselIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      {% for i in mainSlider%}
+        <div class="carousel-item {% if forloop.first %} active{% endif %}">
+          <img class="d-block w-100" src="{{ i.mainsliders.url }}" alt="First slide">
+        </div>
+      {% endfor %}
+    </div>
+    <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  <!-- End Carousel -->
+  <!-- Information Card -->
+  <div id="carousels" class="carousel slide" data-ride="carousel">
+    <div class="carousels-inner">
+      <div class="carousel-item active">
+        <div class="carousel-caption">
+          <h3 class="p-details">KNMT - Project Details</h3>
+          <div class="row ">
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large;">Total Projects</p>
+                  <h3 style="text-align: center; font-size:larger;"> {{ total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">Total Cost</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ project_cost.project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">KNMT Share</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ knmt.knmt_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">ULB Share</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ ulb_share.ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-caption">
+          <h3 class="p-details">KNMT - DMA Project Details</h3>
+          <div class="row ">
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">Total Projects</p>
+                  <h3 style="text-align: center; font-size:larger;"> {{ dmp_total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">Total Cost</p>
+                  <h3 style="text-align: center; font-size:larger;"> &#8377; {{ dmp_project_cost.dmp_project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">KNMT Share</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ dmp_knmt.dmp_knmt }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">ULB Share</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ dmp_ulb_share.dmp_ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-caption">
+          <h3 class="p-details">KNMT - CTP Project Details</h3>
+          <div class="row ">
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">Total Projects</p>
+                  <h3 style="text-align: center; font-size:larger;"> {{ ctp_total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">Total Cost</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ ctp_project_cost.ctp_project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large">KNMT Share</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ ctp_knmt.ctp_knmt }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p style="text-align: center; font-size: large;">ULB Share</p>
+                  <h3 style="text-align: center; font-size:larger;">&#8377; {{ ctp_ulb_share.ctp_ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- PDF Download -->
+  <hr>
+  <div class="flex-container container">
+    <div class="flex-child download-pdf">
+      <h3>Latest update</h3><hr>
+      <marquee behavior="scroll" direction="up" scrollamount="4" onmouseover="this.stop();" onmouseout="this.start();">
+        <a href="#" download>Download the pdf &nbsp;<i class="fa fa-file-pdf-o"></i></a>
+        <p id="dat"></p>
+        <a href="#" download>Download the pdf &nbsp;<i class="fa fa-file-pdf-o"></i></a>
+        <p id="da"></p>
+        <a href="#" download>Download the pdf&nbsp;<i class="fa fa-file-pdf-o"></i></a>
+        <p id="date"></p>
+      </marquee>
+    </div>
+    <!-- Slides container -->
+    <div class="flex-child">
+      <h3>Reforms</h3><hr>
+      <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner carousel-inner-item">
+          {% for i in formSlider%}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img class="d-block w-100" src="{{ i.reform_sliders.url}}" alt="First slide" >
+              <div class="carousel-title">
+                <h3>{{ i.title }}</h3>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- Map Design -->
+    <div class="flex-child">
+      <h3>Location</h3><hr>
+      <div id='map' style='overflow:hidden;width:400px;height: 300px'></div>
+      {% load  static %}
+      <script>
+          var long = 13.0376246
+          var lat = 80.2319139
+          mapboxgl.accessToken = "pk.eyJ1IjoiYXJ5YW5iaGF0dDEwMDIiLCJhIjoiY2tqaDFmcnloNDFpYTJybnFvbmk0cTliNyJ9.ImW_FZl5b1VBm1bYaLyziA";
+          var map = new mapboxgl.Map({
+              container: 'map',
+              style: 'mapbox://styles/mapbox/streets-v10',
+              center: [lat,long], // starting position
+              zoom: 13 // starting zoom
+          });
+          // Set marker options.
+          const marker = new mapboxgl.Marker({
+              color: "#145f8E",
+              draggable: true
+          }).setLngLat([lat,long]).addTo(map);
+          map.addControl(new mapboxgl.NavigationControl());
+          // Add geolocate control to the map.
+          map.addControl(
+              new mapboxgl.GeolocateControl({
+                  positionOptions: {
+                      enableHighAccuracy: true
+                  },
+                  // When active the map will receive updates to the device's location as it changes.
+                  trackUserLocation: true,
+                  // Draw an arrow next to the location dot to indicate which direction the device is heading.
+                  showUserHeading: true
+              })
+          );
+      </script>
+    </div>
+  </div>
+  <!--End Slides container -->
+  <!-- Photo gallery -->
+  <div class="photo-gallery">
+    <hr><h3 class="photoslider-h3 ">Photo Gallery</h3>
+    <marquee behavior="scroll" direction="left" scrollamount="10" onmouseover="this.stop();" onmouseout="this.start();">
+      {% for i in gallery_photos %}
+        <img class= width="300" height="182" src="{{ i.photogallery_sliders.url }}" alt="photo">
+      {% endfor %}
+    </marquee>
+    <hr>
+  </div>
+  <!-- End Photo Gallery-->
+  {% include 'includes/footer.html' %}
+  <!-- End Footer-->
+{% endblock %}
+{% block js-foot %}
+    <script>
+    document.getElementById("date").innerHTML = '25-10-2020';
+    document.getElementById("dat").innerHTML = Date();
+    document.getElementById("da").innerHTML = Date();
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+{% endblock %}

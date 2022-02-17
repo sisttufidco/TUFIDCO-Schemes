@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% include 'includes/header.html' %}
+  <div class="container tm-mt-60">
+    <div class="row tm-mb-50">
+      <div class="col-lg-6 col-12 mb-5">
+        <div class="tm-address-col ml-80">
+          <h2 class="address tm-text-primary1 mb-5">Our Address</h2>
+          {% for i in tufidco_info %}
+          <address class="tm-text-gray-dark tm-mb-50">{{ i.address }}</address>
+          <ul class="tm-contacts">
+            <li><a  class="tm-text-gray-dark"><i class="fa fa-envelope"></i>{{ i.email }}</a></li>
+            <li><a class="tm-text-gray-dark"><i class="fa fa-phone"></i>{{ i.Number }}</a></li>
+            <li><a class="tm-text-gray-dark"><i class="fa fa-globe"></i>{{ i.webURL }}</a></li>
+            <li><a class="tm-text-gray-dark"><i class="fa fa-fax"></i>{{ i.fax }}</a></li>
+          </ul>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-lg-4 col-12">
+        <h2 class="tm-text-primary1 mb-5">Our Location</h2>
+        <!-- Map -->
+        <div class="mapouter mb-4">
+          <div id="map" class="map-contact"></div>
+          <script>
+              var long = 13.0376246
+              var lat = 80.2319139
+	            mapboxgl.accessToken = "pk.eyJ1IjoiYXJ5YW5iaGF0dDEwMDIiLCJhIjoiY2tqaDFmcnloNDFpYTJybnFvbmk0cTliNyJ9.ImW_FZl5b1VBm1bYaLyziA";
+              var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v10',
+                center: [lat,long], // starting position
+                zoom: 13 // starting zoom
+              });
+              // Set marker options.
+              const marker = new mapboxgl.Marker({
+                color: "#145f8E",
+                draggable: true
+              }).setLngLat([lat,long]).addTo(map);
+              map.addControl(new mapboxgl.NavigationControl());
+            </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+  <div class="container">
+    <h2 class="tm-text-primary1 mb-5">Officers</h2>
+    <div class="row tm-mb-74 tm-people-row">
+      {% for i in Officer %}
+        <div class="people-card col-lg col-md col-sm col-3 mb-5">
+          {% load static %}
+          <img src="{% static  'img/person.jpeg' %}" alt="Image" class="mb-4 img-fluid">
+          <h2 class="tm-text-primary tm-person-name mb-4">{{ i.name }}</h2>
+          <h3 class="tm-text-secondary tm-designation h5 mb-4">{{ i.Designation }}</h3>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% include 'includes/footer.html' %}
+{% endblock %}
