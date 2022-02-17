@@ -27,7 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-hu5bn)c*&m%n=y-j#n5_$v&)ox^8^f9_9qr7aw-y1_jop@nph^'
 
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'import_export',
     'nested_admin',
     'mapbox_location_field',
+
 ]
 
 MIDDLEWARE = [
@@ -155,3 +155,10 @@ LOGIN_REDIRECT_URL = '/admin/TUFIDCOapp/dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = "pk.eyJ1IjoiYXJ5YW5iaGF0dDEwMDIiLCJhIjoiY2tqaDFmcnloNDFpYTJybnFvbmk0cTliNyJ9.ImW_FZl5b1VBm1bYaLyziA"
+
+SECURE_HSTS_SECONDS = 12121212
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
