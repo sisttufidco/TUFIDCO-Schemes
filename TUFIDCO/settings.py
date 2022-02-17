@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'import_export',
     'nested_admin',
     'mapbox_location_field',
-    "django_extensions",
 ]
 
 MIDDLEWARE = [
