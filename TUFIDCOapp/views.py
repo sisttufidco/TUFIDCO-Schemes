@@ -188,10 +188,17 @@ class EmailAttachementView(View):
 
         if form.is_valid():
             ULB = form.cleaned_data['ULB']
+            ULB2 = form.cleaned_data['ULB2']
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
-            users = User.objects.filter(groups__name=ULB)
-            email = list(i for i in users.values_list('email', flat=True) if bool(i))
+            user = User.objects.all()
+            email = []
+            for u in ULB:
+                query = user.values_list('email', flat=True).filter(first_name=u)
+                email.append(query[0])
+            for u1 in ULB2:
+                query = user.values_list('email', flat=True).filter(first_name=u1)
+                email.append(query[0])
             files = request.FILES.getlist('attach')
             try:
                 mail = EmailMessage(subject, message, EMAIL_HOST_USER, email)
@@ -199,7 +206,7 @@ class EmailAttachementView(View):
                     mail.attach(f.name, f.read(), f.content_type)
                 mail.send()
                 return render(request, self.template_name,
-                              {'email_form': form, 'error_message': 'Email Sent Successfully to %s' % ULB})
+                              {'email_form': form, 'error_message': 'Email Sent Successfully'})
             except:
                 return render(request, self.template_name,
                               {'email_form': form, 'error_message': 'Either the attachment is too big or corrupt'})
