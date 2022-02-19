@@ -118,8 +118,6 @@
                 {% load static %}
                 {% if user.is_authenticated %}
                 <a class="dropdown-item" href="{% static 'pdf/releaseform.doc' %}">Release Request</a>
-                {% else %}
-                <a class="dropdown-item" href="{% url 'login' %}">Release Request</a>
                 {% endif %}
               </div>
             </li>
