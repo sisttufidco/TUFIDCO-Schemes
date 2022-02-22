@@ -1083,8 +1083,7 @@ class AgencyProgressAdmin(admin.ModelAdmin):
 @admin.register(AgencySanctionModel)
 class AgencySanctionAdmin(admin.ModelAdmin):
     form = AgencySanctionForm
-    fields = (('Scheme', 'Sector', 'Project_ID'), 'tsrefno', 'tsdate', 'tawddate', 'wdawddate', 'ts_awarded',
-              'tr_awarded', 'wd_awarded')
+    fields = (('Scheme', 'Sector', 'Project_ID'),'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate', 'wd_awarded', 'wdawddate')
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
