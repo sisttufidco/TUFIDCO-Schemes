@@ -21,7 +21,8 @@
       <p class="buttons-admin">
         {% for group_for in request.user.groups.all %}
         {% if group_for.name == 'contactform' %}
-        <a class="btn site-btn" type="submit" href="{% url 'emailattachment' %}">Contact ULBs</a>
+        <a class="btn site-btn" type="submit" href="{% url 'emailattachment2' %}">Contact Town Panchayat</a>
+        <a class="btn site-btn" type="submit" href="{% url 'emailattachment' %}">Contact Municipality/Corporation</a>
         {% endif %}
         {% endfor %}
         {% if user.has_usable_password %}

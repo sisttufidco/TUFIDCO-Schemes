@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import EmailAttachementView
+from .views import EmailAttachementView, EmailAttachementView2
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -14,5 +14,6 @@ urlpatterns = [
     path('schemes/singarachennai2.0/AtGlance', views.S_Chennai, name='SChennai2.0'),
     path('schemes/singarachennai2.0/Guidelines', views.S_Chennai_Guidelines, name='SChennaiGuidelines'),
     path('schemes/singarachennai2.0/AdminstrativeSanction', views.S_Chennai_AS, name='SChennaiAS'),
-    path('admin/contactULB', EmailAttachementView.as_view(), name='emailattachment')
+    path('admin/contactDMA', EmailAttachementView.as_view(), name='emailattachment'),
+    path('admin/contactCTP', EmailAttachementView2.as_view(), name='emailattachment2'),
 ]

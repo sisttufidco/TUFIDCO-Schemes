@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'tufidco',
         'USER': 'postgres',
         'PASSWORD': 'Tufidco9540',
-        'HOST': 'db-tufidco.cwgr3gxyihcc.ap-south-1.rds.amazonaws.com',
+        'HOST': 'tufidcodb.ccp9m8wmnigu.ap-south-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
