@@ -344,8 +344,8 @@ class AgencySanctionModel(models.Model):
     wd_awarded = models.CharField("Work Done Awarded", max_length=20, choices=YN_CHOICES, null=True)
 
     class Meta:
-        verbose_name = "ULB Sanction Detail"
-        verbose_name_plural = "ULB Sanction Details"
+        verbose_name = "ULB Project Sanction Detail"
+        verbose_name_plural = "ULB Project Sanction Details"
 
 
 class MasterReport(MasterSanctionForm):
