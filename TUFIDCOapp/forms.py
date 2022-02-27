@@ -27,8 +27,7 @@ class AgencyProgressForm(forms.ModelForm):
         self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                              MasterSanctionForm.objects.values_list('Sector',
                                                                                                     flat=True).filter(
-                                                                 AgencyName__AgencyName=request.user.first_name).order_by(
-                                                                 'SNo').distinct()])
+                                                                 AgencyName__AgencyName=request.user.first_name).distinct()])
         self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                  MasterSanctionForm.objects.values_list('Project_ID',
                                                                                                         flat=True).filter(
@@ -56,8 +55,7 @@ class AgencySanctionForm(forms.ModelForm):
         self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                              MasterSanctionForm.objects.values_list('Sector',
                                                                                                     flat=True).filter(
-                                                                 AgencyName__AgencyName=request.user.first_name).order_by(
-                                                                 'SNo').distinct()])
+                                                                 AgencyName__AgencyName=request.user.first_name).distinct()])
         self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                  MasterSanctionForm.objects.values_list('Project_ID',
                                                                                                         flat=True).filter(

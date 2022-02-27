@@ -152,7 +152,7 @@ class AgencyNameAdmin(ImportExportModelAdmin):
         'AgencyName',
         'AgencyType'
     ]
-
+    list_filter = ['AgencyType']
     ordering = [
         'AgencyName'
     ]

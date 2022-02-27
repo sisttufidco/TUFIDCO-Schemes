@@ -31,9 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-hu5bn)c*&m%n=y-j#n5_$v&)ox^8^f9_9qr7aw-y1_jop@nph^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '65.1.231.170', 'ec2-65-1-231-170.ap-south-1.compute.amazonaws.com']
+ALLOWED_HOSTS = ['www.tufidcoschemes.co.in','tufidcoschemes.co.in']
 
 # Application definition
 
@@ -156,8 +156,8 @@ LOGOUT_REDIRECT_URL = 'home'
 MAPBOX_KEY = "pk.eyJ1IjoiYXJ5YW5iaGF0dDEwMDIiLCJhIjoiY2tqaDFmcnloNDFpYTJybnFvbmk0cTliNyJ9.ImW_FZl5b1VBm1bYaLyziA"
 
 SECURE_HSTS_SECONDS = 12121212
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_HSTS_PRELOAD = False
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
