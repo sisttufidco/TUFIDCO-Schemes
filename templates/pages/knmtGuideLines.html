@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% url 'knmt' as knmtatglance_url %}
 {% url 'knmtAS' as knmtAS_url %}
+{% load static %}
 {% block title %}TUFIDCO Schemes | KNMT{% endblock %}
 {% block content %}
   {% include 'includes/header.html' %}
@@ -19,11 +20,7 @@
          <p class="scheme-p">
            <span>Introduction<br><br></span>
              In Tamil Nadu, there are 14 Corporations (except Greater Chennal Corporation), 121 Municipalities and 528 Town Panchayats. Many schemes taken up in the recent years such as Smart Cities Mission, AMRUT are aimed at improving the infrastructure facilities of Corporations and major towns alone. Smart Cities Mission is being implemented only in 11 Corporations. AMRUT is also being implemented in 28 Towns only. The coverage of schemes in Corporations is relatively high when compared to Municipalities and Town Panchayats. Hence it has been decided to introduce a new Scheme "Kalaignar Nagarpura Mempattu Thittam"(KNMT) in all 121 Municipalities and 528 Town Panchayats so as to fulfil the infrastructural gaps in these Urban Local Bodies.</p>
-
-
-   &raquo;&nbsp;<span  style="font-family: 'palatinolinotype';;"></span> &nbsp;<a href="#" download style="text-decoration: none;">Download the pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
-
-   &raquo;&nbsp;<span style="font-family: 'palatinolinotype';;" ></span>&nbsp; <a href="#" download style="text-decoration: none;">Download the pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
+            &raquo;&nbsp;&nbsp;<a href="{% static 'schemes/knmt/KNMTGuidelines.pdf' %}" download style="text-decoration: none;">KNMTGuidelines.pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
     </div>
 
   </div>

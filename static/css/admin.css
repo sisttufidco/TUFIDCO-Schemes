@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-fieldset .fieldBox{
-    margin-top:10px;
-}
+
 :root {
     --primary: #79aec8;
     --secondary: #417690;
@@ -65,7 +63,16 @@ fieldset .fieldBox{
 ::-webkit-scrollbar-thumb:window-inactive {
   background: #75cf9e;
 }
-
+.site-btn:hover,.site-btn:focus,.site-btn:active, 
+.site-btn:active:focus:not(:disabled):not(.disabled),
+.btn:focus, .btn:active, .btn:hover{
+    box-shadow: none!important;
+    outline: 0;
+    text-decoration: none;
+}
+fieldset .fieldBox{
+    margin-top:10px;
+}
 #header{
     font-family: 'Roboto', sans-serif;
     height: 50px;

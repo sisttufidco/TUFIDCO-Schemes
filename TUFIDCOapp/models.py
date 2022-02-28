@@ -349,7 +349,7 @@ class AgencySanctionModel(models.Model):
         super(AgencySanctionModel, self).save(**kwargs)
 
     def __str__(self):
-        return '{} - {} - {}'.format(str(self.Scheme), str(self.user), str(self.Project_ID))
+        return '{} - {} - {}'.format(str(self.Scheme), str(self.user.first_name), str(self.Project_ID))
 
     class Meta:
        verbose_name = "ULB Project Sanction Detail"
