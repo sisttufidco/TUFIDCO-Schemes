@@ -9,7 +9,6 @@ class PlaceholderAuthForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput(attrs={'placeholder': 'Username'}))
     password = forms.CharField(widget=PasswordInput(attrs={'placeholder': 'Password'}))
 
-
 class AgencyProgressForm(forms.ModelForm):
     class Meta:
         model = AgencyProgressModel
@@ -20,19 +19,14 @@ class AgencyProgressForm(forms.ModelForm):
     
     def __init__(self, request, *args, **kwargs):
         super(AgencyProgressForm, self).__init__(*args, **kwargs)
-        self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                             MasterSanctionForm.objects.values_list('Scheme__Scheme',
-                                                                                                    flat=True).filter(
-                                                                 AgencyName__AgencyName=request.user.first_name).distinct()])
-        self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                             MasterSanctionForm.objects.values_list('Sector',
-                                                                                                    flat=True).filter(
-                                                                 AgencyName__AgencyName=request.user.first_name).distinct()])
-        self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                                 MasterSanctionForm.objects.values_list('Project_ID',
-                                                                                                        flat=True).filter(
-                                                                     AgencyName__AgencyName=request.user.first_name).order_by(
-                                                                     'SNo').distinct()])
+        if not request.user.groups.filter(name__in=["Admin",]).exists():
+            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme',flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector',flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID', flat=True).filter(AgencyName__AgencyName=request.user.first_name).order_by('SNo').distinct()])
+        else:
+            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme',flat=True).distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector',flat=True).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('SNo').distinct()])
 
 
 class AgencySanctionForm(forms.ModelForm):
@@ -47,20 +41,16 @@ class AgencySanctionForm(forms.ModelForm):
 
     def __init__(self, request, *args, **kwargs):
         super(AgencySanctionForm, self).__init__(*args, **kwargs)
-        self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                             MasterSanctionForm.objects.values_list(
-                                                                 'Scheme__Scheme',
-                                                                 flat=True).filter(
-                                                                 AgencyName__AgencyName=request.user.first_name).distinct()])
-        self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                             MasterSanctionForm.objects.values_list('Sector',
-                                                                                                    flat=True).filter(
-                                                                 AgencyName__AgencyName=request.user.first_name).distinct()])
-        self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                                 MasterSanctionForm.objects.values_list('Project_ID',
-                                                                                                        flat=True).filter(
-                                                                     AgencyName__AgencyName=request.user.first_name).order_by(
-                                                                     'SNo').distinct()])
+        if not request.user.groups.filter(name__in=["Admin",]).exists():
+            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme', flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID',flat=True).filter(AgencyName__AgencyName=request.user.first_name).order_by('SNo').distinct()])
+        else:
+            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme', flat=True).distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID',flat=True).order_by('SNo').distinct()])
+
+
 
 
 
