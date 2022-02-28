@@ -342,10 +342,10 @@ class AgencySanctionModel(models.Model):
     ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20, choices=YN_CHOICES, null=True)
     tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, choices=YN_CHOICES, null=True)
     wd_awarded = models.CharField("Work Done Awarded", max_length=20, choices=YN_CHOICES, null=True)
-
+   
     class Meta:
-        verbose_name = "ULB Project Sanction Detail"
-        verbose_name_plural = "ULB Project Sanction Details"
+       verbose_name = "ULB Project Sanction Detail"
+       verbose_name_plural = "ULB Project Sanction Details"
 
 
 class MasterReport(MasterSanctionForm):
