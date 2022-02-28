@@ -1,4 +1,5 @@
 import functools
+from urllib import request
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.db.models import Count, Sum
@@ -1062,12 +1063,12 @@ class AgencyProgressAdmin(admin.ModelAdmin):
     form = AgencyProgressForm
     fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
               'PhysicalProgress', 'status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone', 'upload2')
-
+    
     def save_model(self, request, obj, form, change):
-        obj.user = request.user
-        obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(
-            Project_ID=form.cleaned_data['Project_ID'])
-        obj.save()
+        if request.user.groups.filter(name__in=['Agency']).exists():
+            obj.user = request.user
+            obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(Project_ID=form.cleaned_data['Project_ID'])
+            obj.save()
 
     def get_queryset(self, request):
         qs = super(AgencyProgressAdmin, self).get_queryset(request)
@@ -1086,8 +1087,9 @@ class AgencySanctionAdmin(admin.ModelAdmin):
     fields = (('Scheme', 'Sector', 'Project_ID'),'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate', 'wd_awarded', 'wdawddate')
 
     def save_model(self, request, obj, form, change):
-        obj.user = request.user
-        obj.save()
+        if request.user.groups.filter(name__in=['Agency']).exists():
+            obj.user =  request.user
+            obj.save()
 
     def get_queryset(self, request):
         qs = super(AgencySanctionAdmin, self).get_queryset(request)

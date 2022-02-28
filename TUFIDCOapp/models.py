@@ -316,10 +316,11 @@ class AgencyProgressModel(models.Model):
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Latitude, self.Longitude)
+        self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID = self.Project_ID)
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
-        return '{} - {} - {}'.format(str(self.user), str(self.ProjectName), str(self.Project_ID))
+        return '{} - {} - {}'.format(str(self.user.first_name), str(self.ProjectName), str(self.Project_ID))
 
     class Meta:
         verbose_name = 'ULB Progress Detail'
@@ -343,6 +344,10 @@ class AgencySanctionModel(models.Model):
     tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, choices=YN_CHOICES, null=True)
     wd_awarded = models.CharField("Work Done Awarded", max_length=20, choices=YN_CHOICES, null=True)
     
+    def save(self, **kwargs):
+        self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID = self.Project_ID)
+        super(AgencySanctionModel, self).save(**kwargs)
+
     def __str__(self):
         return '{} - {} - {}'.format(str(self.Scheme), str(self.user), str(self.Project_ID))
 
