@@ -55,6 +55,7 @@
       {% regroup heading by Sector as Sector_list %}
   {% regroup heading by AgencyType__AgencyType as Agency_list %}
   {% regroup heading by GoMeeting as GO_List %}
+  {% regroup heading by Scheme__Scheme as Scheme_List %}
 
     <table>
     {% for t in heading %}
@@ -70,11 +71,39 @@
           {% endif %}
         {% endifchanged %}
 
+
         {% ifchanged t.AgencyType__AgencyType %}
           {% if Agency_list|length > 1 %} COMMISSIONERATE of Town Panchayats and
             Directorate of Municipalities -
           {% else %}
             COMMISSIONERATE of Town Panchayats -
+          {% endif %}
+        {% endifchanged %}
+
+        {% ifchanged t.GoMeeting %}
+          {% if GO_List|length > 1 %}
+            ALl GOS
+          {% else %}
+            {{ t.GoMeeting }} GO
+          {% endif %}
+        {% endifchanged %}
+      </caption>
+      {% elif forloop.counter == 1 and t.AgencyType__AgencyType == "Corporation" and t.Scheme__Scheme == 'Singara Chennai 2.0'%}
+      <caption  class="report-h4" id="heading">
+        {% ifchanged t.Scheme__Scheme %}
+          {% if Scheme_List|length > 1 %}
+            All Schemes -
+            {% else %}
+             Singara Chennai 2.0 - 
+          {% endif %}
+        {% endifchanged %}
+
+
+        {% ifchanged t.AgencyType__AgencyType %}
+          {% if Agency_list|length > 1 %} COMMISSIONERATE of Town Panchayats and
+            Directorate of Municipalities -
+          {% else %}
+          Directorate of Municipalities -
           {% endif %}
         {% endifchanged %}
 
@@ -143,7 +172,16 @@
         </th>
         <th style="text-align: right">
           <div class="text">
-            <a href="#">Scheme Share</a>
+            {% for t in heading %}
+              {% if forloop.first and t.Scheme__Scheme == 'KNMT' %}
+                  <a href="#"> KNMT<br>Share</a>
+              {% endif %}
+            {% endfor %}
+            {% for t in heading %}
+              {% if forloop.first and t.Scheme__Scheme == 'Singara Chennai 2.0' %}
+                  <a href="#"> Singara<br>Chennai 2.0<br>Share</a>
+              {% endif %}
+            {% endfor %}
           </div>
         </th>
         <th style="text-align: right">

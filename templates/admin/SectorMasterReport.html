@@ -67,6 +67,32 @@
             {% endif %}
           {% endifchanged %}
         </caption>
+        {% elif forloop.counter == 1 and t.AgencyType__AgencyType == "Corporation" and t.Scheme__Scheme == 'Singara Chennai 2.0'%}
+        <caption  class="report-h4" id="heading">
+          {% ifchanged t.Scheme__Scheme %}
+            {% if Scheme_List|length > 1 %}
+              All SCHEMES -
+              {% else %}
+              Singara Chennai 2.0 -
+            {% endif %}
+          {% endifchanged %}
+
+          {% ifchanged t.AgencyType__AgencyType %}
+            {% if Agency_list|length > 1 %} COMMISSIONERATE OF TOWN PANCHAYATS AND
+              DIRECTORATE of MUNICIPALITIES -
+            {% else %}
+              DIRECTORATE of MUNICIPALITIES -
+            {% endif %}
+          {% endifchanged %}
+
+          {% ifchanged t.Sector %}
+            {% if Sector_list|length > 1 %}
+              ALL PROJECTS
+            {% else %}
+              {{ t.Sector }} PROJECTS
+            {% endif %}
+          {% endifchanged %}
+        </caption>
       {% elif forloop.counter == 1 and t.AgencyType__AgencyType == "Municipality" and t.Scheme__Scheme == 'KNMT'%}
         <caption  class="report-h4" id="heading">
           {% ifchanged t.Scheme__Scheme %}
@@ -137,7 +163,12 @@
           <div class="text" >
             {% for t in heading %}
               {% if forloop.first and t.Scheme__Scheme == 'KNMT' %}
-                  <a href="#"> Scheme<br>Share</a>
+                  <a href="#"> KNMT<br>Share</a>
+              {% endif %}
+            {% endfor %}
+            {% for t in heading %}
+              {% if forloop.first and t.Scheme__Scheme == 'Singara Chennai 2.0' %}
+                  <a href="#"> Singara<br>Chennai 2.0<br>Share</a>
               {% endif %}
             {% endfor %}
           </div>
