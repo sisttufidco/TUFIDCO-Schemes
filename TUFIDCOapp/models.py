@@ -299,7 +299,7 @@ class AgencyProgressModel(models.Model):
                    "fullscreen_button": True,
                    "navigation_buttons": True,
                    "track_location_button": True,
-                   "readonly": True,
+                   "readonly": False,
                    }, blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
     PhysicalProgress = models.TextField("Physical Progress", null=True)
@@ -315,7 +315,7 @@ class AgencyProgressModel(models.Model):
 
 
     def save(self, **kwargs):
-        self.location = "%s, %s" % (self.Latitude, self.Longitude)
+        self.location = "%s, %s" % (self.Longitude, self.Latitude)
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID = self.Project_ID)
         super(AgencyProgressModel, self).save(**kwargs)
 
