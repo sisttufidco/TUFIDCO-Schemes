@@ -1410,3 +1410,8 @@ class MasterReportAdmin(admin.ModelAdmin):
         }
         response.context_data.update(extra_context)
         return response
+
+
+@admin.register(LatestReports)
+class LatestReportAdmin(admin.ModelAdmin):
+    pass

@@ -14,6 +14,12 @@ from django.utils.safestring import mark_safe
     
 """
 
+class LatestReports(models.Model):
+    name = models.CharField('Name', max_length=50, null=True)
+    report = models.FileField(upload_to='reports/', null=True)
+
+    def __str__(self):
+        return self.name
 
 class tufidco_info(models.Model):
     logo = models.ImageField(upload_to='headerimages/')

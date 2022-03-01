@@ -20,10 +20,11 @@
               <img src="{{ i.india_flag.url }}" alt="flag">
               <span class="topbar-title">{{ i.govt_title }}</span>
             </p>
-            <a href="tel:{{ i.Number }}">
+            <a>
               <p class="pull-right half-right">
-                <i class="fa fa-phone fa-tphone"></i>
-                <span class="topbar-title">Phone No. {{ i.Number }}</span>
+                <i class="fa fa-calendar"><span class="topbar-title" id="date"></span></i>
+                
+                <i class="fa fa-clock-o" style="margin-left:5px;"><span class="topbar-title" id="time" ></span></i>
               </p>
             </a>
           {% endfor %}
@@ -133,4 +134,5 @@
     </nav>
     <!-- End Navbar-->
   </header>
+ 
   <!-- End Header-->

@@ -48,9 +48,9 @@
     <h2 class="tm-text-primary1 mb-5">Officers</h2>
     <div class="row tm-mb-74 tm-people-row">
       {% for i in Officer %}
-        <div class="people-card col-lg col-md col-sm col-3 mb-5">
+        <div class="people-card col-lg col-md col-sm col-4 mb-5">
           {% load static %}
-          <img src="{% static  'img/person.jpeg' %}" alt="Image" class="mb-4 img-fluid">
+          <img src="{% static  'img/person.jpeg' %}" alt="Image" class="mb-4 img-fluid" style="margin-left:52px">
           <h2 class="tm-text-primary tm-person-name mb-4">{{ i.name }}</h2>
           <h3 class="tm-text-secondary tm-designation h5 mb-4">{{ i.Designation }}</h3>
         </div>

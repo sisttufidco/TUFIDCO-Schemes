@@ -7,6 +7,9 @@ body{
     background: #fff;
     overflow-x: hidden;
 }
+i{
+  color: black;
+}
 a{
   text-decoration: none;
 }
