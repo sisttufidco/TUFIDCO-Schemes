@@ -300,6 +300,7 @@ class AgencyProgressModel(models.Model):
                    "navigation_buttons": True,
                    "track_location_button": True,
                    "readonly": False,
+                   "zoom": 15,
                    }, blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
     PhysicalProgress = models.TextField("Physical Progress", null=True)
@@ -320,7 +321,7 @@ class AgencyProgressModel(models.Model):
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
-        return '{} - {} - {}'.format(str(self.user.first_name), str(self.ProjectName), str(self.Project_ID))
+        return '{} - {} - {}'.format(str(self.Scheme),str(self.user.first_name), str(self.Project_ID))
 
     class Meta:
         verbose_name = 'ULB Progress Detail'
@@ -359,8 +360,8 @@ class AgencySanctionModel(models.Model):
 class MasterReport(MasterSanctionForm):
     class Meta:
         proxy = True
-        verbose_name = "Physical & Financial Progress Report"
-        verbose_name_plural = "Physical & Financial Progress Reports"
+        verbose_name = "KNMT Physical & Financial Progress Report"
+        verbose_name_plural = "KNMT Physical & Financial Progress Reports"
 
 class Dashboard(MasterSanctionForm):
     class Meta:

@@ -1,6 +1,6 @@
 {% extends 'admin/change_list.html' %}
 {% load i18n admin_urls static admin_list %}
-{% block content_title %}<h1> Physical and Financial Progress Report</h1>{% endblock %}
+{% block content_title %}<h1>KNMT Physical and Financial Progress Report</h1>{% endblock %}
 {% block extrastyle %}
   {{ block.super }}
   {% load  static %}
@@ -34,29 +34,29 @@
         <colgroup span="2"></colgroup>
         <colgroup span="2"></colgroup>
         <tr class="border-grey">
-          <th class="border-grey" >S.No</th>
+          <th class="border-grey" style="text-align:right;" >S.No</th>
           <th class="border-grey"> Name of the Sector</th>
-          <th class="border-grey" colspan="5">Financial Progress (Rs.in Cr)</th>
-          <th class="border-grey" colspan="5">Physical Progress</th>
+          <th class="border-grey" style="text-align:center;" colspan="5">Financial Progress (Rs.in Cr)</th>
+          <th class="border-grey" style="text-align:center;" colspan="5">Physical Progress</th>
         </tr>
       <tr class="border-grey">
         <th class="border-grey"></th>
         <th class="border-grey"></th>
-        <th class="border-grey" colspan="3" scope="colgroup">Amount Sanctioned</th>
-        <th class="border-grey" scope="col">Amount Spend</th>
-        <th class="border-grey" scope="col">Balance</th>
-        <th class="border-grey" scope="col">No. of <br>works<br>approved</th>
-        <th class="border-grey" scope="col">No. of <br>works<br>taken</th>
-        <th class="border-grey" scope="col">No. of <br>works<br>completed</th>
-        <th  class="border-grey" scope="col">No. of <br>works<br>in progress</th>
-        <th class="border-grey" scope="col">Dropped,<br>if any</th>
+        <th class="border-grey" style="text-align:center;" colspan="3" scope="colgroup">Amount Sanctioned</th>
+        <th class="border-grey" style="text-align:right;" scope="col">Amount Spend</th>
+        <th class="border-grey" style="text-align:right;" scope="col">Balance</th>
+        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>approved</th>
+        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>taken</th>
+        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>completed</th>
+        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>in progress</th>
+        <th class="border-grey" style="text-align:right;" scope="col">Dropped,<br>if any</th>
       </tr>
       <tr class="border-grey">
         <th class="border-grey"></th>
         <th class="border-grey"></th>
-        <th class="border-grey" scope="col">Scheme Share</th>
-        <th class="border-grey" scope="col">ULB Share</th>
-        <th class="border-grey" scope="col">Total</th>
+        <th class="border-grey" style="text-align:right;" scope="col">KNMT Share</th>
+        <th class="border-grey" style="text-align:right;" scope="col">ULB Share</th>
+        <th class="border-grey" style="text-align:right;" scope="col">Total</th>
         <th class="border-grey"></th>
         <th class="border-grey"></th>
         <th class="border-grey"></th>
@@ -64,35 +64,215 @@
         <th class="border-grey"></th>
         <th class="border-grey"></th>
       </tr>
-      {% for row in report %}
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-          <td class="border-grey" >{{ forloop.counter }}</td>
-          <td class="border-grey" >{{ row.Sector }}</td>
-          <td class="border-grey" >{{ row.SchemeShare }}</td>
-          <td class="border-grey" >{{ row.ULBShare }}</td>
-          <td class="border-grey" >{{ row.total }}</td>
-          <td class="border-grey" >{{ row.amountspend }}</td>
-          <td class="border-grey" >{{ row.balance }}</td>
-          <td class="border-grey" >{{ row.workapproved }}</td>
-          <td class="border-grey" >{{ row.worktaken }}</td>
-          <td class="border-grey" >{{ row.workcompleted }}</td>
-          <td class="border-grey" >{{ row.inprogress }}</td>
-          <td class="border-grey" >{{ row.dropped }}</td>
-        </tr>
-      {% endfor %}
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">1</td>
+        <td class="border-grey" >BT Road</td>
+        <td class="border-grey" style="text-align:right;"> {{ BT_Road_SchemeShare.BT_Road_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_ULBShare.BT_Road_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_Total }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.amountspend }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">2</td>
+        <td class="border-grey" >Bus Stand</td>
+        <td class="border-grey" style="text-align:right;"> {{ Bus_Stand_SchemeShare.Bus_Stand_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_ULBShare.Bus_Stand_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Total }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.amountspend }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">3</td>
+        <td class="border-grey" >CC Road</td>
+        <td class="border-grey" style="text-align:right;"> {{ CC_Road_SchemeShare.CC_Road_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_ULBShare.CC_Road_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_Total }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.amountspend }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">4</td>
+        <td class="border-grey" >Community Hall</td>
+        <td class="border-grey" style="text-align:right;"> {{ Community_Hall_SchemeShare.Community_Hall_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_ULBShare.Community_Hall_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">5</td>
+        <td class="border-grey" >Crematorium</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_SchemeShare.Crematorium_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_ULBShare.Crematorium_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">6</td>
+        <td class="border-grey" >Culvert</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_SchemeShare.Culvert_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ Culvert_ULBShare.Culvert_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_Total }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">7</td>
+        <td class="border-grey" >Knowledge Centre</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_SchemeShare.Knowledge_Centre_SchemeShare }} </td>          
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_ULBShare.Knowledge_Centre_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Total }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Completed }}</td>
+        <td class="border-grey" style="text-align:right;" >{{ Knowledge_Centre_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">8</td>
+        <td class="border-grey" >Metal Beam Crash Barrier</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_SchemeShare.M_B_C_B_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_ULBShare.M_B_C_B_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">9</td>
+        <td class="border-grey" >Parks</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_SchemeShare.Parks_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ Parks_ULBShare.Parks_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_Completed }}</td>
+        <td class="border-grey" style="text-align:right;" >{{ Parks_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey"style="text-align:right;" >10</td>
+        <td class="border-grey" >Paver Block</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_SchemeShare.Paver_Block_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_ULBShare.Paver_Block_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_Completed }}</td>
+        <td class="border-grey" style="text-align:right;" >{{ Paver_Block_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">11</td>
+        <td class="border-grey" >Retaining Wall</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_SchemeShare.Retaining_wall_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_ULBShare.Retaining_wall_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">12</td>
+        <td class="border-grey" >Solid Waste Mgt.</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_SchemeShare.SWM_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ SWM_ULBShare.SWM_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">13</td>
+        <td class="border-grey" >SWD</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_SchemeShare.SWD_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ SWD_ULBShare.SWD_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">14</td>
+        <td class="border-grey" >Water Bodies</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_SchemeShare.Water_Bodies_SchemeShare }} </td> 
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_ULBShare.Water_Bodies_ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Total }}</td>
+        <td class="border-grey" >{{ row.amountspend }}</td>
+        <td class="border-grey" >{{ row.balance }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Approved }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Taken }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Completed }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_inprogress }}</td>
+        <td class="border-grey" ></td>
+      </tr>
       <tr class="border-grey" style="font-weight:bold; border-top:2px solid #DDDDDD;">
         <td class="border-grey" ></td>
-        <td class="border-grey">Total </td>
-        <td class="border-grey"> {{ report_total.SchemeShare }} </td>
-        <td class="border-grey"> {{ report_total.ULBShare }} </td>
-        <td class="border-grey"> {{ report_total.total }} </td>
+        <td class="border-grey" style="text-align:right;">Total </td>
+        <td class="border-grey" style="text-align:right;"> {{ SchemeShare.SchemeShare }} </td>
+        <td class="border-grey" style="text-align:right;">  {{ ULBShare.ULBShare }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ ProjectCost.ProjectCost }} </td>
         <td class="border-grey"> {{ report_total.amountspend }} </td>
         <td class="border-grey"> {{ report_total.balance }} </td>
-        <td class="border-grey"> {{ report_total.workapproved }} </td>
-        <td class="border-grey"> {{ report_total.worktaken }} </td>
-        <td class="border-grey"> {{ report_total.workcompleted }} </td>
-        <td class="border-grey"> {{ report_total.inprogrss }} </td>
-        <td class="border-grey"> {{ report_total.dropped }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ work_approved_total }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ works_taken_total }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ works_completed_total }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ works_inprogress_total}} </td>
+        <td class="border-grey" style="text-align:right;"> {{ dropped }} </td>
       </tr>
     </table>
   </div>
