@@ -28,9 +28,6 @@
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
     <ul class="object-tools">
-      <li>
-      <input type="button" id="btnExport" value="Export As Pdf" onclick="CreatePDF()" />
-    </li>
     {% block object-tools-items %}
       {% change_form_object_tools %}
     {% endblock %}
