@@ -7,7 +7,10 @@ body{
     background: #fff;
     overflow-x: hidden;
 }
-i{
+.fa .fa-calendar{
+  color: black;
+}
+.fa .fa-clock-o{
   color: black;
 }
 a{
