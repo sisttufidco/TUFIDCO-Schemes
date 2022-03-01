@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-hu5bn)c*&m%n=y-j#n5_$v&)ox^8^f9_9qr7aw-y1_jop@nph^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['www.tufidcoschemes.co.in','tufidcoschemes.co.in', '127.0.0.1']
 
