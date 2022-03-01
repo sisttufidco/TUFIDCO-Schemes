@@ -248,7 +248,7 @@ class AgencyBankDetails(models.Model):
     beneficiary_name = models.CharField("Name of the Beneficiary", max_length=90, null=True)
     bank_name = models.CharField("Name of the Bank", max_length=90, null=True)
     branch = models.CharField("Branch", max_length=90, null=True)
-    account_number = models.IntegerField("Account Number", null=True)
+    account_number = models.CharField("Account Number", max_length=90, null=True)
     IFSC_code = models.CharField("IFSC Code", max_length=20, null=True)
     passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True
                                       , help_text='Please attach a clear scanned copy front page of the Bank passbook')
