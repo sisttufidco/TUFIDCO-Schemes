@@ -366,6 +366,9 @@ class DashboardAdmin(admin.ModelAdmin):
             'ulb_project_cost': Sum('ApprovedProjectCost'),
             'ulb_works': Count('Project_ID')
         }
+        ulb_metrics2 = {
+            'ulb_project_cost': Sum('ApprovedProjectCost')
+        }
         response.context_data['sectorbarchart'] = list(qs.values('Sector').exclude(
             Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert',
                         'Metal Beam Crash Barriers']).annotate(**metrics_project).order_by('Sector'))
@@ -379,9 +382,7 @@ class DashboardAdmin(admin.ModelAdmin):
             AgencyType__AgencyType='Town Panchayat').annotate(**metrics_project).order_by('Sector'))
 
         response.context_data['piechart'] = list(qs.values('Sector').annotate(**metrics).order_by('Sector'))
-        response.context_data['ulbpiechart'] = list(
-            qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).annotate(**ulb_metrics).order_by(
-                'ApprovedProjectCost'))
+        response.context_data['ulbpiechart'] = list(qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).annotate(**ulb_metrics).order_by('Sector'))
         response.context_data['ulbdonutchart'] = list(
             qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).annotate(**ulb_metrics).order_by(
                 'ulb_works'))
@@ -593,6 +594,10 @@ class DashboardAdmin(admin.ModelAdmin):
             Scheme__Scheme='KNMT').aggregate(knmt_share=Sum('SchemeShare'))
         ulb_share_ulb = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
             Scheme__Scheme='KNMT').aggregate(ulb_share=Sum('ULBShare'))
+        ulb_singara_share = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
+            Scheme__Scheme='Singara Chennai 2.0').aggregate(singara_share=Sum('SchemeShare'))
+        ulb_share_ulb_singara = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
+            Scheme__Scheme='Singara Chennai 2.0').aggregate(ulb_share=Sum('ULBShare'))
 
         pie_chart2 = {
             "Bus Stand": float(busstand['project_cost']),
@@ -789,6 +794,8 @@ class DashboardAdmin(admin.ModelAdmin):
         Virudhunagar_total_projects = MasterSanctionForm.objects.filter(District__District="Virudhunagar").count()
 
         extra_context = {
+            'ulb_singara_share': ulb_singara_share,
+            'ulb_share_ulb_singara':ulb_share_ulb_singara,
             'Vellore_project_cost':Vellore_project_cost,
             'Virudhunagar_project_cost':Virudhunagar_project_cost,
             'Virudhunagar_total_projects':Virudhunagar_total_projects,

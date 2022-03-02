@@ -1362,7 +1362,7 @@
     chart.render();
     
 </script>
-    {% elif group.name == 'Agency' %}
+    {% elif group.name == 'Town Panchayat'%}
         <div class="row row-card ulb-project-details">
             <p class="p-details">Project Details</p>
             <div class="col-lg-3 col-sm-6">
@@ -1485,6 +1485,312 @@
                 type: 'pie',
                 
               },  
+              title: {
+                  text: 'Sector Wise Projects Sanctioned - Cost in lakhs',
+                  align: 'left',
+                  margin: 10,
+                  offsetX: 30,
+                  offsetY: 0,
+                  floating: false,
+                  style: {
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      fontFamily: 'Roboto',
+                      color: '#145F8E'
+                }
+              },
+              labels: [{% for i in ulbpiechart %} '{{ i.Sector }}', {% endfor %}],
+              responsive: [{
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200
+                  },
+                  legend: {
+                    position: 'bottom'
+                  }
+                }
+              }]
+              };
+              var chart = new ApexCharts(document.querySelector("#pieSector"), options);
+              chart.render();
+        </script>
+        {% elif group.name == 'Municipality' %}
+            <div class="row row-card ulb-project-details">
+            <p class="p-details">Project Details</p>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-blue">
+                    <div class="inner">
+                        <p class="card-title">Total Projects</p>
+                        <h3 class="card-info"> {{ ulb_total_project }} </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-green">
+                    <div class="inner">
+                    <p class="card-title">Total Cost</p>
+                    <h3 class="card-info">&#8377; {{ ulb_project_cost.project_cost }} lakhs</h3>
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-orange">
+                    <div class="inner">
+                        <p class="card-title">KNMT Share</p>
+                        <h3 class="card-info">&#8377; {{ ulb_knmt_share.knmt_share }} lakhs</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-red">
+                    <div class="inner">
+                        <p class="card-title">ULB Share</p>
+                        <h3 class="card-info">&#8377; {{ ulb_share_ulb.ulb_share }} lakhs</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="charts">
+            <div class="row">
+                <div class="col piechart" style="margin-left:13px;">
+                    <div id="pieSector"></div>
+                </div>
+                <div class="col piechart" style="margin-right:13px;">
+                    <div id="donutSector"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var options = {
+                series: [{% for i in ulbdonutchart %} {{ i.ulb_works }}, {% endfor %}],
+                title: {
+                    text: 'Sector Wise Number of Works Sanctioned',
+                    align: 'center',
+                    margin: 10,
+                    offsetX: 30,
+                    offsetY: 0,
+                    floating: false,
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        fontFamily: 'Roboto',
+                        color: '#145F8E'
+                  }
+                },
+                dataLabels: {
+                    formatter: function(val, opts){
+                        return opts.w.config.series[opts.seriesIndex]
+                    },
+                },
+                chart: {
+                    width: 410,
+                    type: 'donut',
+                },
+                theme:{
+                    palette: 'palette2',
+                },
+                plotOptions:{
+                    pie:{
+                        donut:{
+                            labels:{
+                                show: true,
+                            },
+                            total: {
+                                showAlways: true,
+                                label: 'Total',
+                                fontSize: '22px',
+                                fontFamily: 'Helvetica, Arial, sans-serif',
+                                fontWeight: 600,
+                                color: '#373d3f',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => {
+                                        return a + b
+                                    }, 0)
+                                },
+                            },
+                        },
+                    },
+                },
+                labels: [{% for i in ulbdonutchart %} '{{ i.Sector }}', {% endfor %}],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#donutSector"), options);
+            chart.render();
+        </script>
+        <script>
+            var options = {
+                series: [{% for i in ulbpiechart %} {{ i.ulb_project_cost}}, {% endfor %}],
+                chart: {
+                width: 410,
+                type: 'pie',
+
+              },
+              title: {
+                  text: 'Sector Wise Projects Sanctioned - Cost in lakhs',
+                  align: 'left',
+                  margin: 10,
+                  offsetX: 30,
+                  offsetY: 0,
+                  floating: false,
+                  style: {
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      fontFamily: 'Roboto',
+                      color: '#145F8E'
+                }
+              },
+              labels: [{% for i in ulbpiechart %} '{{ i.Sector }}', {% endfor %}],
+              responsive: [{
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200
+                  },
+                  legend: {
+                    position: 'bottom'
+                  }
+                }
+              }]
+              };
+              var chart = new ApexCharts(document.querySelector("#pieSector"), options);
+              chart.render();
+        </script>
+      {% elif group.name == 'Corporation' %}
+            <div class="row row-card ulb-project-details">
+            <p class="p-details">Project Details</p>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-blue">
+                    <div class="inner">
+                        <p class="card-title">Total Projects</p>
+                        <h3 class="card-info"> {{ ulb_total_project }} </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-green">
+                    <div class="inner">
+                    <p class="card-title">Total Cost</p>
+                    <h3 class="card-info">&#8377; {{ ulb_project_cost.project_cost }} lakhs</h3>
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-orange">
+                    <div class="inner">
+                        <p class="card-title">Singara Chennai 2.0 Share</p>
+                        <h3 class="card-info">&#8377; {{ ulb_singara_share.singara_share }} lakhs</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card-box bg-red">
+                    <div class="inner">
+                        <p class="card-title">ULB Share</p>
+                        <h3 class="card-info">&#8377; {{ ulb_share_ulb_singara.ulb_share }} lakhs</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="charts">
+            <div class="row">
+                <div class="col piechart" style="margin-left:13px;">
+                    <div id="pieSector"></div>
+                </div>
+                <div class="col piechart" style="margin-right:13px;">
+                    <div id="donutSector"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var options = {
+                series: [{% for i in ulbdonutchart %} {{ i.ulb_works }}, {% endfor %}],
+                title: {
+                    text: 'Sector Wise Number of Works Sanctioned',
+                    align: 'center',
+                    margin: 10,
+                    offsetX: 30,
+                    offsetY: 0,
+                    floating: false,
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        fontFamily: 'Roboto',
+                        color: '#145F8E'
+                  }
+                },
+                dataLabels: {
+                    formatter: function(val, opts){
+                        return opts.w.config.series[opts.seriesIndex]
+                    },
+                },
+                chart: {
+                    width: 410,
+                    type: 'donut',
+                },
+                theme:{
+                    palette: 'palette2',
+                },
+                plotOptions:{
+                    pie:{
+                        donut:{
+                            labels:{
+                                show: true,
+                            },
+                            total: {
+                                showAlways: true,
+                                label: 'Total',
+                                fontSize: '22px',
+                                fontFamily: 'Helvetica, Arial, sans-serif',
+                                fontWeight: 600,
+                                color: '#373d3f',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => {
+                                        return a + b
+                                    }, 0)
+                                },
+                            },
+                        },
+                    },
+                },
+                labels: [{% for i in ulbdonutchart %} '{{ i.Sector }}', {% endfor %}],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#donutSector"), options);
+            chart.render();
+        </script>
+        <script>
+            var options = {
+                series: [{% for i in ulbpiechart %} {{ i.ulb_project_cost}}, {% endfor %}],
+                chart: {
+                width: 410,
+                type: 'pie',
+
+              },
               title: {
                   text: 'Sector Wise Projects Sanctioned - Cost in lakhs',
                   align: 'left',
