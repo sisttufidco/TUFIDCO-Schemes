@@ -212,17 +212,17 @@ class MasterSanctionForm(models.Model):
     Scheme = models.ForeignKey(Scheme, blank=True, on_delete=models.CASCADE, null=True)
     Sector = models.CharField("Sector", max_length=200, blank=True, null=True)
     ProjectName = models.TextField("Name of the Work", blank=True, null=True)
-    ProjectCost = models.DecimalField("Project Cost", decimal_places=2, blank=True, max_digits=10, null=True)
-    ProposedCostByULB = models.DecimalField("Proposed Cost by ULB", decimal_places=2, blank=True, max_digits=10,
+    ProjectCost = models.DecimalField("Project Cost", decimal_places=4, blank=True, max_digits=10, null=True)
+    ProposedCostByULB = models.DecimalField("Proposed Cost by ULB", decimal_places=4, blank=True, max_digits=10,
                                             null=True)
-    ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
+    ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=4, max_digits=10,
                                               null=True)
-    SchemeShare = models.DecimalField("Scheme Share", decimal_places=2, blank=True, max_digits=10, null=True)
-    ULBShare = models.DecimalField("ULB Share", decimal_places=2, blank=True, max_digits=10, null=True)
+    SchemeShare = models.DecimalField("Scheme Share", decimal_places=4, blank=True, max_digits=10, null=True)
+    ULBShare = models.DecimalField("ULB Share", decimal_places=4, blank=True, max_digits=10, null=True)
     GoMeeting = models.IntegerField("GO", blank=True, null=True)
     Date_AS = models.DateField("Date of AS", blank=True, null=True)
     Project_ID = models.CharField('Project ID', max_length=40, blank=True, null=True)
-    total = models.DecimalField("Total", decimal_places=2, blank=True, max_digits=10, null=True)
+    total = models.DecimalField("Total", decimal_places=4, blank=True, max_digits=10, null=True)
 
     def save(self, **kwargs):
         self.Project_ID = "%s_%s_%.3d_%d_%s_%.4d" % (self.Scheme.Scheme[:1],
