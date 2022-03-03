@@ -1065,7 +1065,7 @@ class AgencyProgressAdmin(admin.ModelAdmin):
 @admin.register(AgencySanctionModel)
 class AgencySanctionAdmin(admin.ModelAdmin):
     form = AgencySanctionForm
-    fields = (('Scheme', 'Sector', 'Project_ID'),'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate', 'wd_awarded', 'wdawddate')
+    fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName','ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate', 'wd_awarded', 'wdawddate')
 
     list_filter = [
         'ts_awarded',

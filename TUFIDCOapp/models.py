@@ -290,11 +290,11 @@ def status_choices():
             ('Completed', 'Completed')]
 class AgencyProgressModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), null=True)
-    Sector = models.CharField(max_length=100, choices=sector_make_choices(), null=True)
-    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), null=True)
-    Latitude = models.CharField("Latitude", max_length=20, null=True)
-    Longitude = models.CharField("Longitude", max_length=20, null=True)
+    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True,null=True)
+    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True,null=True)
+    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True,null=True)
+    Latitude = models.CharField("Latitude", max_length=20, blank=True,null=True)
+    Longitude = models.CharField("Longitude", max_length=20, blank=True,null=True)
     location = LocationField(
         map_attrs={"style": 'mapbox://styles/mapbox/satellite-v9',
                    "center": (80.2319139, 13.0376246),
@@ -309,15 +309,15 @@ class AgencyProgressModel(models.Model):
                    "zoom": 15,
                    }, blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
-    PhysicalProgress = models.TextField("Physical Progress", null=True)
-    status = models.CharField(max_length=20, choices=status_choices(), null=True)
-    Expenditure = models.CharField("Expenditure (in lakhs)", max_length=50, null=True)
-    FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, null=True,
+    PhysicalProgress = models.TextField("Physical Progress", blank=True,null=True)
+    status = models.CharField(max_length=20, choices=status_choices(),blank=True, null=True)
+    Expenditure = models.CharField("Expenditure (in lakhs)", max_length=50, blank=True,null=True)
+    FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, blank=True,null=True,
                                    help_text="Agency has to send a hard copy of the release request along with "
                                              "photos,etc in the prescribed format")
-    valueofworkdone = models.CharField("Value of Work done (in lakhs)", max_length=50, null=True)
+    valueofworkdone = models.CharField("Value of Work done (in lakhs)", max_length=50,blank=True, null=True)
     upload1 = models.FileField("upload", upload_to="agencysanctionlocation/", null=True,
-                               help_text="Please upload a photo of site with location matching with the google maps")
+                               help_text="Please upload a photo of site with location matching with the google maps",blank=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
 
 
@@ -336,20 +336,22 @@ class AgencyProgressModel(models.Model):
 
 class AgencySanctionModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), null=True)
-    Sector = models.CharField(max_length=100, choices=sector_make_choices(), null=True)
-    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), null=True)
-    tsrefno = models.CharField("Technical Sanction Reference No.", max_length=30, null=True)
-    tsdate = models.DateField("Technical Sanction Date", null=True)
-    tawddate = models.DateField("Tender Awarded Date", null=True)
-    wdawddate = models.DateField("Work Done Awarded Date", null=True)
+    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True,null=True)
+    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True,null=True)
+    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True,null=True)
+    ProjectName = models.TextField("Project Name", blank=True, null=True)
+
+    tsrefno = models.CharField("Technical Sanction Reference No.", max_length=30, blank=True,null=True)
+    tsdate = models.DateField("Technical Sanction Date", blank=True,null=True)
+    tawddate = models.DateField("Tender Awarded Date", blank=True,null=True)
+    wdawddate = models.DateField("Work Done Awarded Date", blank=True,null=True)
     YN_CHOICES = (
         ('0', 'Yes'),
         ('0', 'No'),
     )
-    ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20, choices=YN_CHOICES, null=True)
-    tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, choices=YN_CHOICES, null=True)
-    wd_awarded = models.CharField("Work Done Awarded", max_length=20, choices=YN_CHOICES, null=True)
+    ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20,blank=True, choices=YN_CHOICES, null=True)
+    tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20,blank=True, choices=YN_CHOICES, null=True)
+    wd_awarded = models.CharField("Work Done Awarded", max_length=20,blank=True, choices=YN_CHOICES, null=True)
     
     def save(self, **kwargs):
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID = self.Project_ID)
