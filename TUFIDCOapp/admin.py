@@ -1077,6 +1077,7 @@ class AgencySanctionAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if request.user.groups.filter(name__in=['Agency']).exists():
             obj.user =  request.user
+            obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(Project_ID=form.cleaned_data['Project_ID'])
             obj.save()
 
     def get_queryset(self, request):
