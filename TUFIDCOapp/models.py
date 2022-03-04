@@ -14,12 +14,14 @@ from django.utils.safestring import mark_safe
     
 """
 
+
 class LatestReports(models.Model):
     name = models.CharField('Name', max_length=50, null=True)
     report = models.FileField(upload_to='reports/', null=True)
 
     def __str__(self):
         return self.name
+
 
 class tufidco_info(models.Model):
     logo = models.ImageField(upload_to='headerimages/')
@@ -142,15 +144,9 @@ class SchemeSanctionPdf(models.Model):
 
 # Master Sanction Form
 class Location(models.Model):
-    latitude = models.DecimalField(
-        max_digits=20, decimal_places=6, null=True, blank=True)
-
-    longitude = models.DecimalField(
-        max_digits=20, decimal_places=6, null=True, blank=True)
-
     location = LocationField(
         map_attrs={"style": 'mapbox://styles/mapbox/satellite-v9',
-                   "center": (0.0, 0.0),
+                   "center": (80.2319139, 13.0376246),
                    "cursor_style": 'pointer',
                    "marker_color": "Blue",
                    "rotate": True,
@@ -285,16 +281,19 @@ def product_id_make_choices():
     return [(str(c), str(c)) for c in
             MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('SNo').distinct()]
 
+
 def status_choices():
     return [('In Progress', 'In Progress'),
             ('Completed', 'Completed')]
+
+
 class AgencyProgressModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True,null=True)
-    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True,null=True)
-    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True,null=True)
-    Latitude = models.CharField("Latitude", max_length=20, blank=True,null=True)
-    Longitude = models.CharField("Longitude", max_length=20, blank=True,null=True)
+    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True, null=True)
+    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True, null=True)
+    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
+    Latitude = models.CharField("Latitude", max_length=20, blank=True, null=True)
+    Longitude = models.CharField("Longitude", max_length=20, blank=True, null=True)
     location = LocationField(
         map_attrs={"style": 'mapbox://styles/mapbox/satellite-v9',
                    "center": (80.2319139, 13.0376246),
@@ -305,29 +304,29 @@ class AgencyProgressModel(models.Model):
                    "fullscreen_button": True,
                    "navigation_buttons": True,
                    "track_location_button": True,
-                   "readonly": False,
+                   "readonly": True,
                    "zoom": 15,
                    }, blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
-    PhysicalProgress = models.TextField("Physical Progress", blank=True,null=True)
-    status = models.CharField(max_length=20, choices=status_choices(),blank=True, null=True)
-    Expenditure = models.CharField("Expenditure (in lakhs)", max_length=50, blank=True,null=True)
-    FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, blank=True,null=True,
+    PhysicalProgress = models.TextField("Physical Progress", blank=True, null=True)
+    status = models.CharField(max_length=20, choices=status_choices(), blank=True, null=True)
+    Expenditure = models.CharField("Expenditure (in lakhs)", max_length=50, blank=True, null=True)
+    FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, blank=True, null=True,
                                    help_text="Agency has to send a hard copy of the release request along with "
                                              "photos,etc in the prescribed format")
-    valueofworkdone = models.CharField("Value of Work done (in lakhs)", max_length=50,blank=True, null=True)
+    valueofworkdone = models.CharField("Value of Work done (in lakhs)", max_length=50, blank=True, null=True)
     upload1 = models.FileField("upload", upload_to="agencysanctionlocation/", null=True,
-                               help_text="Please upload a photo of site with location matching with the google maps",blank=True)
+                               help_text="Please upload a photo of site with location matching with the google maps",
+                               blank=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
-
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
-        self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID = self.Project_ID)
+        self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
-        return '{} - {} - {}'.format(str(self.Scheme),str(self.user.first_name), str(self.Project_ID))
+        return '{} - {} - {}'.format(str(self.Scheme), str(self.user.first_name), str(self.Project_ID))
 
     class Meta:
         verbose_name = 'ULB Progress Detail'
@@ -336,33 +335,34 @@ class AgencyProgressModel(models.Model):
 
 class AgencySanctionModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True,null=True)
-    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True,null=True)
-    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True,null=True)
+    Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True, null=True)
+    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True, null=True)
+    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
 
-    tsrefno = models.CharField("Technical Sanction Reference No.", max_length=30, blank=True,null=True)
-    tsdate = models.DateField("Technical Sanction Date", blank=True,null=True)
-    tawddate = models.DateField("Tender Awarded Date", blank=True,null=True)
-    wdawddate = models.DateField("Work Done Awarded Date", blank=True,null=True)
+    tsrefno = models.CharField("Technical Sanction Reference No.", max_length=30, blank=True, null=True)
+    tsdate = models.DateField("Technical Sanction Date", blank=True, null=True)
+    tawddate = models.DateField("Tender Awarded Date", blank=True, null=True)
+    wdawddate = models.DateField("Work Order Awarded Date", blank=True, null=True)
     YN_CHOICES = (
         ('0', 'Yes'),
         ('0', 'No'),
     )
-    ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20,blank=True, choices=YN_CHOICES, null=True)
-    tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20,blank=True, choices=YN_CHOICES, null=True)
-    wd_awarded = models.CharField("Work Done Awarded", max_length=20,blank=True, choices=YN_CHOICES, null=True)
-    
+    ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES,
+                                  null=True)
+    tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
+    wd_awarded = models.CharField("Work Order Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
+
     def save(self, **kwargs):
-        self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID = self.Project_ID)
+        self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
         super(AgencySanctionModel, self).save(**kwargs)
 
     def __str__(self):
         return '{} - {} - {}'.format(str(self.Scheme), str(self.user.first_name), str(self.Project_ID))
 
     class Meta:
-       verbose_name = "ULB Project Sanction Detail"
-       verbose_name_plural = "ULB Project Sanction Details"
+        verbose_name = "ULB Project Sanction Detail"
+        verbose_name_plural = "ULB Project Sanction Details"
 
 
 class MasterReport(MasterSanctionForm):
@@ -371,17 +371,26 @@ class MasterReport(MasterSanctionForm):
         verbose_name = "KNMT Physical & Financial Progress Report"
         verbose_name_plural = "KNMT Physical & Financial Progress Reports"
 
+
 class Dashboard(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "Dashboard"
         verbose_name_plural = "Dashboard"
 
+
 class SectorMasterReport(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "Sector wise Report"
         verbose_name_plural = "Sector wise Reports"
+
+
+class DistrictWiseReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "DMA District Wise Report"
+        verbose_name_plural = "DMA District Wise Reports"
 
 
 class ULBPanCard(models.Model):

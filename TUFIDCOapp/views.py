@@ -15,19 +15,21 @@ def home(request):
     gallery_photos = postphotogallery_slider.objects.all()
     form_slider_photos = postreformslider.objects.all()
     main_slider_photos = postmainslider.objects.all()
-    total_projects = MasterSanctionForm.objects.count()
-    project_cost = MasterSanctionForm.objects.aggregate(project_cost=Sum('ApprovedProjectCost'))
+    total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').count()
+    project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(project_cost=Sum(
+        'ApprovedProjectCost'))
     knmt = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(knmt_share=Sum('SchemeShare'))
     ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(ulb_share=Sum('ULBShare'))
-    dmp_total_projects = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').count()
-    dmp_project_cost = MasterSanctionForm.objects.filter(
+    dmp_total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
+        AgencyType__AgencyType='Municipality').count()
+    dmp_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Municipality').aggregate(dmp_project_cost=Sum('ApprovedProjectCost'))
     dmp_knmt = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Municipality').aggregate(dmp_knmt=Sum('SchemeShare'))
     dmp_ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Municipality').aggregate(dmp_ulb_share=Sum('ULBShare'))
-    ctp_total_projects = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Town Panchayat').count()
-    ctp_project_cost = MasterSanctionForm.objects.filter(
+    ctp_total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').count()
+    ctp_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Town Panchayat').aggregate(ctp_project_cost=Sum('ApprovedProjectCost'))
     ctp_knmt = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Town Panchayat').aggregate(ctp_knmt=Sum('SchemeShare'))
