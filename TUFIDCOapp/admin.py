@@ -1113,7 +1113,6 @@ class AgencyProgressAdmin(admin.ModelAdmin):
 
 @admin.register(AgencySanctionModel)
 class AgencySanctionAdmin(admin.ModelAdmin):
-    
     form = AgencySanctionForm
     search_fields = [
         'Scheme',
@@ -1181,6 +1180,7 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
     ordering = [
         'user__first_name',
     ]
+
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
@@ -1601,51 +1601,62 @@ class DistrictWiseReportAdmin(admin.ModelAdmin):
         response.context_data['report_total'] = dict(
             qs.aggregate(**metrics)
         )
-        ariyalur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(District__District='Ariyalur'
-                                                                                   ).filter(Scheme__Scheme='KNMT').filter(
+        ariyalur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
+            District__District='Ariyalur'
+            ).filter(Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
-        ariyalur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(District__District='Ariyalur'
-                                                                                   ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Municipality').aggregate(project_cost= Sum('ApprovedProjectCost'))
-        ariyalur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(District__District='Ariyalur'
-                                                                                   ).filter(
+        ariyalur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
+            District__District='Ariyalur'
+            ).filter(Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        ariyalur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
+            District__District='Ariyalur'
+            ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
-        ariyalur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(District__District='Ariyalur'
-                                                                                     ).filter(
+        ariyalur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
+            District__District='Ariyalur'
+            ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        ariyalur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(District__District='Ariyalur'
-                                                                                   ).filter(
+        ariyalur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
+            District__District='Ariyalur'
+            ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
-        ariyalur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(District__District='Ariyalur'
-                                                                                          ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        ariyalur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(District__District='Ariyalur'
-                                                                                        ).filter(
-            Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Municipality').count()
-        ariyalur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(District__District='Ariyalur'
-                                                                                          ).filter(
+        ariyalur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
+            District__District='Ariyalur'
+            ).filter(
             Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
-        ariyalur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(District__District='Ariyalur'
-                                                                                ).filter(
+        ariyalur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
+            District__District='Ariyalur'
+            ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
-        ariyalur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(District__District='Ariyalur'
-                                                                                  ).filter(
+        ariyalur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
+            District__District='Ariyalur'
+            ).filter(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        ariyalur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
+            District__District='Ariyalur'
+            ).filter(
+            Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').count()
+        ariyalur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
+            District__District='Ariyalur'
+            ).filter(
             Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ariyalur'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         ariyalur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ariyalur'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
@@ -1664,7 +1675,8 @@ class DistrictWiseReportAdmin(admin.ModelAdmin):
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         ariyalur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
-            District__District='Ariyalur').filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
+            District__District='Ariyalur').filter(Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ariyalur'
@@ -1689,54 +1701,55 @@ class DistrictWiseReportAdmin(admin.ModelAdmin):
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         ariyalur_total_cost = MasterSanctionForm.objects.filter(District__District='Ariyalur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
 
         Chengalpattu_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Chengalpattu'
-            ).filter(Scheme__Scheme='KNMT').filter(
+        ).filter(Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         Chengalpattu_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Chengalpattu'
-            ).filter(Scheme__Scheme='KNMT').filter(
+        ).filter(Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         Chengalpattu_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         Chengalpattu_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         Chengalpattu_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
         Chengalpattu_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Chengalpattu'
-            ).filter(
+        ).filter(
             Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
@@ -5414,7 +5427,8 @@ class DistrictWiseReportAdmin(admin.ModelAdmin):
         DMA_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').count()
-        DMA_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(Scheme__Scheme='KNMT').filter(
+        DMA_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
+            Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(

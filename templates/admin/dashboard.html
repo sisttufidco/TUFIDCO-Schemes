@@ -155,11 +155,11 @@
         <div class="row">
             <div class="col piechart pl-150" style="margin-left:13px;">
                 <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall</p>
-                <div id="pieSector"></div>
+                <div id="pieSector" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
             <div class="col piechart pl-150" style="margin-right:13px;">
                 <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall</p>
-                <div id="donutSector"></div>
+                <div id="donutSector" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
         </div>
         
@@ -168,11 +168,11 @@
         <div class="row">
             <div class="col piechart pl-150" style="margin-left:13px;">
                 <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Directorate of Municipalities</p>
-                <div id="pieSectorDMA"></div>
+                <div id="pieSectorDMA" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
             <div class="col piechart pl-150" style="margin-right:13px;">
                 <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Directorate of Municipalities</p>
-                <div id="donutSectoDMA"></div>
+                <div id="donutSectoDMA" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
         </div>
     </div>     
@@ -180,39 +180,29 @@
         <div class="row">
             <div class="col piechart pl-150" style="margin-left:13px;">
                 <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats</p>
-                <div id="pieSectorCTP"></div>
+                <div id="pieSectorCTP" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
             <div class="col piechart pl-150" style="margin-right:13px;">
                 <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Commissionerate of Town Panchayats</p>
-                <div id="donutSectorCTP"></div>
+                <div id="donutSectorCTP" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
         </div>
-    </div>             
-    <div id="carousels" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active"> 
-          <div class="row row-card">
-            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Overall</p>
-            <div id="SectorProjectCost" class="pl-230"></div>
-            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="row row-card">
-            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Directorate of Municipal Administration</p>
-            <div id="SectorProjectCostDMA" class="pl-230"></div>
-            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="row row-card">
-            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats</p>
-            <div id="SectorProjectCostCTP" class="pl-230"></div>
-            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
-          </div>
-        </div>
-      </div>
     </div>
+    <div class="row charts piechart">
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Overall</p>
+            <div id="SectorProjectCost" ></div>
+            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
+    </div>
+      <div class="row charts piechart">
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Directorate of Municipal Administration</p>
+            <div id="SectorProjectCostDMA"></div>
+            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
+      </div>
+      <div class="row charts piechart">
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats</p>
+            <div id="SectorProjectCostCTP"></div>
+            <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
+      </div>
     <div class="row row-card2 table-sector">
       <table class="border-grey" style="border-radius:5px;">
         <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Projects Sanctioned - Cost in lakhs</p>
@@ -859,7 +849,7 @@
             },
         },
         chart: {
-            width: 410,
+            width: '100%',
             type: 'donut',
             toolbar: {
                 show: true
@@ -893,7 +883,7 @@
         },
         labels: [{% for i, j in donut_chart_sectorDMA.items %} '{{ i }}', {% endfor %}],
         responsive: [{
-            breakpoint: 480,
+            breakpoint: 300,
             options: {
                 chart: {
                     width: 200
@@ -918,7 +908,7 @@
             },
         },
         chart: {
-            width: 410,
+             width: '100%',
             type: 'donut',
             toolbar: {
                 show: true
@@ -972,7 +962,7 @@
     var options = {
         series: [{% for i, j in pie_chart_CTP.items %} {{ j }}, {% endfor %}],
         chart: {
-        width: 410,
+         width: '100%',
         type: 'pie',
         toolbar: {
             show: true
@@ -1005,7 +995,7 @@
             },
         },
         chart: {
-            width: 410,
+             width: '100%',
             type: 'donut',
             toolbar: {
                 show: true
@@ -1039,10 +1029,10 @@
         },
         labels: [{% for i, j in donut_chart_sector.items %} '{{ i }}', {% endfor %}],
         responsive: [{
-            breakpoint: 480,
+            breakpoint: 300,
             options: {
                 chart: {
-                    width: 200
+                    width: '60%'
                 },
                 legend: {
                     position: 'bottom'
@@ -1060,7 +1050,7 @@
     var options = {
         series: [{% for i, j in pie_chart_sectorDMA.items %} {{ j }}, {% endfor %}],
         chart: {
-        width: 410,
+        width: '100%',
         type: 'pie',
         toolbar: {
             show: true
@@ -1070,7 +1060,7 @@
       },  
       labels: [{% for i, j in pie_chart_sectorDMA.items %} '{{ i }}', {% endfor %}],
       responsive: [{
-        breakpoint: 480,
+        breakpoint: 300,
         options: {
           chart: {
             width: 200
@@ -1088,7 +1078,7 @@
     var options = {
         series: [{% for i, j in pie_chart_sector.items %} {{ j }}, {% endfor %}],
         chart: {
-        width: 410,
+            width: '100%',
         type: 'pie',
         toolbar: {
             show: true
@@ -1097,16 +1087,17 @@
       },  
       labels: [{% for i, j in pie_chart_sector.items %} '{{ i }}', {% endfor %}],
       responsive: [{
-        breakpoint: 480,
+        breakpoint: 1000,
         options: {
           chart: {
-            width: 200
+            width: 300,
           },
           legend: {
             position: 'bottom'
           }
         }
       }]
+
       };
       var chart = new ApexCharts(document.querySelector("#pieSector"), options);
       chart.render();
@@ -1121,8 +1112,8 @@
         }],
         chart: 
         {
-            height: 380,
-            width:900,
+             width: '100%',
+            height: 480,
             type: 'bar',
         },
         plotOptions: {
@@ -1204,8 +1195,8 @@
         }],
         chart: 
         {
-            height: 380,
-            width:900,
+             width: '100%',
+            height: 480,
             type: 'bar',
         },
         plotOptions: {
@@ -1282,13 +1273,13 @@
     {
         series: [
         {
+
             name: 'Cost',
             data: [{{ road.project_cost }},{% for row in sectorbarchart %} {{row.project_cost}}, {% endfor %}]
         }],
-        chart: 
-        {
-            height: 380,
-            width:900,
+        chart:{
+             width: '100%',
+            height: 480,
             type: 'bar',
         },
         plotOptions: {
