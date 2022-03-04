@@ -1,16 +1,16 @@
 #SectorProjectCost {
-  max-width: 1200px;
-  margin: 35px auto;
+  max-width: 1200px !important;
+  margin: 35px auto !important;
   opacity: 0.9;
 }
 #SectorProjectCostCTP {
-  max-width: 1200px;
+  max-width: 1200px !important;
   margin: 35px auto;
   opacity: 0.9;
 }
 #SectorProjectCostDMA {
-  max-width: 1200px;
-  margin: 35px auto;
+  max-width: 1200px !important;
+  margin: 35px auto !important;
   opacity: 0.9;
 }
 .piechart{
