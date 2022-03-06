@@ -20,9 +20,13 @@ class AgencyProgressForm(forms.ModelForm):
     def __init__(self, request, *args, **kwargs):
         super(AgencyProgressForm, self).__init__(*args, **kwargs)
         if not request.user.groups.filter(name__in=["Admin",]).exists():
+            list = []
+            for i in map(str, request.user.groups.all()):
+                list.append(i)
+
             self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme',flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
-            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector',flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
-            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID', flat=True).filter(AgencyName__AgencyName=request.user.first_name).order_by('SNo').distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector',flat=True).filter(AgencyName__AgencyName=request.user.first_name).filter(AgencyType__AgencyType=list[1]).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID', flat=True).filter(AgencyName__AgencyName=request.user.first_name).filter(AgencyType__AgencyType=list[1]).order_by('SNo').distinct()])
         else:
             self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme',flat=True).distinct()])
             self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector',flat=True).distinct()])
@@ -42,9 +46,12 @@ class AgencySanctionForm(forms.ModelForm):
     def __init__(self, request, *args, **kwargs):
         super(AgencySanctionForm, self).__init__(*args, **kwargs)
         if not request.user.groups.filter(name__in=["Admin",]).exists():
+            list = []
+            for i in map(str, request.user.groups.all()):
+                list.append(i)
             self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme', flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
-            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).filter(AgencyName__AgencyName=request.user.first_name).distinct()])
-            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID',flat=True).filter(AgencyName__AgencyName=request.user.first_name).order_by('SNo').distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).filter(AgencyName__AgencyName=request.user.first_name).filter(AgencyType__AgencyType=list[1]).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID',flat=True).filter(AgencyName__AgencyName=request.user.first_name).filter(AgencyType__AgencyType=list[1]).order_by('SNo').distinct()])
         else:
             self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme', flat=True).distinct()])
             self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).distinct()])

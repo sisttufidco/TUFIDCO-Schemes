@@ -36,9 +36,12 @@ def home(request):
     ctp_ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Town Panchayat').aggregate(ctp_ulb_share=Sum('ULBShare'))
 
+    ulb_release_requests = ULBReleaseRequest.objects.all()
+
     latest_reports = LatestReports.objects.all()
 
     context = {
+        'ulb_release_requests': ulb_release_requests,
         'latest_reports': latest_reports,
         "tufidco_info": data,
         'gallery_photos': gallery_photos,

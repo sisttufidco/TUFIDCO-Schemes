@@ -113,13 +113,19 @@
                   <a class="dropdown-item" href="#">Singara Chennai 2.0</a>
               </div>
             </li>
-            <li class="nav-item dropdown">
+              <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Downloads</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-                {% load static %}
-                {% if user.is_authenticated %}
-                <a class="dropdown-item" href="{% static 'pdf/releaseform.doc' %}">Release Request</a>
-                {% endif %}
+              <div class="dropdown-submenu dropdown-menu" aria-labelledby="dropdown04">
+                <a class="dropdown-item" tabindex="-1" href="#" >KNMT</a>
+                  <ul class="dropdown-menu" style="margin-top: 10px">
+                      {% if user.is_authenticated %}
+                          {% for i in ulb_release_requests %}
+                        <li class="dropdown-item">
+                            <a class="dropdown-item" href="{{ i.form.url }}">{{ i.name_of_form }}</a>
+                        </li>
+                          {% endfor %}
+                      {% endif%}
+                  </ul>
               </div>
             </li>
             <li class="nav-item {% if request.path == gallery_url %}active{% endif %}"><a href="{% url 'gallery' %}" class="nav-link">GALLERY</a></li>

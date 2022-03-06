@@ -423,3 +423,16 @@ class FundReleaseDetails(models.Model):
     class Meta:
         verbose_name = "Fund Release Detail"
         verbose_name_plural = "Fund Release Details"
+
+
+class ULBReleaseRequest(models.Model):
+    scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
+    name_of_form = models.CharField("Name of form", max_length=50, null=True)
+    form = models.FileField(upload_to='ReleaseRequest/', null=True)
+
+    def __str__(self):
+        return self.name_of_form
+
+    class Meta:
+        verbose_name = 'ULB Release Request'
+        verbose_name_plural = 'ULB Release Requests'
