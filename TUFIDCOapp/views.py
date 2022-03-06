@@ -128,8 +128,10 @@ def KNMT(request):
 
 def KNMT_AS(request):
     data = tufidco_info.objects.all()
+    latest_reports = LatestReports.objects.all()
 
     context = {
+        "latest_reports":latest_reports,
         "tufidco_info": data,
     }
 
