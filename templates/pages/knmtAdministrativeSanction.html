@@ -22,9 +22,9 @@
              In Tamil Nadu, there are 14 Corporations (except Greater Chennal Corporation), 121 Municipalities and 528 Town Panchayats. Many schemes taken up in the recent years such as Smart Cities Mission, AMRUT are aimed at improving the infrastructure facilities of Corporations and major towns alone. Smart Cities Mission is being implemented only in 11 Corporations. AMRUT is also being implemented in 28 Towns only. The coverage of schemes in Corporations is relatively high when compared to Municipalities and Town Panchayats. Hence it has been decided to introduce a new Scheme "Kalaignar Nagarpura Mempattu Thittam"(KNMT) in all 121 Municipalities and 528 Town Panchayats so as to fulfil the infrastructural gaps in these Urban Local Bodies.
            <br><br>For further details refer the given documents below
            </p>
-            &raquo;&nbsp;&nbsp;<a href="{% static 'schemes/knmt/1 - KNMT -G.O(Ms) No.90, dt 28.10.21.pdf' %}" download style="text-decoration: none;"> 1 - KNMT -G.O(Ms) No.90, dt 28.10.21.pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
-            &raquo;&nbsp;&nbsp; <a href="{% static 'schemes/knmt/2 - KNMT - G.O(Ms.) No.92, dt 30.10.2021.pdf' %}" download style="text-decoration: none;">2 - KNMT - G.O(Ms.) No.92, dt 30.10.2021.pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
-            &raquo;&nbsp;&nbsp; <a href="{% static 'schemes/knmt/3 - KNMT - G.O.(Ms) No.99, dt 12.11.2021.pdf' %}" download style="text-decoration: none;">3 - KNMT - G.O.(Ms) No.99, dt 12.11.2021.pdf&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
+           {% for i in latest_reports %}
+            &raquo;&nbsp;&nbsp;<a href="{{ i.report.url }}" download style="text-decoration: none;"> {{ i.name }}<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
+            {% endfor %}
     </div>
 
   </div>
