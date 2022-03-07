@@ -155,7 +155,7 @@
     <div class="flex-child download-pdf col-md-4">
       <h3>Latest update</h3><hr>
       
-      <marquee behavior="scroll" direction="up" scrollamount="4" onmouseover="this.stop();" onmouseout="this.start();">
+      <marquee style="height: 255px;" behavior="scroll" direction="up" scrollamount="4" onmouseover="this.stop();" onmouseout="this.start();">
         {% for i in latest_reports %}
         <a {% for group_for in request.user.groups.all %}{% if group_for.name == 'Admin' or group_for.name == 'CMD_DGM' %} href="{{ i.report.url }}" {% endif %} {% endfor %}download style="padding-left:10px;">{{ i.name }} &nbsp;<i class="fa fa-file-pdf-o"></i></a><br><br>
         {% endfor %}

@@ -128,7 +128,7 @@ def KNMT(request):
 
 def KNMT_AS(request):
     data = tufidco_info.objects.all()
-    latest_reports = LatestReports.objects.all()
+    latest_reports = LatestReports.objects.filter(Scheme__Scheme='KNMT').all()
 
     context = {
         "latest_reports":latest_reports,
@@ -170,7 +170,7 @@ def S_Chennai_AS(request):
     context = {
         "tufidco_info": data,
         "scheme": scheme,
-        "pdf": pdf
+        "pdf": pdf,
     }
 
     return render(request, 'pages/SingaraChennaiAdministrativeSanction.html', context)

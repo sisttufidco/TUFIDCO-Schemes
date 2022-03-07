@@ -21,7 +21,7 @@
              {{ i.introduction }}
            </p>
              {% for pdf in pdf %}
-           &raquo;&nbsp;<span  style="font-family: 'palatinolinotype';"></span> &nbsp;<a href="{{ pdf.pdf.url }}" download style="text-decoration: none;">{{ pdf.Pdf_name }}&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a>
+           &raquo;&nbsp;<span  style="font-family: 'palatinolinotype';"></span> &nbsp;<a href="{{ pdf.pdf.url }}" download style="text-decoration: none;">{{ pdf.Pdf_name }}&nbsp;<i class="fa fa-file-pdf-o" style="color:red"></i></a><br><br>
                {% endfor %}
          {% endfor %}
        </div>

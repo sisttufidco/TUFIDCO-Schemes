@@ -15,12 +15,7 @@ from django.utils.safestring import mark_safe
 """
 
 
-class LatestReports(models.Model):
-    name = models.CharField('Name', max_length=50, null=True)
-    report = models.FileField(upload_to='reports/', null=True)
 
-    def __str__(self):
-        return self.name
 
 
 class tufidco_info(models.Model):
@@ -141,6 +136,9 @@ class SchemeSanctionPdf(models.Model):
     pdf = models.FileField(upload_to='pdf/', blank=True, null=True)
     Pdf_name = models.CharField('PDF Name', max_length=200, null=True)
 
+    def __str__(self):
+        return self.scheme
+
 
 # Master Sanction Form
 class Location(models.Model):
@@ -249,7 +247,7 @@ class Report(MasterSanctionForm):
 
 class AgencyBankDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    beneficiary_name = models.CharField("Name of the Beneficiary", max_length=90, null=True)
+    beneficiary_name = models.CharField("Name of the ULB", max_length=90, null=True)
     bank_name = models.CharField("Name of the Bank", max_length=90, null=True)
     branch = models.CharField("Branch", max_length=90, null=True)
     account_number = models.CharField("Account Number", max_length=90, null=True)
@@ -438,3 +436,12 @@ class ULBReleaseRequest(models.Model):
     class Meta:
         verbose_name = 'ULB Release Request'
         verbose_name_plural = 'ULB Release Requests'
+
+
+class LatestReports(models.Model):
+    Scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
+    name = models.CharField('Name', max_length=50, null=True)
+    report = models.FileField(upload_to='reports/', null=True)
+
+    def __str__(self):
+        return self.name
