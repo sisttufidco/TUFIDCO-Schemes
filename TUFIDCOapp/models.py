@@ -185,6 +185,8 @@ class AgencyName(models.Model):
 class District(models.Model):
     Pid = models.IntegerField(blank=True, null=True)
     District = models.CharField('District', max_length=80, null=True)
+    Latitude = models.DecimalField("Latitude", blank=True, decimal_places=4, max_digits=10,null=True)
+    Longitude = models.DecimalField('Longitude', blank=True, decimal_places=4, max_digits=10, null=True)
 
     def __str__(self):
         return self.District

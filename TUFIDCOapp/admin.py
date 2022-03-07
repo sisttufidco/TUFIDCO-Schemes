@@ -386,14 +386,23 @@ class DashboardAdmin(admin.ModelAdmin):
             AgencyType__AgencyType='Town Panchayat').annotate(**metrics_project).order_by('Sector'))
 
         response.context_data['piechart'] = list(qs.values('Sector').annotate(**metrics).order_by('Sector'))
-        response.context_data['ulbpiechart'] = list(
-            qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).filter(
-                AgencyType__AgencyType=ULBType[1]).annotate(**ulb_metrics).order_by(
-                'Sector'))
-        response.context_data['ulbdonutchart'] = list(
-            qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).filter(
-                AgencyType__AgencyType=ULBType[1]).annotate(**ulb_metrics).order_by(
-                'ulb_works'))
+        if request.user.groups.filter(name__in=['Corporation']).exists():
+            response.context_data['ulbpiechart'] = list(
+                qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).annotate(**ulb_metrics).order_by(
+                    'Sector'))
+            response.context_data['ulbdonutchart'] = list(
+                qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).annotate(**ulb_metrics).order_by(
+                    'ulb_works'))
+        else:
+            response.context_data['ulbpiechart'] = list(
+                qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).filter(
+                    AgencyType__AgencyType=ULBType[1]).annotate(**ulb_metrics).order_by(
+                    'Sector'))
+            response.context_data['ulbdonutchart'] = list(
+                qs.values('Sector').filter(AgencyName__AgencyName=request.user.first_name).filter(
+                    AgencyType__AgencyType=ULBType[1]).annotate(**ulb_metrics).order_by(
+                    'ulb_works'))
+
 
         road = MasterSanctionForm.objects.filter(
             Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert',
@@ -601,12 +610,19 @@ class DashboardAdmin(admin.ModelAdmin):
             AgencyType__AgencyType='Town Panchayat').aggregate(ctp_knmt=Sum('SchemeShare'))
         ctp_ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             AgencyType__AgencyType='Town Panchayat').aggregate(ctp_ulb_share=Sum('ULBShare'))
+        if request.user.groups.filter(name__in=['Corporation',]).exists():
+            ulb_total_project = MasterSanctionForm.objects.filter(
+                AgencyName__AgencyName=request.user.first_name).count()
+            ulb_project_cost = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).aggregate(
+                project_cost=Sum('ApprovedProjectCost'))
+        else:
+            ulb_total_project = MasterSanctionForm.objects.filter(
+                AgencyName__AgencyName=request.user.first_name).filter(
+                AgencyType__AgencyType=ULBType[1]).count()
+            ulb_project_cost = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
+                AgencyType__AgencyType=ULBType[1]).aggregate(
+                project_cost=Sum('ApprovedProjectCost'))
 
-        ulb_total_project = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
-            AgencyType__AgencyType=ULBType[1]).count()
-        ulb_project_cost = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
-            AgencyType__AgencyType=ULBType[1]).aggregate(
-            project_cost=Sum('ApprovedProjectCost'))
         ulb_knmt_share = MasterSanctionForm.objects.filter(AgencyName__AgencyName=request.user.first_name).filter(
             AgencyType__AgencyType=ULBType[1]).filter(
             Scheme__Scheme='KNMT').aggregate(knmt_share=Sum('SchemeShare'))
