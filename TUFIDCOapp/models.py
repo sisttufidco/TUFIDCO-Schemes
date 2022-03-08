@@ -321,9 +321,6 @@ class AgencyProgressModel(models.Model):
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
-        self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(Project_ID=self.Project_ID)
-        self.percentageofworkdone = (float(self.valueofworkdone)/float(self.ApprovedProjectCost))*100
-        print(self.percentageofworkdone)
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
