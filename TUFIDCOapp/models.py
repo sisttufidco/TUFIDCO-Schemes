@@ -389,8 +389,8 @@ class SectorMasterReport(MasterSanctionForm):
 class DistrictWiseReport(MasterSanctionForm):
     class Meta:
         proxy = True
-        verbose_name = "DMA District Wise Report"
-        verbose_name_plural = "DMA District Wise Reports"
+        verbose_name = "District Wise Report (DMA)"
+        verbose_name_plural = "District Wise Reports (DMA)"
 
 
 class ULBPanCard(models.Model):
