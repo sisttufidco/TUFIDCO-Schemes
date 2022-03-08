@@ -15,9 +15,6 @@ from django.utils.safestring import mark_safe
 """
 
 
-
-
-
 class tufidco_info(models.Model):
     logo = models.ImageField(upload_to='headerimages/')
     title = models.TextField(blank=True, null=True)
@@ -183,7 +180,7 @@ class AgencyName(models.Model):
 class District(models.Model):
     Pid = models.IntegerField(blank=True, null=True)
     District = models.CharField('District', max_length=80, null=True)
-    Latitude = models.DecimalField("Latitude", blank=True, decimal_places=4, max_digits=10,null=True)
+    Latitude = models.DecimalField("Latitude", blank=True, decimal_places=4, max_digits=10, null=True)
     Longitude = models.DecimalField('Longitude', blank=True, decimal_places=4, max_digits=10, null=True)
 
     def __str__(self):
@@ -315,6 +312,7 @@ class AgencyProgressModel(models.Model):
                                    help_text="Agency has to send a hard copy of the release request along with "
                                              "photos,etc in the prescribed format")
     valueofworkdone = models.CharField("Value of Work done (in lakhs)", max_length=50, blank=True, null=True)
+    percentageofworkdone = models.CharField("Percentage", max_length=50, blank=True, null=True)
     upload1 = models.FileField("upload", upload_to="agencysanctionlocation/", null=True,
                                help_text="Please upload a photo of site with location matching with the google maps",
                                blank=True)
@@ -323,6 +321,9 @@ class AgencyProgressModel(models.Model):
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
+        self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(Project_ID=self.Project_ID)
+        self.percentageofworkdone = (float(self.valueofworkdone)/float(self.ApprovedProjectCost))*100
+        print(self.percentageofworkdone)
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
@@ -378,6 +379,12 @@ class Dashboard(MasterSanctionForm):
         verbose_name = "Dashboard"
         verbose_name_plural = "Dashboard"
 
+class ULBProgressIncompleted(AgencyProgressModel):
+    class Meta:
+        proxy = True
+        verbose_name = 'ULB Progress Incompleted'
+        verbose_name_plural = 'ULB Progress Incompleted'
+
 
 class SectorMasterReport(MasterSanctionForm):
     class Meta:
@@ -391,6 +398,13 @@ class DistrictWiseReport(MasterSanctionForm):
         proxy = True
         verbose_name = "District Wise Report (DMA)"
         verbose_name_plural = "District Wise Reports (DMA)"
+
+
+class CTPDistrictWiseReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = 'District Wise Report (CTP)'
+        verbose_name_plural = 'District Wise Report (CTP)'
 
 
 class ULBPanCard(models.Model):

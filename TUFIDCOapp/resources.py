@@ -77,3 +77,4 @@ class MasterSanctionResource(resources.ModelResource):
         fields = ('id', 'SNo', 'AgencyType', 'Agency_Name', 'District',
                   'Scheme', 'Sector', 'ProjectName', 'Project_ID', 'ProjectCost', 'ProposedCostByTufidco',
                   'ApprovedProjectCost', 'SchemeShare', 'ULBShare', 'GoMeeting', 'Date_AS')
+

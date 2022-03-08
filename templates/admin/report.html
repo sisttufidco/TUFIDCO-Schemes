@@ -1,6 +1,6 @@
 {% extends 'admin/change_list.html' %}
 {% load i18n admin_urls static admin_list %}
-{% block content_title %}<div class="report-pdf"><h1>GO Wise Report</h1> <div class="btn-export"><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/> <input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()" /></div></div>{% endblock %}
+{% block content_title %}<h1>GO Wise Report</h1>{% endblock %}
 {% block extrastyle %}
   {{ block.super }}
   {% load  static %}
@@ -17,6 +17,14 @@
       #changelist table thead th:first-child {width: inherit}
     </style>
   {% endif %}
+       {% block object-tools %}
+<ul class="object-tools">
+  {% block object-tools-items %}
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  {% endblock %}
+</ul>
+{% endblock %}
   <style>
     .object-tools a.addlink{
         display: none;
