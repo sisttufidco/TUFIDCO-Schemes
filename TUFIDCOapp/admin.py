@@ -3,15 +3,12 @@ from urllib import request
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 import json
-import pandas as pd
 from django.db.models import Count, Sum
 from import_export.admin import ImportExportModelAdmin
 from mapbox_location_field.admin import MapAdmin
 from .resources import *
 from .forms import *
 import pickle
-import collections
-from django.core.serializers.json import DjangoJSONEncoder
 
 admin.site.index_title = ""
 
