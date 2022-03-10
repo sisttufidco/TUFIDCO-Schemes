@@ -10433,8 +10433,6 @@ class ProjectProgressDetailsReportAdmin(admin.ModelAdmin):
                 if i['Project_ID'] == j['Project_ID']:
                     i['status'] = j['status']
                     query_set.append(i)
-        json_result = json.dumps(query_set, cls=DjangoJSONEncoder)
-        print(json_result)
 
         response.context_data['report'] = list(
             qs.values('Sector').order_by('user__first_name').filter(
