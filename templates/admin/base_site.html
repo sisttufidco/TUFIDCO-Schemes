@@ -25,9 +25,11 @@
         <a class="btn site-btn" type="submit" href="{% url 'emailattachment' %}">Contact DMA</a>
         {% endif %}
         {% endfor %}
+      <!--
         {% if user.has_usable_password %}
           <a class="btn site-btn" href="{% url 'admin:password_change' %}">Change Password</a>
         {% endif %}
+        -->
         <a class="btn site-btn" type="submit" href="{% url 'home' %}">View Site</a>
         <a class="btn default-bt my-2 my-sm-0" type="submit" href="{% url 'admin:logout' %}">Log Out</a>
       </p>

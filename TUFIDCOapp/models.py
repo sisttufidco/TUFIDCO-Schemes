@@ -316,11 +316,20 @@ class AgencyProgressModel(models.Model):
     upload1 = models.FileField("upload", upload_to="agencysanctionlocation/", null=True,
                                help_text="Please upload a photo of site with location matching with the google maps",
                                blank=True)
+    District = models.CharField('District', max_length=50, blank=True, null=True)
+    ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
+                                              null=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
+        self.District = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(
+            Project_ID=self.Project_ID)
+        print(self.ApprovedProjectCost[0])
+        self.percentageofworkdone = str(round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
@@ -375,6 +384,7 @@ class Dashboard(MasterSanctionForm):
         proxy = True
         verbose_name = "Dashboard"
         verbose_name_plural = "Dashboard"
+
 
 class ULBProgressIncompleted(AgencyProgressModel):
     class Meta:
@@ -456,3 +466,10 @@ class LatestReports(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProjectProgressDetailsReport(AgencyProgressModel):
+    class Meta:
+        proxy = True
+        verbose_name = 'Project Progress Details Report'
+        verbose_name_plural = 'Project Progress Details Reports'

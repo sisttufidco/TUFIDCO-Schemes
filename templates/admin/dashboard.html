@@ -203,9 +203,11 @@
             <div id="SectorProjectCostCTP"></div>
             <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
       </div>
-    <div class="row row-card2 table-sector">
+
+       <div class="row row-card2 table-sector">
       <table class="border-grey" style="border-radius:5px;">
         <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Projects Sanctioned - Cost in lakhs</p>
+        <thead>
         <col>
           <colgroup span="2"></colgroup>
           <colgroup span="2"></colgroup>
@@ -214,7 +216,7 @@
             <th class="border-grey th-t1-center">Name of the Sector</th>
             <th class="border-grey th-t1-center"  colspan="3">Overall</th>
             <th class="border-grey th-t1-center" colspan="3">DMA</th>
-            <th class="border-grey th-t1-center" colspan="3">CTP</th> 
+            <th class="border-grey th-t1-center" colspan="3">CTP</th>
         </tr>
         <tr class="border-grey">
           <th class="border-grey th-t2-right"></th>
@@ -239,11 +241,13 @@
             <th class="border-grey th-t3-right" scope="col">Rs. in Lakhs</th>
             <th class="border-grey th-t3-right" scope="col">Percentage</th>
           </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        </thead>
+       <tbody>
+         <tr class="border-grey {% cycle 'row1' 'row2'%}">
             <td class="border-grey" style="text-align:right">1</td>
             <td class="border-grey" style="text-align:center">Bus Stand</td>
             <td class="border-grey" style="text-align:right">{{ busstand_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ busstand.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ busstand.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ busstand_percentage }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ busstandDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ busstandDMA.project_cost }}</td>
@@ -256,7 +260,7 @@
             <td class="border-grey" style="text-align:right">2</td>
             <td class="border-grey" style="text-align:center">Community Hall</td>
             <td class="border-grey" style="text-align:right">{{ ch_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ ch.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ ch.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ ch_percent }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ chDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ chDMA.project_cost }}</td>
@@ -270,19 +274,19 @@
             <td class="border-grey" style="text-align:center">Crematorium</td>
             <td class="border-grey" style="text-align:right">{{ crematorium_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ crematorium.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ crematorium_pt }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ crematorium_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ crematoriumDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ crematoriumDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAcrematorium_pt }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ DMAcrematorium_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ crematoriumCTP_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ crematoriumCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPcrematorium_pt }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ CTPcrematorium_pt }} &percnt;</td>
         </tr>
         <tr class="border-grey {% cycle 'row1' 'row2'%}">
             <td class="border-grey" style="text-align:right">4</td>
             <td class="border-grey" style="text-align:center">Knowledge Centre</td>
             <td class="border-grey" style="text-align:right">{{ KC_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ KC.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ KC.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ KC_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ KCDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ KCDMA.project_cost }}</td>
@@ -295,7 +299,7 @@
             <td class="border-grey" style="text-align:right">5</td>
             <td class="border-grey" style="text-align:center">Market</td>
             <td class="border-grey" style="text-align:right">{{ market_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ market.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ market.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ market_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ marketDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ marketDMA.project_cost }}</td>
@@ -308,7 +312,7 @@
             <td class="border-grey" style="text-align:right">6</td>
             <td class="border-grey" style="text-align:center">Park</td>
             <td class="border-grey" style="text-align:right">{{ park_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ park.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ park.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ park_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ parkDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ parkDMA.project_cost }}</td>
@@ -321,7 +325,7 @@
           <td class="border-grey" style="text-align:right">7</td>
           <td class="border-grey" style="text-align:center">Road Works</td>
           <td class="border-grey" style="text-align:right">{{ road_total }}</td>
-          <td class="border-grey" style="text-align:right">&#8377; {{ road.project_cost }}</td> 
+          <td class="border-grey" style="text-align:right">&#8377; {{ road.project_cost }}</td>
           <td class="border-grey" style="text-align:right">{{ road_pt }} &percnt;</td>
           <td class="border-grey" style="text-align:right">{{ roadDMA_total }}</td>
           <td class="border-grey" style="text-align:right">&#8377; {{ roadDMA.project_cost }}</td>
@@ -334,7 +338,7 @@
             <td class="border-grey" style="text-align:right">8</td>
             <td class="border-grey" style="text-align:center">Solid Waste Mgt.</td>
             <td class="border-grey" style="text-align:right">{{ SWM_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ SWM.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ SWM.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ SWM_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ SWMDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ SWMDMA.project_cost }}</td>
@@ -347,7 +351,7 @@
             <td class="border-grey" style="text-align:right">9</td>
             <td class="border-grey" style="text-align:center">Water Bodies</td>
             <td class="border-grey" style="text-align:right">{{ WB_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ WB.project_cost }}</td> 
+            <td class="border-grey" style="text-align:right">&#8377; {{ WB.project_cost }}</td>
             <td class="border-grey" style="text-align:right">{{ WB_pt }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ WBDMA_total }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ WBDMA.project_cost }}</td>
@@ -361,14 +365,63 @@
             <td class="border-grey" style="text-align:right">Total </td>
             <td class="border-grey" style="text-align:right">{{ total_projects }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ project_cost.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">100 &percnt;</td> 
+            <td class="border-grey" style="text-align:right">100 &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ dmp_total_projects }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ dmp_project_cost.dmp_project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMA_total_percent }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ DMA_total_percent }} &percnt;</td>
             <td class="border-grey" style="text-align:right">{{ ctp_total_projects }}</td>
             <td class="border-grey" style="text-align:right">&#8377; {{ ctp_project_cost.ctp_project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTP_total_percent }} &percnt;</td> 
+            <td class="border-grey" style="text-align:right">{{ CTP_total_percent }} &percnt;</td>
         </tr>
+
+       </tbody>
+      </table>
+      <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam Crash Barrier.</p>
+    </div>
+       <div class="row row-card2 table-sector">
+      <table class="border-grey" style="border-radius:5px;">
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Projects Sanctioned - Cost in lakhs</p>
+        <thead>
+        <col>
+          <colgroup span="2"></colgroup>
+          <colgroup span="2"></colgroup>
+          <tr class="border-grey">
+            <th class="border-grey th-t1-center">S.No</th>
+            <th class="border-grey th-t1-center">Name of the Sector</th>
+            <th class="border-grey th-t1-center"  colspan="2">Approved</th>
+            <th class="border-grey th-t1-center" colspan="3">Completed</th>
+            <th class="border-grey th-t1-center" colspan="3">In Progress</th>
+              <th class="border-grey th-t1-center" colspan="3">To be Commenced</th>
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right" >No. of Works</th>
+          <th class="border-grey th-t2-center">Project Cost</th>
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-center">Project Cost</th>
+            <th class="border-grey th-t2-center">Percentage</th>
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-center">Project Cost</th>
+            <th class="border-grey th-t2-center">Percentage</th>
+            <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-center">Project Cost</th>
+            <th class="border-grey th-t2-center">Percentage</th>
+        </tr>
+        </thead>
+       <tbody>
+         <tr class="border-grey {% cycle 'row1' 'row2'%}">
+            <td class="border-grey" style="text-align:right">1</td>
+            <td class="border-grey" style="text-align:center">Bus Stand</td>
+            <td class="border-grey" style="text-align:right">{{ busstand_approved_project_count }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ busstand_approved_project_cost.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ busstand_completed_count }}</td>
+            <td class="border-grey" style="text-align:right">{{ busstand_completed_approved_project_cost.project_cost }}</td>
+             <td class="border-grey" style="text-align:right">{{ busstand_inprogress_count }}</td>
+             <td class="border-grey" style="text-align:right">{{ busstand_in_progress_approved_project_cost }}</td>
+        </tr>
+
+       </tbody>
       </table>
       <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam Crash Barrier.</p>
     </div>
