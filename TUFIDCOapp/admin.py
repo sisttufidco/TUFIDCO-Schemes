@@ -417,7 +417,6 @@ class AgencyProgressAdmin(admin.ModelAdmin):
 
     list_filter = [
         'status',
-        'user',
         'Scheme',
         'Sector',
         'valueofworkdone',
