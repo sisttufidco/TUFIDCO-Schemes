@@ -3,7 +3,7 @@ from urllib import request
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 import json
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Avg
 from import_export.admin import ImportExportModelAdmin
 from mapbox_location_field.admin import MapAdmin
 from .resources import *
@@ -11388,9 +11388,18 @@ class DashboardAdmin(admin.ModelAdmin):
         Virudhunagar_total_projects = MasterSanctionForm.objects.filter(District__District="Virudhunagar").count()
         district_info = District.objects.exclude(District='Chennai').all()
 
+        busstand_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(Sector='Bus Stand').count()
+        busstand_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(Sector='Bus Stand').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        busstand_completed_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='Completed').count()
+        busstand_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
 
 
         extra_context = {
+
+            'busstand_approved_project_cost':busstand_approved_project_cost,
+            'busstand_completed_approved_project_cost':busstand_completed_approved_project_cost,
+            'busstand_approved_project_count': busstand_approved_project_count,
+            'busstand_completed_count': busstand_completed_count,
             'CTPVirudhunagar_total_projects': CTPVirudhunagar_total_projects,
             'CTPVirudhunagar_project_cost': CTPVirudhunagar_project_cost,
             'DMAVirudhunagar_total_projects': DMAVirudhunagar_total_projects,

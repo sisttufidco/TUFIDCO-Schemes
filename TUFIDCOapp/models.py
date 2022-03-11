@@ -311,8 +311,8 @@ class AgencyProgressModel(models.Model):
     FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, blank=True, null=True,
                                    help_text="Agency has to send a hard copy of the release request along with "
                                              "photos,etc in the prescribed format")
-    valueofworkdone = models.CharField("Value of Work done (in lakhs)", max_length=50, blank=True, null=True)
-    percentageofworkdone = models.CharField("Percentage", max_length=50, blank=True, null=True)
+    valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=12, blank=True, default=0.0, null=True)
+    percentageofworkdone = models.CharField("Percentage of work done", max_length=50, blank=True, null=True)
     upload1 = models.FileField("upload", upload_to="agencysanctionlocation/", null=True,
                                help_text="Please upload a photo of site with location matching with the google maps",
                                blank=True)
@@ -329,7 +329,10 @@ class AgencyProgressModel(models.Model):
         self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(
             Project_ID=self.Project_ID)
         print(self.ApprovedProjectCost[0])
-        self.percentageofworkdone = str(round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
+        if (self.valueofworkdone != None):
+            self.percentageofworkdone = str(round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
+        else:
+            self.percentageofworkdone = str(0.00)
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
