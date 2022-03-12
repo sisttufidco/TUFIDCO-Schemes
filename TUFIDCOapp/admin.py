@@ -3,7 +3,7 @@ from urllib import request
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 import json
-from django.db.models import Count, Sum, Avg
+from django.db.models import Count, Sum, Avg, Func
 from import_export.admin import ImportExportModelAdmin
 from mapbox_location_field.admin import MapAdmin
 from .resources import *
@@ -5658,7 +5658,9 @@ class CTPDistrictWiseReportAdmin(admin.ModelAdmin):
         response.context_data.update(extra_context)
         return response
 
-
+class Round(Func):
+    function = "ROUND"
+    template = "%(function)s(%(expressions)s::numeric, 2)"
 @admin.register(DistrictWiseReport)
 class DistrictWiseReportAdmin(admin.ModelAdmin):
     change_list_template = "admin/districtwisereport.html"
@@ -11392,9 +11394,19 @@ class DashboardAdmin(admin.ModelAdmin):
         busstand_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(Sector='Bus Stand').aggregate(project_cost=Sum('ApprovedProjectCost'))
         busstand_completed_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='Completed').count()
         busstand_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        busstand_inprogress_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').count()
+        busstand_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        busstand_tobecommenced_count = busstand_approved_project_count-(busstand_completed_count+busstand_inprogress_count)
+        busstand_tobecommenced_project_cost = round(float(busstand_approved_project_cost['project_cost']) - float(busstand_inprogress_approved_project_cost['project_cost']),2)
 
-
+        busstand_district = AgencyProgressModel.objects.values('District').order_by('District').filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').annotate(percent = Sum('percentageofworkdone'))
+        print(busstand_district)
         extra_context = {
+            'busstand_district': busstand_district,
+            'busstand_tobecommenced_count': busstand_tobecommenced_count,
+            'busstand_tobecommenced_project_cost':busstand_tobecommenced_project_cost,
+            'busstand_inprogress_count': busstand_inprogress_count,
+            'busstand_inprogress_approved_project_cost': busstand_inprogress_approved_project_cost,
 
             'busstand_approved_project_cost':busstand_approved_project_cost,
             'busstand_completed_approved_project_cost':busstand_completed_approved_project_cost,

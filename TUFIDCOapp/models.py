@@ -312,7 +312,7 @@ class AgencyProgressModel(models.Model):
                                    help_text="Agency has to send a hard copy of the release request along with "
                                              "photos,etc in the prescribed format")
     valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=12, blank=True, default=0.0, null=True)
-    percentageofworkdone = models.CharField("Percentage of work done", max_length=50, blank=True, null=True)
+    percentageofworkdone = models.DecimalField("Percentage of work done", decimal_places=2, max_digits=12, blank=True, default=0.0, null=True)
     upload1 = models.FileField("upload", upload_to="agencysanctionlocation/", null=True,
                                help_text="Please upload a photo of site with location matching with the google maps",
                                blank=True)
@@ -330,9 +330,9 @@ class AgencyProgressModel(models.Model):
             Project_ID=self.Project_ID)
         print(self.ApprovedProjectCost[0])
         if (self.valueofworkdone != None):
-            self.percentageofworkdone = str(round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
+            self.percentageofworkdone = (round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
         else:
-            self.percentageofworkdone = str(0.00)
+            self.percentageofworkdone = (0.00)
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):

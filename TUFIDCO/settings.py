@@ -12,16 +12,19 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from asyncio import FastChildWatcher
 from pathlib import Path
+from dotenv import load_dotenv
 import os
 from re import T
 
+load_dotenv()
+
 # Previous settings ...
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = 'tufidcoschemes@gmail.com'
-EMAIL_HOST_PASSWORD = 'Project2020'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_FILE_PATH = '/temp'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hu5bn)c*&m%n=y-j#n5_$v&)ox^8^f9_9qr7aw-y1_jop@nph^'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -92,10 +95,10 @@ WSGI_APPLICATION = 'TUFIDCO.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tufidco',
-        'USER': 'postgres',
-        'PASSWORD': 'Tufidco9540',
-        'HOST': 'tufidcodb.ccp9m8wmnigu.ap-south-1.rds.amazonaws.com',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
         'PORT': '5432',
     }
 }
@@ -155,7 +158,7 @@ LOGIN_URL = "/admin/login/"
 LOGIN_REDIRECT_URL = '/admin/TUFIDCOapp/dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-MAPBOX_KEY = "pk.eyJ1IjoiYXJ5YW5iaGF0dDEwMDIiLCJhIjoiY2tqaDFmcnloNDFpYTJybnFvbmk0cTliNyJ9.ImW_FZl5b1VBm1bYaLyziA"
+MAPBOX_KEY = os.getenv('MAPBOX_KEY')
 
 SECURE_HSTS_SECONDS = 12121212
 SECURE_SSL_REDIRECT = True
@@ -163,6 +166,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
 
 
 
