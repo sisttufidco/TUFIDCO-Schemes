@@ -36,7 +36,7 @@ def home(request):
     ctp_ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Town Panchayat').aggregate(ctp_ulb_share=Sum('ULBShare'))
 
-    ulb_release_requests = ULBReleaseRequest.objects.all()
+    ulb_release_requests = ULBReleaseRequest.objects.all().order_by('name_of_form')
 
     latest_reports = LatestReports.objects.all()
 

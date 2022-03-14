@@ -134,7 +134,7 @@ class SchemeSanctionPdf(models.Model):
     Pdf_name = models.CharField('PDF Name', max_length=200, null=True)
 
     def __str__(self):
-        return self.scheme
+        return self.Pdf_name
 
 
 # Master Sanction Form
