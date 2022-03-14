@@ -73,8 +73,10 @@ def home(request):
 def about(request):
     data = tufidco_info.objects.all()
     about_text = About.objects.all()
+    Counter = PageCounter.objects.all()[0]
 
     context = {
+        'num_visits': Counter,
         "tufidco_info": data,
         "about_text": about_text,
     }
@@ -83,11 +85,13 @@ def about(request):
 
 
 def gallery(request):
+    Counter = PageCounter.objects.all()[0]
     data = tufidco_info.objects.all()
     gallery_img = gallery_Images.objects.all()
     gallery_places = gallery_Images.objects.values_list('type', flat=True).order_by('type').distinct()
 
     context = {
+        'num_visits': Counter,
         "tufidco_info": data,
         "gallery": gallery_img,
         "gallery_places": gallery_places,
@@ -97,10 +101,12 @@ def gallery(request):
 
 
 def contact(request):
+    Counter = PageCounter.objects.all()[0]
     data = tufidco_info.objects.all()
     officer = Officer.objects.all()
 
     context = {
+        'num_visits': Counter,
         "tufidco_info": data,
         "Officer": officer,
     }
