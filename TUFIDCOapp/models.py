@@ -136,6 +136,12 @@ class SchemeSanctionPdf(models.Model):
     def __str__(self):
         return self.Pdf_name
 
+class PageCounter(models.Model):
+    count = models.IntegerField('Page Counter', null=True)
+
+    def __str__(self):
+        return str(self.count)
+
 
 # Master Sanction Form
 class Location(models.Model):
