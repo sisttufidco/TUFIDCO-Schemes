@@ -115,11 +115,13 @@ def contact(request):
 
 
 def FAQ(request):
+    Counter = PageCounter.objects.all()[0]
     data = tufidco_info.objects.all()
     scheme_name = Scheme_Faq_Questions.objects.order_by('id').filter(name=1)
     scheme_name2 = Scheme_Faq_Questions.objects.order_by('id').filter(name=2)
 
     context = {
+        'num_visits': Counter,
         "tufidco_info": data,
         "Scheme_name": scheme_name,
         "scheme_name2": scheme_name2,
