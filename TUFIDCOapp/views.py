@@ -11,8 +11,11 @@ from TUFIDCO.settings import EMAIL_HOST_USER
 
 # Create your views here.
 def home(request):
-    num_visits = request.session.get('num_visits', 0)
-    request.session['num_visits'] = num_visits + 1
+    Counter= PageCounter.objects.all()[0]
+    Counter.count += 1
+    Counter.save()
+
+
     data = tufidco_info.objects.all()
     gallery_photos = postphotogallery_slider.objects.all()
     form_slider_photos = postreformslider.objects.all()
@@ -61,7 +64,7 @@ def home(request):
         'ctp_project_cost': ctp_project_cost,
         'ctp_knmt': ctp_knmt,
         'ctp_ulb_share': ctp_ulb_share,
-        'num_visits': num_visits
+        'num_visits': Counter
     }
 
     return render(request, 'pages/home.html', context)

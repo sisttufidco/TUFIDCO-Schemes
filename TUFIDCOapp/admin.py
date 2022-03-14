@@ -11771,3 +11771,5 @@ class DashboardAdmin(admin.ModelAdmin):
 
         response.context_data.update(extra_context)
         return response
+
+admin.site.register(PageCounter)
