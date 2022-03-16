@@ -9,17 +9,18 @@ class PlaceholderAuthForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput(attrs={'placeholder': 'Username'}))
     password = forms.CharField(widget=PasswordInput(attrs={'placeholder': 'Password'}))
 
+
 class AgencyProgressForm(forms.ModelForm):
     class Meta:
         model = AgencyProgressModel
-        fields = ('Sector','status')
+        fields = ('Sector', 'status')
         widgets = {
             'status': forms.RadioSelect(),
         }
-    
+
     def __init__(self, request, *args, **kwargs):
         super(AgencyProgressForm, self).__init__(*args, **kwargs)
-        if not request.user.groups.filter(name__in=["Admin",]).exists():
+        if not request.user.groups.filter(name__in=["Admin", ]).exists():
             if request.user.groups.filter(name__in=['Corporation', ]).exists():
                 self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                      MasterSanctionForm.objects.values_list(
@@ -55,9 +56,16 @@ class AgencyProgressForm(forms.ModelForm):
                                                                              AgencyType__AgencyType=list[1]).order_by(
                                                                              'SNo').distinct()])
         else:
-            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme',flat=True).distinct()])
-            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector',flat=True).distinct()])
-            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('SNo').distinct()])
+            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
+                                                                 MasterSanctionForm.objects.values_list(
+                                                                     'Scheme__Scheme', flat=True).distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in
+                                                                 MasterSanctionForm.objects.values_list('Sector',
+                                                                                                        flat=True).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
+                                                                     MasterSanctionForm.objects.values_list(
+                                                                         'Project_ID', flat=True).order_by(
+                                                                         'SNo').distinct()])
 
 
 class AgencySanctionForm(forms.ModelForm):
@@ -72,8 +80,8 @@ class AgencySanctionForm(forms.ModelForm):
 
     def __init__(self, request, *args, **kwargs):
         super(AgencySanctionForm, self).__init__(*args, **kwargs)
-        if not request.user.groups.filter(name__in=["Admin",]).exists():
-            if request.user.groups.filter(name__in=['Corporation',]).exists():
+        if not request.user.groups.filter(name__in=["Admin", ]).exists():
+            if request.user.groups.filter(name__in=['Corporation', ]).exists():
                 self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                      MasterSanctionForm.objects.values_list(
                                                                          'Scheme__Scheme', flat=True).filter(
@@ -83,7 +91,10 @@ class AgencySanctionForm(forms.ModelForm):
                                                                                                             flat=True).filter(
                                                                          AgencyName__AgencyName=request.user.first_name).distinct()])
                 self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
-                                                                         MasterSanctionForm.objects.values_list('Project_ID', flat=True).filter(AgencyName__AgencyName=request.user.first_name).order_by('SNo').distinct()])
+                                                                         MasterSanctionForm.objects.values_list(
+                                                                             'Project_ID', flat=True).filter(
+                                                                             AgencyName__AgencyName=request.user.first_name).order_by(
+                                                                             'SNo').distinct()])
             else:
                 list = []
                 for i in map(str, request.user.groups.all()):
@@ -105,17 +116,23 @@ class AgencySanctionForm(forms.ModelForm):
                                                                              AgencyType__AgencyType=list[1]).order_by(
                                                                              'SNo').distinct()])
         else:
-            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Scheme__Scheme', flat=True).distinct()])
-            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).distinct()])
-            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Project_ID',flat=True).order_by('SNo').distinct()])
-
-
-
-
+            self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
+                                                                 MasterSanctionForm.objects.values_list(
+                                                                     'Scheme__Scheme', flat=True).distinct()])
+            self.fields['Sector'].widget = forms.Select(choices=[(str(c), str(c)) for c in
+                                                                 MasterSanctionForm.objects.values_list('Sector',
+                                                                                                        flat=True).distinct()])
+            self.fields['Project_ID'].widget = forms.Select(choices=[(str(c), str(c)) for c in
+                                                                     MasterSanctionForm.objects.values_list(
+                                                                         'Project_ID', flat=True).order_by(
+                                                                         'SNo').distinct()])
 
 
 class EmailForm(forms.Form):
-    ULB = forms.MultipleChoiceField(choices=[(str(c), str(c)) for c in User.objects.values_list('first_name', flat=True).filter(groups__name='Agency').filter(groups__name='Municipality').order_by('first_name')], widget=forms.CheckboxSelectMultiple())
+    ULB = forms.MultipleChoiceField(choices=[(str(c), str(c)) for c in
+                                             User.objects.values_list('first_name', flat=True).filter(
+                                                 groups__name='Agency').filter(groups__name='Municipality').order_by(
+                                                 'first_name')], widget=forms.CheckboxSelectMultiple())
     subject = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={'placeholder': 'Enter Subject', 'style': 'width: 450px;', 'class': 'form-control'}))
     attach = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True, 'style': 'width: 450px;',
@@ -123,8 +140,12 @@ class EmailForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea(
         attrs={'placeholder': 'Enter Message', 'style': 'width: 450px;', 'class': 'form-control'}))
 
+
 class EmailForm2(forms.Form):
-    ULB2 = forms.MultipleChoiceField(choices=[(str(c), str(c)) for c in User.objects.values_list('first_name', flat=True).filter(groups__name='Agency').filter(groups__name='Town Panchayat').order_by('first_name')], widget=forms.CheckboxSelectMultiple())
+    ULB2 = forms.MultipleChoiceField(choices=[(str(c), str(c)) for c in
+                                              User.objects.values_list('first_name', flat=True).filter(
+                                                  groups__name='Agency').filter(groups__name='Town Panchayat').order_by(
+                                                  'first_name')], widget=forms.CheckboxSelectMultiple())
     subject = forms.CharField(max_length=100, widget=forms.TextInput(
         attrs={'placeholder': 'Enter Subject', 'style': 'width: 450px;', 'class': 'form-control'}))
     attach = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True, 'style': 'width: 450px;',

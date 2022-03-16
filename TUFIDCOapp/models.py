@@ -287,7 +287,8 @@ def product_id_make_choices():
 
 def status_choices():
     return [('In Progress', 'In Progress'),
-            ('Completed', 'Completed')]
+            ('Completed', 'Completed'),
+            ('Not Commenced',  'Not Commenced')]
 
 
 class AgencyProgressModel(models.Model):
@@ -312,7 +313,7 @@ class AgencyProgressModel(models.Model):
                    }, blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
     PhysicalProgress = models.TextField("Physical Progress", blank=True, null=True)
-    status = models.CharField(max_length=20, choices=status_choices(), blank=True, null=True)
+    status = models.CharField(max_length=20, choices=status_choices(), default='Not Commenced', blank=False, null=True)
     Expenditure = models.CharField("Expenditure (in lakhs)", max_length=50, blank=True, null=True)
     FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, blank=True, null=True,
                                    help_text="Agency has to send a hard copy of the release request along with "
