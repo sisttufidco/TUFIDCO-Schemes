@@ -58,10 +58,10 @@
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #75cf9e;
+  background: #145F8E;
 }
 ::-webkit-scrollbar-thumb:window-inactive {
-  background: #75cf9e;
+  background: #145F8E;
 }
 .site-btn:hover,.site-btn:focus,.site-btn:active, 
 .site-btn:active:focus:not(:disabled):not(.disabled),
@@ -90,7 +90,7 @@ fieldset .fieldBox{
     font-weight: bolder;
 }
 #header a:link, #header a:visited {
-    color: #2b6;
+    color: #145F8E;
 }
 .btn:focus,.btn:active {
     outline: none !important;
@@ -125,13 +125,14 @@ fieldset .fieldBox{
   margin-left: auto;
   margin-right: auto;
   padding-top: 15px;
+
 }
 .navbar .container-fluid .container-text h6{
     text-align: center;
 }
 .logo-img{
-    width: 100%;
-    max-width: 80px;
+    height: 80px;
+    width: 100px;
 }
 .default-bt:hover{
     background-color: #145F8E !important;
@@ -149,8 +150,8 @@ fieldset .fieldBox{
     padding-right: 30px;
 }
 .tamil_logo{
-    padding-top: .3125rem;
-    padding-bottom: .3125rem;
+    height: 100px;
+    padding-top: 15px;
 }
 .buttons-admin{
     float: none;
@@ -195,14 +196,18 @@ caption {
 }
 
 div.breadcrumbs{
-    background-color: #f0f0f5;
-    color: #2a2929;
+    background-color: #145F8E;
+    color: #fff;
 }
 div.breadcrumbs a{
-    color:#2a2929;
+    color: #fff;
 }
 div.breadcrumbs a:hover{
-    color: #000000;
+    color: #fff;
+}
+.navbar{
+    padding-top: 0;
+    padding-bottom: 0;
 }
 #text{
     color:white;
@@ -230,13 +235,13 @@ div.breadcrumbs a:hover{
     padding-left: 18px !important;
     padding-right: 22px !important;
     border-radius: 3px !important;
-    background: #75cf9e !important;
+    background: #145F8E !important;
 }
 .object-tools a:link, .object-tools a:visited {
-    background: #75cf9e;
+    background: #145F8E;
 }
 .object-tools a:hover{
-    background: rgb(78, 197, 136);
+    background: #145F8E;
 }
 
 .module{
@@ -285,7 +290,7 @@ a.button:hover{
     float: right !important;
 }
 .table.import-preview tr.new{
-    background-color: #75cf9e;
+    background-color: #145F8E;
 }
 label{
     font-weight: bold !important;
@@ -296,7 +301,7 @@ label{
     margin-left: 200px;
 }
 .module h2, .module caption, .inline-group h2 {
-  background: #75cf9e !important;
+  background: #145F8E !important;
 }
 .submit-row a.closelink {
   height:35px !important;
@@ -334,7 +339,7 @@ label{
     background-color: #145F8E;
 }
 .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active{
-    background-color: #75cf9e;
+    background-color: #145F8E;
 }
 span{
     text-decoration: none !important;

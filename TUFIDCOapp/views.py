@@ -11,10 +11,9 @@ from TUFIDCO.settings import EMAIL_HOST_USER
 
 # Create your views here.
 def home(request):
-    Counter= PageCounter.objects.all()[0]
+    Counter = PageCounter.objects.all()[0]
     Counter.count += 1
     Counter.save()
-
 
     data = tufidco_info.objects.all()
     gallery_photos = postphotogallery_slider.objects.all()
@@ -33,7 +32,8 @@ def home(request):
         AgencyType__AgencyType='Municipality').aggregate(dmp_knmt=Sum('SchemeShare'))
     dmp_ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Municipality').aggregate(dmp_ulb_share=Sum('ULBShare'))
-    ctp_total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').count()
+    ctp_total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
+        AgencyType__AgencyType='Town Panchayat').count()
     ctp_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
         AgencyType__AgencyType='Town Panchayat').aggregate(ctp_project_cost=Sum('ApprovedProjectCost'))
     ctp_knmt = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -145,7 +145,7 @@ def KNMT_AS(request):
     latest_reports = LatestReports.objects.filter(Scheme__Scheme='KNMT').all()
 
     context = {
-        "latest_reports":latest_reports,
+        "latest_reports": latest_reports,
         "tufidco_info": data,
     }
 
@@ -233,6 +233,7 @@ class EmailAttachementView(View):
 
         return render(request, self.template_name,
                       {'email_form': form, 'error_message': 'Unable to send email. Please try again later'})
+
 
 @method_decorator(login_required, name='dispatch')
 class EmailAttachementView2(View):
