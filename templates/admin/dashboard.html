@@ -302,16 +302,16 @@
           <tr class="border-grey {% cycle 'row1' 'row2'%}">
     <td class="border-grey" style="text-align:center"></td>
      <td class="border-grey" style="text-align:right">Total</td>
-    <td class="border-grey" style="text-align:right">{{ total_approved_project_count }}</td>
+    <td class="border-grey" style="text-align:right">{{ total_projects }}</td>
     <td class="border-grey" style="text-align:right">&#8377; {{ total_approved_project_cost.project_cost }}</td>
     <td class="border-grey" style="text-align:right">{{ total_completed_count }}</td>
-    <td class="border-grey" style="text-align:right">{{ total_completed_approved_project_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ total_completed_approved_project_cost.project_cost }}</td>
 
      <td class="border-grey" style="text-align:right;">{{ total_inprogress_count }}</td>
-     <td class="border-grey" style="text-align:right">{{ total_inprogress_approved_project_cost.project_cost }}</td>
+     <td class="border-grey" style="text-align:right">&#8377; {{ total_inprogress_approved_project_cost.project_cost }}</td>
 
      <td class="border-grey" style="text-align:right">{{ total_tobecommenced_count }}</td>
-    <td class="border-grey" style="text-align:right">{{ total_tobecommenced_project_cost }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ total_tobecommenced_project_cost.project_cost }}</td>
 </tr>
           </tfoot>
 
@@ -727,33 +727,33 @@
         'circle-stroke-color': '#ffffff'
         }
         });
-         
+
         // Create a popup, but don't add it to the map yet.
         const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false
         });
-         
+
         map.on('mouseenter', 'places', (e) => {
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = 'pointer';
-         
+
         // Copy coordinates array.
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties.description;
-         
+
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
         // over the copy being pointed to.
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
-         
+
         // Populate the popup and set its coordinates
         // based on the feature found.
         popup.setLngLat(coordinates).setHTML(description).addTo(map);
         });
-         
+
         map.on('mouseleave', 'places', () => {
         map.getCanvas().style.cursor = '';
         popup.remove();

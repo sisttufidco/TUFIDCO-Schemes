@@ -20,7 +20,7 @@ class AgencyProgressForm(forms.ModelForm):
 
     def __init__(self, request, *args, **kwargs):
         super(AgencyProgressForm, self).__init__(*args, **kwargs)
-        if not request.user.groups.filter(name__in=["Admin", ]).exists():
+        if not request.user.groups.filter(name__in=["Admin", 'progressdetails']).exists():
             if request.user.groups.filter(name__in=['Corporation', ]).exists():
                 self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                      MasterSanctionForm.objects.values_list(
@@ -39,7 +39,6 @@ class AgencyProgressForm(forms.ModelForm):
                 list = []
                 for i in map(str, request.user.groups.all()):
                     list.append(i)
-                print(request.user.groups.all())
                 self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                      MasterSanctionForm.objects.values_list(
                                                                          'Scheme__Scheme', flat=True).filter(
@@ -80,7 +79,7 @@ class AgencySanctionForm(forms.ModelForm):
 
     def __init__(self, request, *args, **kwargs):
         super(AgencySanctionForm, self).__init__(*args, **kwargs)
-        if not request.user.groups.filter(name__in=["Admin", ]).exists():
+        if not request.user.groups.filter(name__in=["Admin", 'progressdetails']).exists():
             if request.user.groups.filter(name__in=['Corporation', ]).exists():
                 self.fields['Scheme'].widget = forms.Select(choices=[(str(c), str(c)) for c in
                                                                      MasterSanctionForm.objects.values_list(

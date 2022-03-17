@@ -389,3 +389,8 @@ a{
         font-size: 2rem !important;
     }
 }
+  @media (min-width: 576px){
+.modal-dialog{
+max-width: 700px;
+}
+  }
