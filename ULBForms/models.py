@@ -189,9 +189,3 @@ class ULBProgressIncompleted(AgencyProgressModel):
         verbose_name_plural = 'ULB Progress Incompleted'
 
 
-class ProjectProgressDetailsReport(AgencyProgressModel):
-    class Meta:
-        proxy = True
-        verbose_name = 'Project Progress Details Report'
-        verbose_name_plural = 'Project Progress Details Reports'
-
