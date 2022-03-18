@@ -224,7 +224,7 @@ div.breadcrumbs a:hover{
     width: 75% !important;
     margin-left: 105px !important;
     margin-top:3%;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
 }
 #content-related {
     box-shadow:  -6px 0 #fff, 0 1px 6px rgba(100, 100, 111, 0.2);
@@ -286,7 +286,7 @@ a.button:hover{
 #map-map-mapbox-location-field{
     margin-top: 10px;
 }
-.mapboxgl-ctrl-geocoder--icon mapboxgl-ctrl-geocoder--icon-search{
+.mapboxgl-ctrl-geocoder--icon .mapboxgl-ctrl-geocoder--icon-search{
     float: right !important;
 }
 .table.import-preview tr.new{
