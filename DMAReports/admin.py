@@ -1,3 +1,6 @@
+from django.contrib import admin
+from TUFIDCOapp.models import *
+# Register your models here.
 import functools
 from urllib import request
 from django.contrib import admin
@@ -6,375 +9,19 @@ import json
 from django.db.models import Count, Sum, Avg, Func
 from import_export.admin import ImportExportModelAdmin
 from mapbox_location_field.admin import MapAdmin
-from .resources import *
-from .forms import *
 import pickle
 from django.db.models import Q
+from .models import DistrictWiseReport
+from django.contrib.admin.sites import AdminSite
 
-from DMAReports.admin import *
+class Round(Func):
+    function = "ROUND"
+    template = "%(function)s(%(expressions)s::numeric, 2)"
 
 
-admin.site.index_title = ""
-
-# Register your models here.
-admin.site.register(tufidco_info)
-
-
-@admin.register(Officer)
-class OfficerAdmin(admin.ModelAdmin):
-    list_display = [
-        'name',
-        'Designation'
-    ]
-
-    ordering = [
-        'id'
-    ]
-
-
-class PostImageAdmin(admin.StackedInline):
-    model = postphotogallery_slider
-
-
-class PostFormSlider(admin.StackedInline):
-    model = postreformslider
-
-
-class PostMainSlider(admin.StackedInline):
-    model = postmainslider
-
-
-class GalleryAdmin(admin.StackedInline):
-    model = gallery_Images
-
-
-@admin.register(body_images)
-class BodyAdmin(admin.ModelAdmin):
-    inlines = [
-        PostImageAdmin,
-        PostFormSlider,
-        PostMainSlider
-    ]
-
-    class Meta:
-        model = body_images
-
-
-@admin.register(postphotogallery_slider)
-class PostImageAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(postreformslider)
-class PostFormSlider(admin.ModelAdmin):
-    pass
-
-
-@admin.register(postmainslider)
-class PostMainSlider(admin.ModelAdmin):
-    pass
-
-
-@admin.register(gallery_Images)
-class GalleryAdmin(admin.ModelAdmin):
-    list_display = [
-        'place',
-        'Date'
-    ]
-
-    readonly_fields = (
-        'image_preview',
-    )
-
-    ordering = [
-        'id'
-    ]
-
-    def image_preview(self, obj):
-        return obj.image_preview
-
-    image_preview.short_description = 'Image Preview'
-    image_preview.allow_tags = True
-
-
-# Sanction Form
-admin.site.register(Location, MapAdmin)
-
-admin.site.register(About)
-
-
-class SchemeAdmin(ImportExportModelAdmin, admin.AdminSite):
-    model = Scheme
-
-    list_display = [
-        'Scheme'
-    ]
-
-
-admin.site.register(Scheme, SchemeAdmin)
-
-admin.site.register(SchemeSanctionPdf)
-
-
-class LocationAdmin(admin.StackedInline):
-    model = Location
-
-
-@admin.register(Scheme_Faq_Questions)
-class SchemeFAQQuestion(admin.ModelAdmin):
-    list_display = [
-        'question',
-        'name'
-    ]
-
-    ordering = [
-        'question'
-    ]
-
-
-@admin.register(Scheme_Page)
-class SchemePageAdmin(admin.ModelAdmin):
-    pass
-
-
-class AgencyTypeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    model = AgencyType
-
-    list_display = [
-        'AgencyType'
-    ]
-
-    ordering = [
-        'id'
-    ]
-
-
-admin.site.register(AgencyType, AgencyTypeAdmin)
-
-
-class AgencyNameAdmin(ImportExportModelAdmin):
-    resource_class = AgencyNameResource
-
-    list_display = [
-        'AgencyName',
-        'AgencyType'
-    ]
-    list_filter = ['AgencyType']
-    ordering = [
-        'AgencyName'
-    ]
-
-    search_fields = [
-        'AgencyName'
-    ]
-
-
-admin.site.register(AgencyName, AgencyNameAdmin)
-
-
-class DistrictAdmin(ImportExportModelAdmin):
-    resource_class = DistrictResource
-
-    list_display = [
-        'District'
-    ]
-
-    ordering = [
-        'District'
-    ]
-
-    search_fields = [
-        'District'
-    ]
-
-
-admin.site.register(District, DistrictAdmin)
-
-
-class RegionAdmin(ImportExportModelAdmin):
-    resource_class = RegionResource
-
-    list_display = [
-        'Region'
-    ]
-
-    ordering = [
-        'Region'
-    ]
-
-    search_fields = [
-        'Region'
-    ]
-
-
-admin.site.register(Region, RegionAdmin)
-
-
-class ReleaseDateInLine(admin.TabularInline):
-    model = FundReleaseDetails
-    extra = 1
-
-    verbose_name = "Fund Release Detail"
-    verbose_name_plural = "Fund Release Details"
-
-
-class MasterSanctionFormAdmin(ImportExportModelAdmin, admin.AdminSite):
-    change_form_template = 'admin/masterform.html'
-    resource_class = MasterSanctionResource
-
-    exclude = ['total']
-
-    list_display = [
-        'SNo',
-        'AgencyName',
-        'Sector',
-        'ProjectName',
-        'Project_ID',
-        'Scheme',
-        'ApprovedProjectCost',
-        'SchemeShare',
-        'ULBShare'
-    ]
-
-    list_filter = (
-        'AgencyType',
-        'Sector',
-        'Scheme',
-        'GoMeeting',
-    )
-
-    ordering = (
-        'SNo',
-    )
-
-    search_fields = (
-        'Project_ID',
-        'Scheme__Scheme',
-        'Sector',
-        'GoMeeting',
-        'ProjectName',
-        'AgencyName__AgencyName',
-        'District__District'
-    )
-
-    inlines = [ReleaseDateInLine]
-
-
-admin.site.register(MasterSanctionForm, MasterSanctionFormAdmin)
-
-
-@admin.register(Report)
-class ReportAdmin(admin.ModelAdmin):
-    change_list_template = 'admin/report.html'
-
-    list_filter = (
-        'AgencyType',
-        'Scheme',
-        'GoMeeting',
-    )
-
-    ordering = (
-        'SNo',
-    )
-
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context=extra_context)
-
-        try:
-            qs = response.context_data['cl'].queryset
-        except (AttributeError, KeyError):
-            return response
-
-        metrics = {
-            'AgencyName': Count('AgencyName', distinct=True),
-            'NoM': Count('SNo'),
-            'ApprovedProjectCost': Sum('ApprovedProjectCost'),
-            'SchemeShare': Sum('SchemeShare'),
-            'ULBShare': Sum('ULBShare')
-        }
-        response.context_data['report_total'] = dict(
-            qs.aggregate(**metrics)
-        )
-
-        response.context_data['report'] = list(qs.values('Sector').annotate(**metrics).order_by('Sector'))
-        response.context_data['heading'] = list(
-            qs.values('Scheme__Scheme', 'GoMeeting', 'Sector', 'AgencyType__AgencyType').order_by(
-                'GoMeeting').distinct()
-        )
-        return response
-
-
-@admin.register(SectorMasterReport)
-class SectorReportAdmin(admin.ModelAdmin):
-    change_list_template = 'admin/SectorMasterReport.html'
-
-    list_filter = (
-        'AgencyType',
-        'Scheme',
-        'Sector',
-        'GoMeeting',
-    )
-
-    ordering = (
-        'SNo',
-    )
-
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context=extra_context)
-
-        try:
-            qs = response.context_data['cl'].queryset
-        except (AttributeError, KeyError):
-            return response
-
-        metrics = {
-            'ProjectCost': Sum('ProjectCost'),
-            'ProposedULBCost': Sum('ProposedCostByULB'),
-            'ApprovedCost': Sum('ApprovedProjectCost'),
-            'SchemeShare': Sum('SchemeShare'),
-            'ULBShare': Sum('ULBShare')
-        }
-
-        response.context_data['report_total'] = dict(
-            qs.aggregate(**metrics)
-        )
-
-        response.context_data['report'] = list(
-            qs.values('District__District', 'AgencyName__AgencyName', 'ProjectName', 'Project_ID',
-                      'ApprovedProjectCost', 'Sector', 'SchemeShare', 'ULBShare', 'Project_ID').order_by('GoMeeting',
-                                                                                                         'Sector',
-                                                                                                         'Project_ID'))
-        response.context_data['heading'] = list(
-            qs.values('Scheme__Scheme', 'Sector', 'AgencyType__AgencyType').order_by('Scheme__Scheme').distinct()
-        )
-
-        return response
-
-
-"""
-    Agency admin
-"""
-
-
-
-
-
-class FundReleaseDetailsAdmin(admin.StackedInline):
-    model = FundReleaseDetails
-    extra = 5
-
-
-
-
-
-@admin.register(LatestReports)
-class LatestReportAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(CTPDistrictWiseReport)
-class CTPDistrictWiseReportAdmin(admin.ModelAdmin):
-    change_list_template = "admin/CTPDistrictWiseReport.html"
+@admin.register(DistrictWiseReport)
+class DistrictWiseReportAdmin(admin.ModelAdmin):
+    change_list_template = "admin/districtwisereport.html"
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
@@ -382,9 +29,7 @@ class CTPDistrictWiseReportAdmin(admin.ModelAdmin):
             qs = response.context_data['cl'].queryset
         except (AttributeError, KeyError):
             return response
-        extra_context = {
 
-        }
         metrics = {
             'Project_ID': Count('Project_ID'),
             'ApprovedCost': Sum('ApprovedProjectCost'),
@@ -393,3855 +38,3854 @@ class CTPDistrictWiseReportAdmin(admin.ModelAdmin):
         response.context_data['report_total'] = dict(
             qs.aggregate(**metrics)
         )
-
         ariyalur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Ariyalur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Ariyalur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         ariyalur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         ariyalur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Ariyalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Ariyalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Ariyalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ariyalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Ariyalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Ariyalur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ariyalur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         ariyalur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Ariyalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Ariyalur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         ariyalur_total_no = MasterSanctionForm.objects.filter(District__District='Ariyalur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         ariyalur_total_cost = MasterSanctionForm.objects.filter(District__District='Ariyalur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Chengalpattu_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Chengalpattu'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Chengalpattu'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Chengalpattu'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Chengalpattu'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Chengalpattu'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Chengalpattu'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Chengalpattu'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Chengalpattu').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Chengalpattu').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Chengalpattu_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Chengalpattu'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Chengalpattu').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Chengalpattu_total_no = MasterSanctionForm.objects.filter(District__District='Chengalpattu').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Chengalpattu_total_cost = MasterSanctionForm.objects.filter(District__District='Chengalpattu').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Coimbatore'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Coimbatore'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Coimbatore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Coimbatore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Coimbatore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Coimbatore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Coimbatore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Coimbatore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Coimbatore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Coimbatore_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Coimbatore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Coimbatore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Coimbatore_total_no = MasterSanctionForm.objects.filter(District__District='Coimbatore').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Coimbatore_total_cost = MasterSanctionForm.objects.filter(District__District='Coimbatore').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Cuddalore'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Cuddalore'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Cuddalore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Cuddalore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Cuddalore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Cuddalore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Cuddalore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Cuddalore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Cuddalore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Cuddalore_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Cuddalore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Cuddalore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Cuddalore_total_no = MasterSanctionForm.objects.filter(District__District='Cuddalore').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Cuddalore_total_cost = MasterSanctionForm.objects.filter(District__District='Cuddalore').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Dharmapuri'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Dharmapuri'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Dharmapuri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Dharmapuri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Dharmapuri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Dharmapuri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Dharmapuri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Dharmapuri').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Dharmapuri').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dharmapuri_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Dharmapuri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Dharmapuri').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Dharmapuri_total_no = MasterSanctionForm.objects.filter(District__District='Dharmapuri').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dharmapuri_total_cost = MasterSanctionForm.objects.filter(District__District='Dharmapuri').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Dindigul'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Dindigul'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Dindigul_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Dindigul_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Dindigul'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Dindigul'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Dindigul'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Dindigul'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Dindigul'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Dindigul').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Dindigul').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Dindigul_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Dindigul'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Dindigul').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Dindigul_total_no = MasterSanctionForm.objects.filter(District__District='Dindigul').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Dindigul_total_cost = MasterSanctionForm.objects.filter(District__District='Dindigul').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Erode_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Erode'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Erode'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Erode_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Erode_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Erode'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Erode'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Erode'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Erode'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Erode'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Erode').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Erode').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Erode_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Erode'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Erode').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Erode_total_no = MasterSanctionForm.objects.filter(District__District='Erode').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Erode_total_cost = MasterSanctionForm.objects.filter(District__District='Erode').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Kallakurichi_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Kallakurichi'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Kallakurichi'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Kallakurichi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Kallakurichi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Kallakurichi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Kallakurichi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Kallakurichi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Kallakurichi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Kallakurichi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kallakurichi_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Kallakurichi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Kallakurichi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Kallakurichi_total_no = MasterSanctionForm.objects.filter(District__District='Kallakurichi').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kallakurichi_total_cost = MasterSanctionForm.objects.filter(District__District='Kallakurichi').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Kancheepuram'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Kancheepuram'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Kancheepuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Kancheepuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Kancheepuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Kancheepuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Kancheepuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Kancheepuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Kancheepuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kancheepuram_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Kancheepuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Kancheepuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Kancheepuram_total_no = MasterSanctionForm.objects.filter(District__District='Kancheepuram').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kancheepuram_total_cost = MasterSanctionForm.objects.filter(District__District='Kancheepuram').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Kanyakumari'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Kanyakumari'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Kanyakumari'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Kanyakumari'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Kanyakumari'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Kanyakumari'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Kanyakumari'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Kanyakumari').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Kanyakumari').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Kanyakumari_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Kanyakumari'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Kanyakumari').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Kanyakumari_total_no = MasterSanctionForm.objects.filter(District__District='Kanyakumari').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Kanyakumari_total_cost = MasterSanctionForm.objects.filter(District__District='Kanyakumari').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Karur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Karur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Karur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Karur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Karur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Karur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Karur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Karur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Karur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Karur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Karur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Karur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Karur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Karur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Karur_total_no = MasterSanctionForm.objects.filter(District__District='Karur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Karur_total_cost = MasterSanctionForm.objects.filter(District__District='Karur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Krishnagiri_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Krishnagiri'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Krishnagiri'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Krishnagiri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Krishnagiri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Krishnagiri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Krishnagiri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Krishnagiri'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Krishnagiri').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Krishnagiri').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Krishnagiri_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Krishnagiri'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Krishnagiri').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Krishnagiri_total_no = MasterSanctionForm.objects.filter(District__District='Krishnagiri').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Krishnagiri_total_cost = MasterSanctionForm.objects.filter(District__District='Krishnagiri').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Madurai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Madurai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Madurai_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Madurai_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Madurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Madurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Madurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Madurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Madurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Madurai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Madurai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Madurai_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Madurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Madurai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Madurai_total_no = MasterSanctionForm.objects.filter(District__District='Madurai').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Madurai_total_cost = MasterSanctionForm.objects.filter(District__District='Madurai').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Mayiladuthurai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Mayiladuthurai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Mayiladuthurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Mayiladuthurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Mayiladuthurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Mayiladuthurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Mayiladuthurai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Mayiladuthurai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Mayiladuthurai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Mayiladuthurai_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Mayiladuthurai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Mayiladuthurai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Mayiladuthurai_total_no = MasterSanctionForm.objects.filter(District__District='Mayiladuthurai').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Mayiladuthurai_total_cost = MasterSanctionForm.objects.filter(District__District='Mayiladuthurai').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Nagapattinam'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Nagapattinam'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Nagapattinam'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Nagapattinam'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Nagapattinam'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Nagapattinam'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Nagapattinam'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Nagapattinam').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Nagapattinam').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nagapattinam_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Nagapattinam'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Nagapattinam').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Nagapattinam_total_no = MasterSanctionForm.objects.filter(District__District='Nagapattinam').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nagapattinam_total_cost = MasterSanctionForm.objects.filter(District__District='Nagapattinam').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Namakkal'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Namakkal'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Namakkal_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Namakkal_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Namakkal'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Namakkal'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Namakkal'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Namakkal'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Namakkal'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Namakkal').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Namakkal').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Namakkal_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Namakkal'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Namakkal').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Namakkal_total_no = MasterSanctionForm.objects.filter(District__District='Namakkal').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Namakkal_total_cost = MasterSanctionForm.objects.filter(District__District='Namakkal').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Nilgiris'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Nilgiris'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Nilgiris'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Nilgiris'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Nilgiris'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Nilgiris'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Nilgiris'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Nilgiris').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Nilgiris').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Nilgiris_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Nilgiris'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Nilgiris').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Nilgiris_total_no = MasterSanctionForm.objects.filter(District__District='Nilgiris').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Nilgiris_total_cost = MasterSanctionForm.objects.filter(District__District='Nilgiris').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Perambalur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Perambalur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Perambalur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Perambalur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Perambalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Perambalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Perambalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Perambalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Perambalur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Perambalur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Perambalur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Perambalur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Perambalur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Perambalur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Perambalur_total_no = MasterSanctionForm.objects.filter(District__District='Perambalur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Perambalur_total_cost = MasterSanctionForm.objects.filter(District__District='Perambalur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Pudukottai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Pudukottai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Pudukottai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Pudukottai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Pudukottai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Pudukottai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Pudukottai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Pudukottai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Pudukottai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Pudukottai_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Pudukottai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Pudukottai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Pudukottai_total_no = MasterSanctionForm.objects.filter(District__District='Pudukottai').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Pudukottai_total_cost = MasterSanctionForm.objects.filter(District__District='Pudukottai').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         response.context_data['KNMT_Sector'] = list(qs.values('Sector').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').annotate(**metrics).order_by('Sector'))
+            AgencyType__AgencyType='Municipality').annotate(**metrics).order_by('Sector'))
         Ramanathapuram_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Ramanathapuram'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Ramanathapuram'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Ramanathapuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Ramanathapuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Ramanathapuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ramanathapuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Ramanathapuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Ramanathapuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ramanathapuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ramanathapuram_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Ramanathapuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Ramanathapuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Ramanathapuram_total_no = MasterSanctionForm.objects.filter(District__District='Ramanathapuram').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ramanathapuram_total_cost = MasterSanctionForm.objects.filter(District__District='Ramanathapuram').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Ranipet'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Ranipet'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Ranipet_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Ranipet_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Ranipet'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Ranipet'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Ranipet'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Ranipet'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Ranipet'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Ranipet').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Ranipet').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Ranipet_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Ranipet'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Ranipet').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Ranipet_total_no = MasterSanctionForm.objects.filter(District__District='Ranipet').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Ranipet_total_cost = MasterSanctionForm.objects.filter(District__District='Ranipet').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Salem'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Salem'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Salem_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Salem_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Salem'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Salem'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Salem'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Salem'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Salem'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Salem').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Salem').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Salem_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Salem'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Salem').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Salem_total_no = MasterSanctionForm.objects.filter(District__District='Salem').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Salem_total_cost = MasterSanctionForm.objects.filter(District__District='Salem').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Sivagangai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Sivagangai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Sivagangai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Sivagangai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Sivagangai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Sivagangai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Sivagangai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Sivagangai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Sivagangai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Sivagangai_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Sivagangai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Sivagangai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Sivagangai_total_no = MasterSanctionForm.objects.filter(District__District='Sivagangai').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Sivagangai_total_cost = MasterSanctionForm.objects.filter(District__District='Sivagangai').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tenkasi'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tenkasi'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tenkasi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tenkasi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tenkasi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tenkasi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tenkasi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tenkasi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tenkasi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tenkasi_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tenkasi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tenkasi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Tenkasi_total_no = MasterSanctionForm.objects.filter(District__District='Tenkasi').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tenkasi_total_cost = MasterSanctionForm.objects.filter(District__District='Tenkasi').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thanjavur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thanjavur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thanjavur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thanjavur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thanjavur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thanjavur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thanjavur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thanjavur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thanjavur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thanjavur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thanjavur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thanjavur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Thanjavur_total_no = MasterSanctionForm.objects.filter(District__District='Thanjavur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thanjavur_total_cost = MasterSanctionForm.objects.filter(District__District='Thanjavur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Theni'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Theni'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Theni_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Theni_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Theni'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Theni'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Theni'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Theni'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Theni'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Theni').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Theni').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Theni_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Theni'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Theni').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Theni_total_no = MasterSanctionForm.objects.filter(District__District='Theni').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Theni_total_cost = MasterSanctionForm.objects.filter(District__District='Theni').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thiruvallur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thiruvallur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thiruvallur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thiruvallur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thiruvallur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thiruvallur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thiruvallur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thiruvallur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thiruvallur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvallur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thiruvallur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thiruvallur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Thiruvallur_total_no = MasterSanctionForm.objects.filter(District__District='Thiruvallur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvallur_total_cost = MasterSanctionForm.objects.filter(District__District='Thiruvallur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thiruvarur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thiruvarur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thiruvarur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thiruvarur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thiruvarur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thiruvarur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thiruvarur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thiruvarur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thiruvarur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thiruvarur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thiruvarur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thiruvarur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Thiruvarur_total_no = MasterSanctionForm.objects.filter(District__District='Thiruvarur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thiruvarur_total_cost = MasterSanctionForm.objects.filter(District__District='Thiruvarur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thoothukudi'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Thoothukudi'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Thoothukudi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Thoothukudi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Thoothukudi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Thoothukudi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Thoothukudi'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Thoothukudi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Thoothukudi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Thoothukudi_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thoothukudi'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Thoothukudi').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Thoothukudi_total_no = MasterSanctionForm.objects.filter(District__District='Thoothukudi').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Thoothukudi_total_cost = MasterSanctionForm.objects.filter(District__District='Thoothukudi').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tiruchirappalli'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tiruchirappalli'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tiruchirappalli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tiruchirappalli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tiruchirappalli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tiruchirappalli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tiruchirappalli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tiruchirappalli').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tiruchirappalli').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruchirappalli_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tiruchirappalli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tiruchirappalli').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Tiruchirappalli_total_no = MasterSanctionForm.objects.filter(District__District='Tiruchirappalli').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruchirappalli_total_cost = MasterSanctionForm.objects.filter(District__District='Tiruchirappalli').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tirunelveli'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tirunelveli'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tirunelveli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tirunelveli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tirunelveli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tirunelveli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tirunelveli'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tirunelveli').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tirunelveli').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirunelveli_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tirunelveli'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tirunelveli').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Tirunelveli_total_no = MasterSanctionForm.objects.filter(District__District='Tirunelveli').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirunelveli_total_cost = MasterSanctionForm.objects.filter(District__District='Tirunelveli').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tirupathur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tirupathur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tirupathur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tirupathur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tirupathur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tirupathur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tirupathur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tirupathur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tirupathur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tirupathur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tirupathur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tirupathur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Tirupathur_total_no = MasterSanctionForm.objects.filter(District__District='Tirupathur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tirupathur_total_cost = MasterSanctionForm.objects.filter(District__District='Tirupathur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tiruppur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tiruppur'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tiruppur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tiruppur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tiruppur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tiruppur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tiruppur'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tiruppur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tiruppur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruppur_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tiruppur'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tiruppur').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Tiruppur_total_no = MasterSanctionForm.objects.filter(District__District='Tiruppur').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruppur_total_cost = MasterSanctionForm.objects.filter(District__District='Tiruppur').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tiruvannamalai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Tiruvannamalai'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Tiruvannamalai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Tiruvannamalai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Tiruvannamalai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Tiruvannamalai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Tiruvannamalai'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Tiruvannamalai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Tiruvannamalai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Tiruvannamalai_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tiruvannamalai'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Tiruvannamalai').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Tiruvannamalai_total_no = MasterSanctionForm.objects.filter(District__District='Tiruvannamalai').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Tiruvannamalai_total_cost = MasterSanctionForm.objects.filter(District__District='Tiruvannamalai').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Vellore'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Vellore'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Vellore_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Vellore_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Vellore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Vellore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Vellore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Vellore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Vellore'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Vellore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Vellore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Vellore_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Vellore'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Vellore').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Vellore_total_no = MasterSanctionForm.objects.filter(District__District='Vellore').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Vellore_total_cost = MasterSanctionForm.objects.filter(District__District='Vellore').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Villupuram'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Villupuram'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Villupuram_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Villupuram_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Villupuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Villupuram').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Villupuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Villupuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Villupuram'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Villupuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Villupuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Villupuram_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Villupuram'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Villupuram').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Villupuram_total_no = MasterSanctionForm.objects.filter(District__District='Villupuram').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Villupuram_total_cost = MasterSanctionForm.objects.filter(District__District='Villupuram').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Virudhunagar'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(
             District__District='Virudhunagar'
         ).filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             District__District='Virudhunagar').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             District__District='Virudhunagar').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         Virudhunagar_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Virudhunagar'
         ).filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             District__District='Virudhunagar').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         Virudhunagar_total_no = MasterSanctionForm.objects.filter(District__District='Virudhunagar').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         Virudhunagar_total_cost = MasterSanctionForm.objects.filter(District__District='Virudhunagar').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         DMA_BT_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='BT Road').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_BT_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='BT Road').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMA_CC_RoadDMA_No = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_CC_RoadDMA_Cost = MasterSanctionForm.objects.filter(Sector='CC Road').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(project_cost=Sum('ApprovedProjectCost'))
+            AgencyType__AgencyType='Municipality').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMA_CrematoriumDMA_No = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_CrematoriumDMA_Cost = MasterSanctionForm.objects.filter(Sector='Crematorium').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_CulvertDMA_No = MasterSanctionForm.objects.filter(Sector='Culvert').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_CulvertDMA_Cost = MasterSanctionForm.objects.filter(Sector='Villupuram').filter(
             District__District='Virudhunagar'
         ).filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_KnowledgeDMA_Centre_No = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_KnowledgeDMA_Centre_Cost = MasterSanctionForm.objects.filter(Sector='Knowledge Centre').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_MarketDMA_No = MasterSanctionForm.objects.filter(Sector='Market').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_MarketDMA_Cost = MasterSanctionForm.objects.filter(Sector='Market').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_ParksDMA_No = MasterSanctionForm.objects.filter(Sector='Parks').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_ParksDMA_Cost = MasterSanctionForm.objects.filter(Sector='Parks').filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_PaverBlockDMA_No = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_PaverBlockDMA_Cost = MasterSanctionForm.objects.filter(Sector='Paver Block').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_SWDDMA_No = MasterSanctionForm.objects.filter(Sector='SWD').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_SWDDMA_Cost = MasterSanctionForm.objects.filter(Sector='SWD').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         DMA_WBDMA_No = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_WBDMA_Cost = MasterSanctionForm.objects.filter(Sector='Water Bodies').filter(Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').aggregate(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
 
         DMA_total_no = MasterSanctionForm.objects.filter(
             Scheme__Scheme='KNMT').filter(
-            AgencyType__AgencyType='Town Panchayat').count()
+            AgencyType__AgencyType='Municipality').count()
         DMA_total_cost = MasterSanctionForm.objects.filter(
-            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').aggregate(
+            Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
         extra_context = {
             'DMA_BT_RoadDMA_No': DMA_BT_RoadDMA_No,
@@ -5091,22 +4735,5 @@ class CTPDistrictWiseReportAdmin(admin.ModelAdmin):
             'Nilgiris_total_no': Nilgiris_total_no,
             'Nilgiris_total_cost': Nilgiris_total_cost,
         }
-
         response.context_data.update(extra_context)
         return response
-
-
-class Round(Func):
-    function = "ROUND"
-    template = "%(function)s(%(expressions)s::numeric, 2)"
-
-
-
-
-admin.site.register(ULBReleaseRequest)
-
-
-
-
-
-admin.site.register(PageCounter)

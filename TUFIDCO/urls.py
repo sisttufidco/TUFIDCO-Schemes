@@ -20,17 +20,19 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.views.static import serve as mediaserve
-
 from TUFIDCOapp.forms import PlaceholderAuthForm
+admin.autodiscover()
 
 urlpatterns = [
     path('', include('TUFIDCOapp.urls')),
+    path('admin/DMAreports/', include('DMAReports.urls')),
+    path('admin/Dashboard', include("Dashboard.urls")),
     path('admin/login/', auth_views.LoginView.as_view(template_name='pages/admin_login.html',
                                                       authentication_form=PlaceholderAuthForm,
                                                       redirect_authenticated_user=True), name='login'
          ),
     path('admin/', include('smart_selects.urls')),
     path('admin/', admin.site.urls),
+    re_path(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$', mediaserve,
+            {'document_root': settings.MEDIA_ROOT})
 ]
-
-urlpatterns.append(re_path(f'^{settings.MEDIA_URL.lstrip("/")}(?P<path>.*)$',mediaserve, {'document_root': settings.MEDIA_ROOT}))

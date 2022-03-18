@@ -38,7 +38,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['www.tufidcoschemes.co.in','tufidcoschemes.co.in', '127.0.0.1']
+ALLOWED_HOSTS = ['www.tufidcoschemes.co.in', 'tufidcoschemes.co.in', '127.0.0.1']
 
 # Application definition
 
@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TUFIDCOapp.apps.TufidcoappConfig',
+    'DMAReports.apps.DmareportsConfig',
+    'Dashboard.apps.DashboardConfig',
+    'ULBForms.apps.UlbformsConfig',
     'smart_selects',
     'import_export',
     'nested_admin',
@@ -73,8 +76,7 @@ ROOT_URLCONF = 'TUFIDCO.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,43 +157,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 USE_DJANGO_JQUERY = True
 
 LOGIN_URL = "/admin/login/"
-LOGIN_REDIRECT_URL = '/admin/TUFIDCOapp/dashboard'
+LOGIN_REDIRECT_URL = '/admin/Dashboard/dashboard/'
 LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = os.getenv('MAPBOX_KEY')
-'''
-'''
+
 SECURE_HSTS_SECONDS = 12121212
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
