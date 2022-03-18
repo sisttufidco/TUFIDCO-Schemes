@@ -474,40 +474,7 @@ class MasterReportAdmin(admin.ModelAdmin):
 
 def Decimal(x):
     return float(x)
-@admin.register(ProjectProgressDetailsReport)
-class ProjectProgressDetailsReportAdmin(admin.ModelAdmin):
-    change_list_template = 'admin/projectprogressdetails.html'
 
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context=extra_context)
-
-        try:
-            qs = response.context_data['cl'].queryset
-        except (AttributeError, KeyError):
-            return response
-
-        qs1 = MasterSanctionForm.objects.values_list('Sector', 'Project_ID', 'District__District',
-                                                     'ApprovedProjectCost')
-
-        r_qs1 = MasterSanctionForm.objects.all()
-        r_qs1.query = pickle.loads(pickle.dumps(qs1.query))
-        qs2 = AgencyProgressModel.objects.values_list('Sector', 'Project_ID', 'status')
-
-        r_qs2 = AgencyProgressModel.objects.all()
-        r_qs2.query = pickle.loads(pickle.dumps(qs2.query))
-
-        query_set = []
-        for i in r_qs1:
-            for j in r_qs2:
-                if i['Project_ID'] == j['Project_ID']:
-                    i['status'] = j['status']
-                    query_set.append(i)
-
-        response.context_data['report'] = list(
-            qs.values('Sector').order_by('user__first_name').filter(
-                status=None).filter(Scheme='KNMT'))
-
-        return response
 
 @admin.register(ULBDetails)
 class ULBDetaislAdmin(admin.ModelAdmin):
