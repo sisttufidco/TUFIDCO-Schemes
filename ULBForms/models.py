@@ -118,6 +118,7 @@ class AgencyProgressModel(models.Model):
                                               null=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
+    ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
@@ -127,6 +128,8 @@ class AgencyProgressModel(models.Model):
         self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(
             Project_ID=self.Project_ID)
         self.ULBName = MasterSanctionForm.objects.values_list('AgencyName__AgencyName', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
             Project_ID=self.Project_ID)
 
         if self.valueofworkdone is not None:
@@ -167,9 +170,15 @@ class AgencySanctionModel(models.Model):
     work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=5, decimal_places=2, blank=True,
                                                null=True, help_text='Without Tax')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
+    ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
+    ULBName = models.CharField('ULB Name', max_length=50, blank=True, null=True)
 
     def save(self, **kwargs):
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
+        self.ULBName = MasterSanctionForm.objects.values_list('AgencyName__AgencyName', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
+            Project_ID=self.Project_ID)
         super(AgencySanctionModel, self).save(**kwargs)
 
     def __str__(self):
