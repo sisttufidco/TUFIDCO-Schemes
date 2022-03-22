@@ -12,7 +12,7 @@ from django.db.models import Count, Sum, Avg, Func
 
 class AgencyBankDetailsAdmin(admin.ModelAdmin):
     change_form_template = 'admin/bankdetails.html'
-    exclude = ['user']
+    exclude = ['user', 'date_and_time']
     readonly_fields = ['passbook_preview']
     list_display = [
         'user',
@@ -69,7 +69,7 @@ admin.site.register(AgencyBankDetails, AgencyBankDetailsAdmin)
 
 class ULBPANDetailsAdmin(admin.ModelAdmin):
     change_form_template = 'admin/ULBpandetails.html'
-    exclude = ['user']
+    exclude = ['user', 'date_and_time']
     readonly_fields = ['pan_preview']
     list_display = [
         'user',
