@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 from TUFIDCOapp.models import Scheme, MasterSanctionForm, AgencyType, District
 from mapbox_location_field.models import LocationField
@@ -17,7 +18,7 @@ class AgencyBankDetails(models.Model):
     IFSC_code = models.CharField("IFSC Code", max_length=20, null=True)
     passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
-    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
 
     @property
     def passbook_preview(self):
@@ -39,7 +40,7 @@ class ULBPanCard(models.Model):
     name = models.CharField("Name", max_length=60, null=True)
     panphoto = models.FileField("PAN Photo", upload_to='PAN/', null=True,
                                 help_text="Please Upload a Clear Scanned Copy of PAN")
-    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
 
     @property
     def pan_preview(self):
@@ -98,8 +99,8 @@ class AgencyProgressModel(models.Model):
     PhysicalProgress = models.TextField("Physical Progress", blank=True, null=True)
     status = models.CharField(max_length=20, choices=status_choices(), default='Not Commenced', blank=False, null=True,
                               help_text='Selecting anyone of the status field is mandatory.')
-    nc_status = models.TextField("Reason for non commencement", null=True, blank=True, help_text='Payment made to Contractor')
-    Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True)
+    nc_status = models.TextField("Reason for non commencement", null=True, blank=True)
+    Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True, help_text='Payment made to Contractor')
     FundRelease = models.DecimalField("Fund Release (in lakhs) (Recieved from TUFIDCO)", max_digits=5, decimal_places=2,
                                       blank=True, null=True,
                                       help_text="Agency has to send a hard copy of the release request along with "
@@ -116,7 +117,7 @@ class AgencyProgressModel(models.Model):
     ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
                                               null=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
-    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
@@ -165,7 +166,7 @@ class AgencySanctionModel(models.Model):
                                                null=True, help_text="With Tax.")
     work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=5, decimal_places=2, blank=True,
                                                null=True, help_text='Without Tax')
-    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
 
     def save(self, **kwargs):
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)

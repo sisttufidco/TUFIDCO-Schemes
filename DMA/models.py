@@ -14,7 +14,6 @@ class DistrictWiseReport(MasterSanctionForm):
 
 class MunicipalityDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Sno = models.IntegerField('S.No', null=True)
     municipality_name = models.CharField('Name of Municipality', max_length=40, null=True)
     district = models.CharField('District', max_length=40, null=True)
     region = models.CharField('Region', max_length=40, null=True)
@@ -25,3 +24,7 @@ class MunicipalityDetails(models.Model):
 
     def __str__(self):
         return self.municipality_name
+
+    class Meta:
+        verbose_name = 'Municipality Detail'
+        verbose_name_plural = 'Municipality Details'

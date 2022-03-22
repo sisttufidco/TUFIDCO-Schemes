@@ -1,10 +1,13 @@
 from django.contrib import admin
 from CTP.models import *
+
+
 # Register your models here.
 
 @admin.register(TownPanchayatDetails)
 class TownPanchayatDetailsAdmin(admin.ModelAdmin):
     exclude = ['user']
+
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
@@ -18,7 +21,7 @@ class TownPanchayatDetailsAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(TownPanchayatDetailsAdmin, self).get_queryset(request)
-        if not request.user.groups.filter(name__in=["Admin", 'Municipality']).exists():
+        if not request.user.groups.filter(name__in=["Admin",]).exists():
             return qs.filter(user=request.user)
         return qs
 
