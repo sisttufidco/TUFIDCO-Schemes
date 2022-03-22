@@ -70,6 +70,9 @@
     outline: 0;
     text-decoration: none;
 }
+a.section:link{
+    font-weight: bold;
+}
 fieldset .fieldBox{
     margin-top:10px;
 }

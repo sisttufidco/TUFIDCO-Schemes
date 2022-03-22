@@ -9,8 +9,8 @@ class TownPanchayatDetails(models.Model):
     district = models.CharField('District', max_length=40, null=True)
     zone = models.CharField('Zone', max_length=40, null=True)
     cell1 = models.CharField('Cell 1', max_length=20, null=True)
-    cell2 = models.CharField('Cell 2', max_length=20, null=True)
-    cell3 = models.CharField('Cell 3', max_length=20, null=True)
+    cell2 = models.CharField('Cell 2', max_length=20, blank=True, null=True)
+    cell3 = models.CharField('Cell 3', max_length=20, blank=True, null=True)
     email = models.EmailField('Email ID', max_length=40, null=True)
 
     def __str__(self):
