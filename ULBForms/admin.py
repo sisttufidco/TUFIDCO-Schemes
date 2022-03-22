@@ -6,6 +6,7 @@ import pickle
 from .forms import *
 from django.db.models import Count, Sum, Avg, Func
 
+
 # Register your models here.
 
 
@@ -65,6 +66,7 @@ class AgencyBankDetailsAdmin(admin.ModelAdmin):
 
 admin.site.register(AgencyBankDetails, AgencyBankDetailsAdmin)
 
+
 class ULBPANDetailsAdmin(admin.ModelAdmin):
     change_form_template = 'admin/ULBpandetails.html'
     exclude = ['user']
@@ -112,6 +114,7 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ULBPanCard, ULBPANDetailsAdmin)
+
 
 @admin.register(MasterReport)
 class MasterReportAdmin(admin.ModelAdmin):
@@ -472,26 +475,17 @@ class MasterReportAdmin(admin.ModelAdmin):
         response.context_data.update(extra_context)
         return response
 
+
 def Decimal(x):
     return float(x)
-
-
-@admin.register(ULBDetails)
-class ULBDetaislAdmin(admin.ModelAdmin):
-    search_fields = [
-        'ulbName'
-    ]
-    list_display = [
-        'ulbName',
-        'ulbtype'
-    ]
 
 
 @admin.register(AgencyProgressModel)
 class AgencyProgressAdmin(admin.ModelAdmin):
     form = AgencyProgressForm
     fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
-              'PhysicalProgress', 'status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone', 'upload2')
+              'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
+              'upload2')
 
     list_filter = [
         'status',
@@ -554,7 +548,7 @@ class AgencySanctionAdmin(admin.ModelAdmin):
     ]
     fields = (
         ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', 'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate',
-        'wd_awarded', 'wdawddate')
+        'wd_awarded', 'wdawddate', 'work_awarded_amount2', 'work_awarded_amount1')
     list_display = [
         'Project_ID',
         'Sector',
@@ -591,6 +585,7 @@ class AgencySanctionAdmin(admin.ModelAdmin):
         formset = super().get_form(request, obj, **kwargs)
         return functools.partial(formset, request)
 
+
 @admin.register(ULBProgressIncompleted)
 class ULBProgressIncompletedAdmin(admin.ModelAdmin):
     change_list_template = 'admin/ulbprogressincompleted.html'
@@ -607,8 +602,3 @@ class ULBProgressIncompletedAdmin(admin.ModelAdmin):
             qs.values('user__first_name', 'Project_ID', 'Sector').order_by('user__first_name').filter(
                 status=None).filter(Scheme='KNMT'))
         return response
-
-
-
-
-

@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 from TUFIDCOapp.models import Scheme, MasterSanctionForm, AgencyType, District
 from mapbox_location_field.models import LocationField
 
+
 # Create your models here.
 
 
@@ -14,8 +15,9 @@ class AgencyBankDetails(models.Model):
     branch = models.CharField("Branch", max_length=90, null=True)
     account_number = models.CharField("Account Number", max_length=90, null=True)
     IFSC_code = models.CharField("IFSC Code", max_length=20, null=True)
-    passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True
-                                      , help_text='Please attach a clear scanned copy front page of the Bank passbook')
+    passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
+                                      help_text='Please attach a clear scanned copy front page of the Bank passbook')
+    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
 
     @property
     def passbook_preview(self):
@@ -30,12 +32,14 @@ class AgencyBankDetails(models.Model):
         verbose_name = "ULB Bank Detail"
         verbose_name_plural = "ULB Bank Details"
 
+
 class ULBPanCard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     PANno = models.CharField("PAN Number", max_length=60, null=True)
     name = models.CharField("Name", max_length=60, null=True)
     panphoto = models.FileField("PAN Photo", upload_to='PAN/', null=True,
                                 help_text="Please Upload a Clear Scanned Copy of PAN")
+    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
 
     @property
     def pan_preview(self):
@@ -49,6 +53,7 @@ class ULBPanCard(models.Model):
     class Meta:
         verbose_name = "ULB PAN Detail"
         verbose_name_plural = "ULB PAN Details"
+
 
 def scheme_make_choices():
     return [(str(c), str(c)) for c in Scheme.objects.all()]
@@ -91,11 +96,14 @@ class AgencyProgressModel(models.Model):
                    }, blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
     PhysicalProgress = models.TextField("Physical Progress", blank=True, null=True)
-    status = models.CharField(max_length=20, choices=status_choices(), default='Not Commenced', blank=False, null=True)
-    Expenditure = models.CharField("Expenditure (in lakhs)", max_length=50, blank=True, null=True)
-    FundRelease = models.CharField("Fund Release (in lakhs)", max_length=50, blank=True, null=True,
-                                   help_text="Agency has to send a hard copy of the release request along with "
-                                             "photos,etc in the prescribed format")
+    status = models.CharField(max_length=20, choices=status_choices(), default='Not Commenced', blank=False, null=True,
+                              help_text='Selecting anyone of the status field is mandatory.')
+    nc_status = models.TextField("Reason for non commencement", null=True, blank=True, help_text='Payment made to Contractor')
+    Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True)
+    FundRelease = models.DecimalField("Fund Release (in lakhs) (Recieved from TUFIDCO)", max_digits=5, decimal_places=2,
+                                      blank=True, null=True,
+                                      help_text="Agency has to send a hard copy of the release request along with "
+                                                "photos,etc in the prescribed format")
     valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=12, blank=True,
                                           default=0.0, null=True)
     percentageofworkdone = models.DecimalField("Percentage of work done", decimal_places=2, max_digits=12, blank=True,
@@ -104,9 +112,11 @@ class AgencyProgressModel(models.Model):
                                help_text="Please upload a photo of site with location matching with the google maps",
                                blank=True)
     District = models.CharField('District', max_length=50, blank=True, null=True)
+    ULBName = models.CharField('ULB Name', max_length=50, blank=True, null=True)
     ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
                                               null=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
+    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
@@ -115,12 +125,14 @@ class AgencyProgressModel(models.Model):
             Project_ID=self.Project_ID)
         self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(
             Project_ID=self.Project_ID)
-        print(self.ApprovedProjectCost[0])
-        if (self.valueofworkdone != None):
+        self.ULBName = MasterSanctionForm.objects.values_list('AgencyName__AgencyName', flat=True).filter(
+            Project_ID=self.Project_ID)
+
+        if self.valueofworkdone is not None:
             self.percentageofworkdone = (
                 round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
         else:
-            self.percentageofworkdone = (0.00)
+            self.percentageofworkdone = 0.00
         super(AgencyProgressModel, self).save(**kwargs)
 
     def __str__(self):
@@ -137,7 +149,6 @@ class AgencySanctionModel(models.Model):
     Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True, null=True)
     Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
     ProjectName = models.TextField("Project Name", blank=True, null=True)
-
     tsrefno = models.CharField("Technical Sanction Reference No.", max_length=30, blank=True, null=True)
     tsdate = models.DateField("Technical Sanction Date", blank=True, null=True)
     tawddate = models.DateField("Tender Awarded Date", blank=True, null=True)
@@ -150,6 +161,11 @@ class AgencySanctionModel(models.Model):
                                   null=True)
     tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
     wd_awarded = models.CharField("Work Order Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
+    work_awarded_amount1 = models.DecimalField("Word Order Amount", max_digits=5, decimal_places=2, blank=True,
+                                               null=True, help_text="With Tax.")
+    work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=5, decimal_places=2, blank=True,
+                                               null=True, help_text='Without Tax')
+    date_and_time = models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self, **kwargs):
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
@@ -163,29 +179,8 @@ class AgencySanctionModel(models.Model):
         verbose_name_plural = "ULB Project Sanction Details"
 
 
-class ULBDetails(models.Model):
-    ulbName = models.CharField('Name of the ULB', max_length=100, null=True, help_text="As Per the Record")
-    ulbtype = models.ForeignKey(AgencyType, on_delete=models.CASCADE, null=True, verbose_name='ULB Type')
-    administrative_district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
-    regional_office_zone = models.CharField('Regional Office/Zone', max_length=100, null=True)
-    office_phone_number = models.CharField('Office Phone Number', max_length=100, null=True)
-    mail_id = models.EmailField('Email ID', max_length=100, null=True)
-    alternative_mail = models.EmailField('Alternative Email ID', blank=True, max_length=100, null=True)
-    officials = models.CharField('Officials', max_length=100, null=True)
-    executive_commissionar_ph_no = models.CharField('Executive/Commissionar Phone No.', max_length=100, null=True)
-    me_je = models.CharField('Master Engineer/Junior Engineer', max_length=100, null=True)
-
-    def __str__(self):
-        return self.ulbName
-
-    class Meta:
-        verbose_name = 'ULB Detail'
-        verbose_name_plural = 'ULB Details'
-
 class ULBProgressIncompleted(AgencyProgressModel):
     class Meta:
         proxy = True
         verbose_name = 'ULB Progress Incompleted'
         verbose_name_plural = 'ULB Progress Incompleted'
-
-

@@ -249,10 +249,8 @@ div.breadcrumbs a:hover{
     padding-top: 20px;
 }
 #nav-filter{
-    width: 264px;
-    margin-left: 5px;
+    max-width: 250px;
     margin-top: 15px;
-    border-radius: 8px;
 }
 #toolbar #searchbar{
     margin-top: 1px;
@@ -330,6 +328,7 @@ label{
 }
 #nav-sidebar .current-app .section:link, #nav-sidebar .current-app .section:visited{
     color: white !important;
+    flex: 0 0 320px !important;
 }
 #changelist table thead th {
     white-space: normal;

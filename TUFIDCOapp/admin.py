@@ -11,7 +11,7 @@ from .forms import *
 import pickle
 from django.db.models import Q
 
-from DMAReports.admin import *
+
 
 
 admin.site.index_title = ""

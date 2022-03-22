@@ -598,14 +598,20 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
-              {% for row in busstand_district1 %}
+              {% for row in district_c %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td> {{ row.count }}</td>
+                <td> {{ row.district_c }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1616,19 +1622,32 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Details</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
               {% for row in district_p %}
-              <tr class="{% cycle 'row1' 'row2' %}">
+                     <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District__District }} </td>
+                <td> {{ row.District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td>
+                     <form action="{% url 'export_park' %}" method="POST">
+                   {% csrf_token %}
+                      <input type="submit" class="btn btn-success" name="submit" value="{{ row.District }}" >
+              </form>
+              </td>
                 </tr>
+
               {% endfor %}
               </tbody>
           </table>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
@@ -1640,7 +1659,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="Parks1Label">KNMT - District Wise To Be Commenced - Paver Block</h5>
+          <h5 class="modal-title" id="PaverBlock1Label">KNMT - District Wise To Be Commenced - Paver Block</h5>
         </div>
         <div class="modal-body">
           <table>

@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TUFIDCOapp.apps.TufidcoappConfig',
-    'DMAReports.apps.DmareportsConfig',
+    'reports.apps.ReportsConfig',
+    'DMA.apps.DmaConfig',
+    'CTP.apps.CtpConfig',
     'Dashboard.apps.DashboardConfig',
     'ULBForms.apps.UlbformsConfig',
     'smart_selects',
@@ -162,10 +164,13 @@ LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = os.getenv('MAPBOX_KEY')
 
+
+
 SECURE_HSTS_SECONDS = 12121212
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-
+'''
+'''

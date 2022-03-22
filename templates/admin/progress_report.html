@@ -1,0 +1,143 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}<h1>Agency Progress Report</h1>{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+       {% block object-tools %}
+<ul class="object-tools">
+  {% block object-tools-items %}
+  {% endblock %}
+</ul>
+{% endblock %}
+{% endblock %}
+
+
+{% block result_list %}
+    <div class="row row-card2 table-sector">
+        <table class="border-grey" style="border-radius:5px;">
+            <thead>
+                <col>
+                <colgroup span="2"></colgroup>
+                <colgroup span="2"></colgroup>
+                <tr class="border-grey">
+                    <th class="border-grey th-t1-center">S.No</th>
+                    <th class="border-grey th-t1-center">Name of the Sector</th>
+                    <th class="border-grey th-t1-center"  colspan="2">Approved</th>
+                    <th class="border-grey th-t1-center" colspan="2">Completed</th>
+                    <th class="border-grey th-t1-center" colspan="2">In Progress</th>
+                    <th class="border-grey th-t1-center" colspan="2">To be Commenced</th>
+                </tr>
+                <tr class="border-grey">
+                    <th class="border-grey th-t2-right"></th>
+                    <th class="border-grey th-t2-right"></th>
+                    <th class="border-grey th-t2-right" >No. of Works</th>
+                    <th class="border-grey th-t2-right">Project Cost</th>
+                    <th class="border-grey th-t2-right">No. of Works</th>
+                    <th class="border-grey th-t2-right">Project Cost</th>
+                    <th class="border-grey th-t2-right">No. of Works</th>
+                    <th class="border-grey th-t2-right">Project Cost</th>
+                    <th class="border-grey th-t2-right">No. of Works</th>
+                    <th class="border-grey th-t2-right">Project Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-grey {% cycle 'row1' 'row2'%}">
+                    <td class="border-grey" style="text-align:center">10</td>
+                    <td class="border-grey" style="text-align:center">Parks</td>
+                    <td class="border-grey" style="text-align:right">{{ Parks_approved_project_count }}</td>
+                    <td class="border-grey" style="text-align:right">&#8377; {{ Parks_approved_project_cost.project_cost }}</td>
+                    <td class="border-grey" style="text-align:right">{{ Parks_completed_count }}</td>
+                    <td class="border-grey" style="text-align:right">&#8377; {{ Parks_completed_approved_project_cost.project_cost }}</td>
+                    <td class="border-grey" style="text-align:right; color: #0a53be; font-weight: bold;"><a type="button" data-toggle="modal" data-target="#Parks">{{ Parks_inprogress_count }}</a></td>
+                    <td class="border-grey" style="text-align:right">&#8377; {{ Parks_inprogress_approved_project_cost.project_cost }}</td>
+                    <td class="border-grey" style="text-align:right; color: #0a53be; font-weight: bold;"><a type="button" data-toggle="modal" data-target="#Parks1">{{ Parks_tobecommenced_count }}</a></td>
+                    <td class="border-grey" style="text-align:right">&#8377; {{ Parks_tobecommenced_project_cost.project_cost }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="Parks1" tabindex="-1" role="dialog" aria-labelledby="Parks1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="Parks1Label">KNMT - District Wise To Be Commenced - Parks</h5>
+        </div>
+        <div class="modal-body">
+          <table>
+              <thead>
+              <tr>
+                  <th>
+                      <div class="text">
+                        <a href="#">S. No</a>
+                      </div>
+                  </th>
+                  <th>
+                    <div class="text">
+                        <a href="#">Name of District</a>
+                    </div>
+                  </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">No of Works</a>
+                    </div>
+                  </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Details</a>
+                    </div>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for row in district_p %}
+                     <tr class="{% cycle 'row1' 'row2' %}">
+                <td> {{ forloop.counter }} </td>
+                <td> {{ row.District}} </td>
+                <td style="text-align: center"> {{ row.count }}</td>
+              <td>
+                  <form action="{% url 'export' %}" method="POST">
+                   {% csrf_token %}
+                  <button type="submit" name="submit" value="{{ row.District }}">Export</button>
+              </form>
+              </td>
+                </tr>
+
+              {% endfor %}
+              </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $('[data-toggle="modal"]').hover(function() {
+                var modalId = $(this).data('target');
+                $(modalId).modal('show');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block pagination %}{% endblock  %}

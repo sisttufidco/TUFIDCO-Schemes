@@ -25,8 +25,9 @@ admin.autodiscover()
 
 urlpatterns = [
     path('', include('TUFIDCOapp.urls')),
-    path('admin/DMAreports/', include('DMAReports.urls')),
-    path('admin/Dashboard', include("Dashboard.urls")),
+    path('ULBFOrms', include('ULBForms.urls')),
+    path('admin/reports', include('reports.urls')),
+    path('Dashboard/', include("Dashboard.urls")),
     path('admin/login/', auth_views.LoginView.as_view(template_name='pages/admin_login.html',
                                                       authentication_form=PlaceholderAuthForm,
                                                       redirect_authenticated_user=True), name='login'
