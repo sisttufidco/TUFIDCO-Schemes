@@ -11,8 +11,7 @@ from django.db.models import Count, Sum, Avg, Func
 
 
 class AgencyBankDetailsAdmin(admin.ModelAdmin):
-    change_form_template = 'admin/bankagencydetails.html'
-
+    change_form_template = 'admin/bankdetails.html'
     exclude = ['user']
     readonly_fields = ['passbook_preview']
     list_display = [
@@ -21,7 +20,8 @@ class AgencyBankDetailsAdmin(admin.ModelAdmin):
         'bank_name',
         'branch',
         'account_number',
-        'IFSC_code'
+        'IFSC_code',
+        'date_and_time'
     ]
     ordering = [
         'user__first_name',
@@ -74,7 +74,8 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
     list_display = [
         'user',
         'PANno',
-        'name'
+        'name',
+        'date_and_time'
     ]
     search_fields = [
         'user__first_name',
@@ -115,6 +116,135 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
 
 admin.site.register(ULBPanCard, ULBPANDetailsAdmin)
 
+
+
+def Decimal(x):
+    return float(x)
+
+
+@admin.register(AgencyProgressModel)
+class AgencyProgressAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/ulbprogress.html'
+    form = AgencyProgressForm
+    fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
+              'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
+              'upload2')
+
+    list_filter = [
+        'status',
+        'Scheme',
+        'Sector',
+    ]
+    list_display = [
+        'Project_ID',
+        'Sector',
+        'ProjectName',
+        'user',
+        'valueofworkdone',
+        'status',
+        'percentageofworkdone',
+        'date_and_time'
+    ]
+
+    search_fields = [
+        'Scheme',
+        'user__first_name',
+        'ProjectName',
+        'Project_ID',
+        'Sector',
+    ]
+
+    ordering = [
+        'Project_ID',
+        'Sector',
+        'user'
+    ]
+
+    def save_model(self, request, obj, form, change):
+        if request.user.groups.filter(name__in=['Agency']).exists():
+            obj.user = request.user
+            obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(
+                Project_ID=form.cleaned_data['Project_ID'])
+            obj.save()
+
+    def get_queryset(self, request):
+        qs = super(AgencyProgressAdmin, self).get_queryset(request)
+        if not request.user.groups.filter(name__in=["Admin", "progressdetails"]).exists():
+            return qs.filter(user=request.user)
+        return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        Form = super().get_form(request, obj=None, **kwargs)
+        return functools.partial(Form, request)
+
+
+@admin.register(AgencySanctionModel)
+class AgencySanctionAdmin(admin.ModelAdmin):
+    form = AgencySanctionForm
+    search_fields = [
+        'Scheme',
+        'Project_ID',
+        'ProjectName',
+        'user__first_name',
+        'Sector'
+    ]
+    fields = (
+        ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', 'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate',
+        'wd_awarded', 'wdawddate', 'work_awarded_amount2', 'work_awarded_amount1')
+    list_display = [
+        'Project_ID',
+        'Sector',
+        'ProjectName',
+        'user',
+        'date_and_time'
+    ]
+    ordering = [
+        'Project_ID',
+        'Sector',
+        'user'
+    ]
+    list_filter = [
+        'Scheme',
+        'Sector',
+        'ts_awarded',
+        'tr_awarded',
+        'wd_awarded',
+    ]
+
+    def save_model(self, request, obj, form, change):
+        if request.user.groups.filter(name__in=['Agency']).exists():
+            obj.user = request.user
+            obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(
+                Project_ID=form.cleaned_data['Project_ID'])
+            obj.save()
+
+    def get_queryset(self, request):
+        qs = super(AgencySanctionAdmin, self).get_queryset(request)
+        if not request.user.groups.filter(name__in=["Admin", ]).exists():
+            return qs.filter(user=request.user)
+        return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        formset = super().get_form(request, obj, **kwargs)
+        return functools.partial(formset, request)
+
+
+@admin.register(ULBProgressIncompleted)
+class ULBProgressIncompletedAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/ulbprogressincompleted.html'
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        response.context_data['report'] = list(
+            qs.values('user__first_name', 'Project_ID', 'Sector').order_by('user__first_name').filter(
+                status=None).filter(Scheme='KNMT'))
+        return response
 
 @admin.register(MasterReport)
 class MasterReportAdmin(admin.ModelAdmin):
@@ -475,130 +605,3 @@ class MasterReportAdmin(admin.ModelAdmin):
         response.context_data.update(extra_context)
         return response
 
-
-def Decimal(x):
-    return float(x)
-
-
-@admin.register(AgencyProgressModel)
-class AgencyProgressAdmin(admin.ModelAdmin):
-    form = AgencyProgressForm
-    fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
-              'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
-              'upload2')
-
-    list_filter = [
-        'status',
-        'Scheme',
-        'Sector',
-        'valueofworkdone',
-        'percentageofworkdone'
-    ]
-    list_display = [
-        'Project_ID',
-        'Sector',
-        'ProjectName',
-        'user',
-        'valueofworkdone',
-        'status',
-        'percentageofworkdone'
-    ]
-
-    search_fields = [
-        'Scheme',
-        'user__first_name',
-        'ProjectName',
-        'Project_ID',
-        'Sector',
-    ]
-
-    ordering = [
-        'Project_ID',
-        'Sector',
-        'user'
-    ]
-
-    def save_model(self, request, obj, form, change):
-        if request.user.groups.filter(name__in=['Agency']).exists():
-            obj.user = request.user
-            obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(
-                Project_ID=form.cleaned_data['Project_ID'])
-            obj.save()
-
-    def get_queryset(self, request):
-        qs = super(AgencyProgressAdmin, self).get_queryset(request)
-        if not request.user.groups.filter(name__in=["Admin", "progressdetails"]).exists():
-            return qs.filter(user=request.user)
-        return qs
-
-    def get_form(self, request, obj=None, **kwargs):
-        Form = super().get_form(request, obj=None, **kwargs)
-        return functools.partial(Form, request)
-
-
-@admin.register(AgencySanctionModel)
-class AgencySanctionAdmin(admin.ModelAdmin):
-    form = AgencySanctionForm
-    search_fields = [
-        'Scheme',
-        'Project_ID',
-        'ProjectName',
-        'user__first_name',
-        'Sector'
-    ]
-    fields = (
-        ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', 'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate',
-        'wd_awarded', 'wdawddate', 'work_awarded_amount2', 'work_awarded_amount1')
-    list_display = [
-        'Project_ID',
-        'Sector',
-        'ProjectName',
-        'user',
-    ]
-    ordering = [
-        'Project_ID',
-        'Sector',
-        'user'
-    ]
-    list_filter = [
-        'Scheme',
-        'Sector',
-        'ts_awarded',
-        'tr_awarded',
-        'wd_awarded',
-    ]
-
-    def save_model(self, request, obj, form, change):
-        if request.user.groups.filter(name__in=['Agency']).exists():
-            obj.user = request.user
-            obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(
-                Project_ID=form.cleaned_data['Project_ID'])
-            obj.save()
-
-    def get_queryset(self, request):
-        qs = super(AgencySanctionAdmin, self).get_queryset(request)
-        if not request.user.groups.filter(name__in=["Admin", ]).exists():
-            return qs.filter(user=request.user)
-        return qs
-
-    def get_form(self, request, obj=None, **kwargs):
-        formset = super().get_form(request, obj, **kwargs)
-        return functools.partial(formset, request)
-
-
-@admin.register(ULBProgressIncompleted)
-class ULBProgressIncompletedAdmin(admin.ModelAdmin):
-    change_list_template = 'admin/ulbprogressincompleted.html'
-
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context=extra_context)
-
-        try:
-            qs = response.context_data['cl'].queryset
-        except (AttributeError, KeyError):
-            return response
-
-        response.context_data['report'] = list(
-            qs.values('user__first_name', 'Project_ID', 'Sector').order_by('user__first_name').filter(
-                status=None).filter(Scheme='KNMT'))
-        return response

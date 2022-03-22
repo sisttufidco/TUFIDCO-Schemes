@@ -5,7 +5,6 @@ from django.db import models
 # Create your models here.
 class TownPanchayatDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Sno = models.IntegerField('S.No', null=True)
     name_tp = models.CharField('Name of Town Panchayat', max_length=40, null=True)
     district = models.CharField('District', max_length=40, null=True)
     zone = models.CharField('Zone', max_length=40, null=True)
@@ -16,3 +15,7 @@ class TownPanchayatDetails(models.Model):
 
     def __str__(self):
         return self.name_tp
+
+    class Meta:
+        verbose_name = 'Town Panchayat Detail'
+        verbose_name_plural = 'Town Panchayat Details'
