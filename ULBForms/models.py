@@ -203,18 +203,7 @@ class AgencySanctionModel(models.Model):
         verbose_name_plural = "Project Sanction Details"
 
 
-class ULBProgressIncompleted(AgencyProgressModel):
-    class Meta:
-        proxy = True
-        verbose_name = 'Portal Progress Detail'
-        verbose_name_plural = 'Portal Progress Details'
 
-
-class ULBSanctionReportError(AgencySanctionModel):
-    class Meta:
-        proxy = True
-        verbose_name = 'Portal Sanction Detail'
-        verbose_name_plural = 'Portal Sanction Details'
 
 
 class Location(models.Model):
