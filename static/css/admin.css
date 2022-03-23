@@ -229,12 +229,6 @@ div.breadcrumbs a:hover{
     margin-bottom: 10px !important;
 }
 
-.dashboard #content{
-    width: 75% !important;
-    margin-left: 105px !important;
-    margin-top:3%;
-    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
-}
 #content-related {
     box-shadow:  -6px 0 #fff, 0 1px 6px rgba(100, 100, 111, 0.2);
 }
