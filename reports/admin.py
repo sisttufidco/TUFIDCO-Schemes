@@ -57,3 +57,51 @@ class ULBSanctionReportErrorAdmin(admin.ModelAdmin):
             ).filter(work_awarded_amount1=None).filter(work_awarded_amount2=None)
         )
         return response
+
+@admin.register(ProgressNotEntered)
+class ProgressNotEnteredAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/progressnotentered.html'
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        agencyProgresslist = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).all())
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        response.context_data['report'] = list(
+            qs.values(
+                'AgencyName__AgencyName',
+                'Project_ID',
+                'Sector'
+            ).order_by('AgencyName__AgencyName').exclude(Sector='Solid Waste Mgt.').filter(AgencyType__AgencyType='Town Panchayat').filter(
+                ~Q(Project_ID__in=agencyProgresslist)).filter(Scheme__Scheme='KNMT')
+        )
+        return response
+
+@admin.register(SanctionNotEntered)
+class ProgressNotEnteredAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/sanctionnotentereddetails.html'
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        agencySanctionlist = list(AgencySanctionModel.objects.values_list('Project_ID', flat=True).all())
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        response.context_data['report'] = list(
+            qs.values(
+                'AgencyName__AgencyName',
+                'Project_ID',
+                'Sector'
+            ).order_by('AgencyName__AgencyName').exclude(Sector='Solid Waste Mgt.').filter(AgencyType__AgencyType='Town Panchayat').filter(
+                ~Q(Project_ID__in=agencySanctionlist)).filter(Scheme__Scheme='KNMT')
+        )
+        return response

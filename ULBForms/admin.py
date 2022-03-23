@@ -229,7 +229,6 @@ class AgencySanctionAdmin(admin.ModelAdmin):
         return functools.partial(formset, request)
 
 
-
 @admin.register(MasterReport)
 class MasterReportAdmin(admin.ModelAdmin):
     change_list_template = 'admin/masterreport.html'
