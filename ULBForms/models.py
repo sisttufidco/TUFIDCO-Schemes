@@ -22,6 +22,9 @@ class AgencyBankDetails(models.Model):
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
 
+    def save(self, **kwargs):
+        self.date_and_time = datetime.now()
+
     @property
     def passbook_preview(self):
         if self.passbookupload:
@@ -52,6 +55,9 @@ class ULBPanCard(models.Model):
 
     def __str__(self):
         return self.user.first_name
+
+    def save(self, **kwargs):
+        self.date_and_time = datetime.now()
 
     class Meta:
         verbose_name = "PAN Detail"
@@ -123,7 +129,6 @@ class AgencyProgressModel(models.Model):
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
 
-
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
@@ -135,7 +140,7 @@ class AgencyProgressModel(models.Model):
             Project_ID=self.Project_ID)
         self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
             Project_ID=self.Project_ID)
-
+        self.date_and_time = datetime.now()
 
         if self.valueofworkdone is not None:
             self.percentageofworkdone = (
@@ -187,6 +192,7 @@ class AgencySanctionModel(models.Model):
             Project_ID=self.Project_ID)
         self.District = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(
             Project_ID=self.Project_ID)
+        self.date_and_time = datetime.now()
         super(AgencySanctionModel, self).save(**kwargs)
 
     def __str__(self):
