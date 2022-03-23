@@ -201,6 +201,9 @@ caption {
     color: #fff!important;
 }
 
+.selector .selector-available h2 {
+    color: white;
+}
 div.breadcrumbs{
     background-color: #145F8E;
     color: #fff;

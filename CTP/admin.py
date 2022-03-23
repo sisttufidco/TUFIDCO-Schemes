@@ -8,6 +8,21 @@ from CTP.models import *
 class TownPanchayatDetailsAdmin(admin.ModelAdmin):
     exclude = ['user']
 
+    search_fields = [
+        'user__first_name',
+        'district'
+    ]
+
+    list_display = [
+        'name_tp',
+        'district',
+        'zone',
+        'cell1',
+        'email'
+    ]
+
+
+
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
