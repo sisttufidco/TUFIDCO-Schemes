@@ -117,7 +117,6 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
 admin.site.register(ULBPanCard, ULBPANDetailsAdmin)
 
 
-
 def Decimal(x):
     return float(x)
 
@@ -139,8 +138,7 @@ class AgencyProgressAdmin(admin.ModelAdmin):
         'Project_ID',
         'Sector',
         'ProjectName',
-        'user',
-        'valueofworkdone',
+        'ULBName',
         'status',
         'percentageofworkdone',
         'date_and_time'
@@ -156,8 +154,9 @@ class AgencyProgressAdmin(admin.ModelAdmin):
 
     ordering = [
         'Project_ID',
+        'date_and_time',
+        'ULBName',
         'Sector',
-        'user'
     ]
 
     def save_model(self, request, obj, form, change):
@@ -195,13 +194,14 @@ class AgencySanctionAdmin(admin.ModelAdmin):
         'Project_ID',
         'Sector',
         'ProjectName',
-        'user',
+        'ULBName',
         'date_and_time'
     ]
     ordering = [
         'Project_ID',
+        'date_and_time',
+        'ULBName',
         'Sector',
-        'user'
     ]
     list_filter = [
         'Scheme',
@@ -233,6 +233,11 @@ class AgencySanctionAdmin(admin.ModelAdmin):
 class ULBProgressIncompletedAdmin(admin.ModelAdmin):
     change_list_template = 'admin/ulbprogressincompleted.html'
 
+    list_filter = [
+        'ULBType',
+        'Sector'
+    ]
+
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
 
@@ -242,9 +247,39 @@ class ULBProgressIncompletedAdmin(admin.ModelAdmin):
             return response
 
         response.context_data['report'] = list(
-            qs.values('user__first_name', 'Project_ID', 'Sector').order_by('user__first_name').filter(
-                status=None).filter(Scheme='KNMT'))
+            qs.values('ULBName', 'Project_ID', 'Sector').order_by('ULBName').order_by('Sector').filter(
+                Scheme='KNMT').filter(status='In Progress').filter(valueofworkdone=0.0))
         return response
+
+
+@admin.register(ULBSanctionReportError)
+class ULBSanctionReportErrorAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/ulbSanctionReportError.html'
+
+    list_filter = [
+        'ULBType',
+        'Sector'
+    ]
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        response.context_data['report'] = list(
+            qs.values(
+                'ULBName',
+                'Project_ID',
+                'Sector'
+            ).order_by('ULBName').filter(Scheme='KNMT').filter(
+                wd_awarded='0'
+            ).filter(work_awarded_amount1=None).filter(work_awarded_amount2=None)
+        )
+        return response
+
 
 @admin.register(MasterReport)
 class MasterReportAdmin(admin.ModelAdmin):
@@ -604,4 +639,3 @@ class MasterReportAdmin(admin.ModelAdmin):
         }
         response.context_data.update(extra_context)
         return response
-

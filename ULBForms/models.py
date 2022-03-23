@@ -4,6 +4,8 @@ from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 from TUFIDCOapp.models import Scheme, MasterSanctionForm, AgencyType, District
 from mapbox_location_field.models import LocationField
+from mapbox_location_field.admin import MapAdmin
+from django.contrib import admin
 
 
 # Create your models here.
@@ -30,8 +32,8 @@ class AgencyBankDetails(models.Model):
         return self.beneficiary_name
 
     class Meta:
-        verbose_name = "ULB Bank Detail"
-        verbose_name_plural = "ULB Bank Details"
+        verbose_name = "Bank Detail"
+        verbose_name_plural = "Bank Details"
 
 
 class ULBPanCard(models.Model):
@@ -52,8 +54,8 @@ class ULBPanCard(models.Model):
         return self.user.first_name
 
     class Meta:
-        verbose_name = "ULB PAN Detail"
-        verbose_name_plural = "ULB PAN Details"
+        verbose_name = "PAN Detail"
+        verbose_name_plural = "PAN Details"
 
 
 def scheme_make_choices():
@@ -100,7 +102,8 @@ class AgencyProgressModel(models.Model):
     status = models.CharField(max_length=20, choices=status_choices(), default='Not Commenced', blank=False, null=True,
                               help_text='Selecting anyone of the status field is mandatory.')
     nc_status = models.TextField("Reason for non commencement", null=True, blank=True)
-    Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True, help_text='Payment made to Contractor')
+    Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True,
+                                      help_text='Payment made to Contractor')
     FundRelease = models.DecimalField("Fund Release (in lakhs) (Recieved from TUFIDCO)", max_digits=5, decimal_places=2,
                                       blank=True, null=True,
                                       help_text="Agency has to send a hard copy of the release request along with "
@@ -120,6 +123,7 @@ class AgencyProgressModel(models.Model):
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
 
+
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
@@ -132,6 +136,7 @@ class AgencyProgressModel(models.Model):
         self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
             Project_ID=self.Project_ID)
 
+
         if self.valueofworkdone is not None:
             self.percentageofworkdone = (
                 round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
@@ -143,8 +148,8 @@ class AgencyProgressModel(models.Model):
         return '{} - {} - {}'.format(str(self.Scheme), str(self.user.first_name), str(self.Project_ID))
 
     class Meta:
-        verbose_name = 'ULB Progress Detail'
-        verbose_name_plural = 'ULB Progress Details'
+        verbose_name = 'Progress Detail'
+        verbose_name_plural = 'Progress Details'
 
 
 class AgencySanctionModel(models.Model):
@@ -159,7 +164,7 @@ class AgencySanctionModel(models.Model):
     wdawddate = models.DateField("Work Order Awarded Date", blank=True, null=True)
     YN_CHOICES = (
         ('0', 'Yes'),
-        ('0', 'No'),
+        ('1', 'No'),
     )
     ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES,
                                   null=True)
@@ -172,6 +177,7 @@ class AgencySanctionModel(models.Model):
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
     ULBName = models.CharField('ULB Name', max_length=50, blank=True, null=True)
+    District = models.CharField('District', max_length=50, blank=True, null=True)
 
     def save(self, **kwargs):
         self.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(Project_ID=self.Project_ID)
@@ -179,18 +185,45 @@ class AgencySanctionModel(models.Model):
             Project_ID=self.Project_ID)
         self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
             Project_ID=self.Project_ID)
+        self.District = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(
+            Project_ID=self.Project_ID)
         super(AgencySanctionModel, self).save(**kwargs)
 
     def __str__(self):
         return '{} - {} - {}'.format(str(self.Scheme), str(self.user.first_name), str(self.Project_ID))
 
     class Meta:
-        verbose_name = "ULB Project Sanction Detail"
-        verbose_name_plural = "ULB Project Sanction Details"
+        verbose_name = "Project Sanction Detail"
+        verbose_name_plural = "Project Sanction Details"
 
 
 class ULBProgressIncompleted(AgencyProgressModel):
     class Meta:
         proxy = True
-        verbose_name = 'ULB Progress Incompleted'
-        verbose_name_plural = 'ULB Progress Incompleted'
+        verbose_name = 'Portal Progress Detail'
+        verbose_name_plural = 'Portal Progress Details'
+
+
+class ULBSanctionReportError(AgencySanctionModel):
+    class Meta:
+        proxy = True
+        verbose_name = 'Portal Sanction Detail'
+        verbose_name_plural = 'Portal Sanction Details'
+
+
+class Location(models.Model):
+    location = LocationField(
+        map_attrs={"style": 'mapbox://styles/mapbox/satellite-v9',
+                   "center": (80.2319139, 13.0376246),
+                   "cursor_style": 'pointer',
+                   "marker_color": "Blue",
+                   "rotate": True,
+                   "geocoder": True,
+                   "fullscreen_button": True,
+                   "navigation_buttons": True,
+                   "track_location_button": True,
+                   "readonly": True,
+                   })
+
+
+admin.site.register(Location, MapAdmin)

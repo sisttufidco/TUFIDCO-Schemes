@@ -1,7 +1,6 @@
 from weakref import proxy
 from django.contrib.auth.models import User
 from django.db import models
-from mapbox_location_field.models import LocationField
 from django.utils.safestring import mark_safe
 
 """
@@ -145,19 +144,6 @@ class PageCounter(models.Model):
 
 
 # Master Sanction Form
-class Location(models.Model):
-    location = LocationField(
-        map_attrs={"style": 'mapbox://styles/mapbox/satellite-v9',
-                   "center": (80.2319139, 13.0376246),
-                   "cursor_style": 'pointer',
-                   "marker_color": "Blue",
-                   "rotate": True,
-                   "geocoder": True,
-                   "fullscreen_button": True,
-                   "navigation_buttons": True,
-                   "track_location_button": True,
-                   "readonly": True,
-                   })
 
 
 class AgencyType(models.Model):

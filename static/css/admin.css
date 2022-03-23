@@ -198,7 +198,7 @@ input.default{
 caption {
     caption-side: top !important;
     background-color: #f0f0f5 !important;
-    color: #2a2929 !important;
+    color: #fff!important;
 }
 
 div.breadcrumbs{

@@ -5,7 +5,6 @@ from django.contrib.admin import AdminSite
 import json
 from django.db.models import Count, Sum, Avg, Func
 from import_export.admin import ImportExportModelAdmin
-from mapbox_location_field.admin import MapAdmin
 from .resources import *
 from .forms import *
 import pickle
@@ -98,7 +97,7 @@ class GalleryAdmin(admin.ModelAdmin):
 
 
 # Sanction Form
-admin.site.register(Location, MapAdmin)
+
 
 admin.site.register(About)
 
@@ -116,8 +115,7 @@ admin.site.register(Scheme, SchemeAdmin)
 admin.site.register(SchemeSanctionPdf)
 
 
-class LocationAdmin(admin.StackedInline):
-    model = Location
+
 
 
 @admin.register(Scheme_Faq_Questions)
