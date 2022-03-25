@@ -19,8 +19,8 @@ class MunicipalityDetails(models.Model):
     region = models.CharField('Region', max_length=40, null=True)
     email_id1 = models.EmailField('Email ID', max_length=40, null=True)
     email_id2 = models.EmailField('Alternative Email ID', max_length=40, blank=True, null=True)
-    mc = models.IntegerField('Municipal Commissioner Phone Number', null=True)
-    me = models.IntegerField('Municipal Engineer Phone Number', null=True)
+    mc = models.CharField('Municipal Commissioner Phone Number', max_length=20, null=True)
+    me = models.CharField('Municipal Engineer Phone Number', max_length=20, null=True)
 
     def __str__(self):
         return self.municipality_name
