@@ -37,6 +37,7 @@ class AgencyBankDetailsAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
+        obj.date_and_time = datetime.now()
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
@@ -88,6 +89,7 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
+        obj.date_and_time = datetime.now()
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
