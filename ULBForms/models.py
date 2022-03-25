@@ -22,8 +22,6 @@ class AgencyBankDetails(models.Model):
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
 
-    def save(self, **kwargs):
-        self.date_and_time = datetime.now()
 
     @property
     def passbook_preview(self):
@@ -56,8 +54,6 @@ class ULBPanCard(models.Model):
     def __str__(self):
         return self.user.first_name
 
-    def save(self, **kwargs):
-        self.date_and_time = datetime.now()
 
     class Meta:
         verbose_name = "PAN Detail"
@@ -201,9 +197,6 @@ class AgencySanctionModel(models.Model):
     class Meta:
         verbose_name = "Project Sanction Detail"
         verbose_name_plural = "Project Sanction Details"
-
-
-
 
 
 class Location(models.Model):
