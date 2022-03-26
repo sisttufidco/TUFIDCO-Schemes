@@ -1223,6 +1223,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1231,6 +1236,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_bus' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1266,6 +1277,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1274,6 +1290,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+               <td style="text-align: center">
+                  <form method="post" action="{% url 'export_bt' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1311,6 +1333,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1319,6 +1346,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+               <td style="text-align: center">
+                  <form method="post" action="{% url 'export_cc' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1357,6 +1390,12 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
+
               </tr>
               </thead>
               <tbody>
@@ -1365,6 +1404,13 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+
+               <td style="text-align: center">
+                  <form method="post" action="{% url 'export_ch' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1401,6 +1447,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1409,6 +1460,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+                    <td style="text-align: center">
+                  <form method="post" action="{% url 'export_cr' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1445,6 +1502,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1453,6 +1515,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_cl' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1489,6 +1557,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1497,6 +1570,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+               <td style="text-align: center">
+                  <form method="post" action="{% url 'export_kc' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1533,6 +1612,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1541,6 +1625,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+               <td style="text-align: center">
+                  <form method="post" action="{% url 'export_mt' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1578,6 +1668,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1586,6 +1681,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+               <td style="text-align: center">
+                  <form method="post" action="{% url 'export_mbcb' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1627,6 +1728,11 @@
                         <a href="#" style="text-align: center">Details</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1635,11 +1741,11 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
-              <td>
-                     <form action="{% url 'export_park' %}" method="POST">
-                   {% csrf_token %}
-                      <input type="submit" class="btn btn-success" name="submit" value="{{ row.District }}" >
-              </form>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_pk' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
               </td>
                 </tr>
 
@@ -1680,6 +1786,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1688,6 +1799,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_pb' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1725,6 +1842,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1733,6 +1855,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_rw' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1770,6 +1898,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1778,6 +1911,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_swm' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1818,6 +1957,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                     <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1826,7 +1970,14 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+              <td style="text-align: center">
+                  <form method="post" action="{% url 'export_swd' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
+
               {% endfor %}
               </tbody>
           </table>
@@ -1862,6 +2013,11 @@
                         <a href="#" style="text-align: center">No of Works</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -1870,6 +2026,12 @@
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District__District }} </td>
                 <td style="text-align: center"> {{ row.count }}</td>
+                  <td style="text-align: center">
+                  <form method="post" action="{% url 'export_wb' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District__District }}" class="btn btn-danger">Export</button>
+                  </form>
+              </td>
                 </tr>
               {% endfor %}
               </tbody>

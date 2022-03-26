@@ -84,7 +84,7 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
         'name',
     ]
     ordering = [
-        'user__first_name',
+        'date_and_time',
     ]
 
     def save_model(self, request, obj, form, change):
@@ -141,9 +141,10 @@ class AgencyProgressAdmin(admin.ModelAdmin):
         'Sector',
         'ProjectName',
         'ULBName',
+        'District',
         'status',
         'percentageofworkdone',
-        'date_and_time'
+        'date_and_time',
     ]
 
     search_fields = [
@@ -155,10 +156,7 @@ class AgencyProgressAdmin(admin.ModelAdmin):
     ]
 
     ordering = [
-        'Project_ID',
         'date_and_time',
-        'ULBName',
-        'Sector',
     ]
 
     def save_model(self, request, obj, form, change):
