@@ -155,9 +155,7 @@ class AgencyProgressAdmin(admin.ModelAdmin):
         'Sector',
     ]
 
-    ordering = [
-        'date_and_time',
-    ]
+
 
     def save_model(self, request, obj, form, change):
         if request.user.groups.filter(name__in=['Agency']).exists():
@@ -197,9 +195,7 @@ class AgencySanctionAdmin(admin.ModelAdmin):
         'ULBName',
         'date_and_time'
     ]
-    ordering = [
-        'date_and_time',
-    ]
+
     list_filter = [
         'Scheme',
         'Sector',
