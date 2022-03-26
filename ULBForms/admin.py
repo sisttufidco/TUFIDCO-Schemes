@@ -198,10 +198,7 @@ class AgencySanctionAdmin(admin.ModelAdmin):
         'date_and_time'
     ]
     ordering = [
-        'Project_ID',
         'date_and_time',
-        'ULBName',
-        'Sector',
     ]
     list_filter = [
         'Scheme',
