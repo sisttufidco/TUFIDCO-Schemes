@@ -252,11 +252,14 @@ class MasterReportAdmin(admin.ModelAdmin):
             BT_Road_ULBShare=Sum('ULBShare'))
         BT_Road_Total = BT_Road_SchemeShare['BT_Road_SchemeShare'] + BT_Road_ULBShare['BT_Road_ULBShare']
         BT_Road_Approved = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(Sector='BT Road').count()
+        BT_Road_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='BT Road').aggregate(sum=Sum('valueofworkdone'))
+        BT_Road_workorder  = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(Sector='BT Road').aggregate(sum=Sum('work_awarded_amount1'))
         BT_Road_Completed = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='BT Road').filter(
             status='Completed').count()
         BT_Road_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='BT Road').filter(
             status='In Progress').count()
         BT_Road_Taken = BT_Road_inprogress + BT_Road_Completed
+
         Bus_Stand_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
             Sector="Bus Stand").aggregate(Bus_Stand_SchemeShare=Sum('SchemeShare'))
         Bus_Stand_ULBShare = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -268,6 +271,10 @@ class MasterReportAdmin(admin.ModelAdmin):
         Bus_Stand_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(
             status='In Progress').count()
         Bus_Stand_Taken = Bus_Stand_inprogress + Bus_Stand_Completed
+        Bus_Stand_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').aggregate(sum=Sum('valueofworkdone'))
+        Bus_Stand_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(Sector='Bus Stand').aggregate(
+            sum=Sum('work_awarded_amount1'))
+
         CC_Road_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
             Sector="CC Road").aggregate(CC_Road_SchemeShare=Sum('SchemeShare'))
         CC_Road_ULBShare = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(Sector='CC Road').aggregate(
@@ -278,6 +285,10 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         CC_Road_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='CC Road').filter(
             status='In Progress').count()
+        CC_Road_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='CC Road').aggregate(
+            sum=Sum('valueofworkdone'))
+        CC_Road_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(Sector='CC Road').aggregate(
+            sum=Sum('work_awarded_amount1'))
         CC_Road_Taken = CC_Road_inprogress + CC_Road_Completed
         # Community Hall
         Community_Hall_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
@@ -292,6 +303,10 @@ class MasterReportAdmin(admin.ModelAdmin):
             Sector='Community Hall').filter(status='Completed').count()
         Community_Hall_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
             Sector='Community Hall').filter(status='In Progress').count()
+        Community_Hall_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Community Hall').aggregate(
+            sum=Sum('valueofworkdone'))
+        Community_Hall_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(Sector='Community Hall').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Community_Hall_Taken = Community_Hall_inprogress + Community_Hall_Completed
         # Crematorium
         Crematorium_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
@@ -306,6 +321,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         Crematorium_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Crematorium').filter(
             status='In Progress').count()
+        Crematorium_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Crematorium').aggregate(
+            sum=Sum('valueofworkdone'))
+        Crematorium_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Crematorium').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Crematorium_Taken = Crematorium_inprogress + Crematorium_Completed
         #	Culvert
         Culvert_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
@@ -318,6 +339,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         Culvert_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Culvert').filter(
             status='In Progress').count()
+        Culvert_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Culvert').aggregate(
+            sum=Sum('valueofworkdone'))
+        Culvert_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Culvert').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Culvert_Taken = Culvert_inprogress + Culvert_Completed
         # Knowledge Centre
         Knowledge_Centre_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
@@ -332,6 +359,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             Sector='Knowledge Centre').filter(status='Completed').count()
         Knowledge_Centre_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
             Sector='Knowledge Centre').filter(status='In Progress').count()
+        Knowledge_centre_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Knowledge Centre').aggregate(
+            sum=Sum('valueofworkdone'))
+        Knowledge_centre_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Knowledge Centre').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Knowledge_Centre_Taken = Knowledge_Centre_inprogress + Knowledge_Centre_Completed
         # Market
         Market_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(Sector="Market").aggregate(
@@ -344,6 +377,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         Market_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Market').filter(
             status='In Progress').count()
+        Market_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Market').aggregate(
+            sum=Sum('valueofworkdone'))
+        Market_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Market').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Market_Taken = Market_inprogress + Market_Completed
         # Metal Beam Crash Barriers
         M_B_C_B_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
@@ -357,6 +396,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             Sector='Metal Beam Crash Barriers').filter(status='Completed').count()
         M_B_C_B_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').filter(status='In Progress').count()
+        MBCB_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Metal Beam Crash Barriers').aggregate(
+            sum=Sum('valueofworkdone'))
+        MBCB_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Metal Beam Crash Barriers').aggregate(
+            sum=Sum('work_awarded_amount1'))
         M_B_C_B_Taken = M_B_C_B_inprogress + M_B_C_B_Completed
 
         # Parks
@@ -370,6 +415,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         Parks_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Parks').filter(
             status='In Progress').count()
+        Parks_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Parks').aggregate(
+            sum=Sum('valueofworkdone'))
+        Parks_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Parks').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Parks_Taken = Parks_inprogress + Parks_Completed
 
         # Paver Block
@@ -385,6 +436,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         Paver_Block_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Paver Block').filter(
             status='In Progress').count()
+        Paver_Block_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Paver Block').aggregate(
+            sum=Sum('valueofworkdone'))
+        Paver_Block_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Paver Block').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Paver_Block_Taken = Paver_Block_inprogress + Paver_Block_Completed
 
         # Retaining wall
@@ -400,6 +457,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             Sector='Retaining wall').filter(status='Completed').count()
         Retaining_wall_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
             Sector='Retaining wall').filter(status='In Progress').count()
+        Retaining_wall_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Retaining wall').aggregate(
+            sum=Sum('valueofworkdone'))
+        Retaining_wall_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Retaining wall').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Retaining_wall_Taken = Retaining_wall_inprogress + Retaining_wall_Completed
         # Solid Waste Mgt. SWM
         SWM_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(
@@ -413,6 +476,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         SWM_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Solid Waste Mgt.').filter(
             status='In Progress').count()
+        SWM_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Solid Waste Mgt.').aggregate(
+            sum=Sum('valueofworkdone'))
+        SWM_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Solid Waste Mgt.').aggregate(
+            sum=Sum('work_awarded_amount1'))
         SWM_Taken = SWM_inprogress + SWM_Completed
         # SWD
         SWD_SchemeShare = MasterSanctionForm.objects.filter(Scheme__Scheme="KNMT").filter(Sector="SWD").aggregate(
@@ -425,6 +494,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             status='Completed').count()
         SWD_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='SWD').filter(
             status='In Progress').count()
+        SWD_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='SWD').aggregate(
+            sum=Sum('valueofworkdone'))
+        SWD_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='SWD').aggregate(
+            sum=Sum('work_awarded_amount1'))
         SWD_Taken = SWD_inprogress + SWD_Completed
 
         # Water Bodies
@@ -438,6 +513,12 @@ class MasterReportAdmin(admin.ModelAdmin):
             Sector='Water Bodies').count()
         Water_Bodies_Completed = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(Sector='Water Bodies').filter(
             status='Completed').count()
+        Water_Bodies_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Water Bodies').aggregate(
+            sum=Sum('valueofworkdone'))
+        Water_Bodies_workorder = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            Sector='Water Bodies').aggregate(
+            sum=Sum('work_awarded_amount1'))
         Water_Bodies_inprogress = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
             Sector='Water Bodies').filter(status='In Progress').count()
         Water_Bodies_Taken = Water_Bodies_inprogress + Water_Bodies_Completed
@@ -447,12 +528,47 @@ class MasterReportAdmin(admin.ModelAdmin):
         ProjectCost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(
             ProjectCost=Sum('ApprovedProjectCost'))
         work_approved_total = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').count()
-
+        work_amountspend = AgencyProgressModel.objects.filter(Scheme='KNMT').aggregate(
+            sum=Sum('valueofworkdone'))
+        workorder_total = AgencySanctionModel.objects.filter(Scheme='KNMT').aggregate(
+            sum=Sum('work_awarded_amount1'))
         works_inprogress_total = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(status='In Progress').count()
         works_completed_total = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(status='Completed').count()
         works_taken_total = works_inprogress_total + works_completed_total
 
         extra_context = {
+            'work_amountspend':work_amountspend,
+            'workorder_total':workorder_total,
+            'SWM_workorder':SWM_workorder,
+            'SWM_amountspend':SWM_amountspend,
+            'Bus_Stand_workorder':Bus_Stand_workorder,
+            'Bus_Stand_amountspend':Bus_Stand_amountspend,
+            'CC_Road_workorder':CC_Road_workorder,
+            'CC_Road_amountspend':CC_Road_amountspend,
+            'Community_Hall_workorder':Community_Hall_workorder,
+            'Community_Hall_amountspend':Community_Hall_amountspend,
+            'Crematorium_amountspend':Crematorium_amountspend,
+            'Crematorium_workorder':Crematorium_workorder,
+            'Culvert_workorder':Culvert_workorder,
+            'Culvert_amountspend':Culvert_amountspend,
+            'Knowledge_centre_workorder':Knowledge_centre_workorder,
+            'Knowledge_centre_amountspend':Knowledge_centre_amountspend,
+            'Market_workorder':Market_workorder,
+            'Market_amountspend':Market_amountspend,
+            'MBCB_workorder':MBCB_workorder,
+            'MBCB_amountspend':MBCB_amountspend,
+            'Parks_workorder':Parks_workorder,
+            'Parks_amountspend':Parks_amountspend,
+            'Paver_Block_workorder':Paver_Block_workorder,
+            'Paver_Block_amountspend':Paver_Block_amountspend,
+            'Retaining_wall_workorder':Retaining_wall_workorder,
+            'Retaining_wall_amountspend':Retaining_wall_amountspend,
+            'SWD_workorder':SWD_workorder,
+            'SWD_amountspend':SWD_amountspend,
+            'Water_Bodies_amountspend':Water_Bodies_amountspend,
+            'Water_Bodies_workorder':Water_Bodies_workorder,
+            'BT_Road_workorder':BT_Road_workorder,
+            'BT_Road_amountspend':BT_Road_amountspend,
             'works_taken_total': works_taken_total,
             'works_inprogress_total': works_inprogress_total,
             'works_completed_total': works_completed_total,
