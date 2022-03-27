@@ -23,6 +23,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -30,7 +35,13 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+              <td>
+                    <form method="post" action="{% url 'export_in_bs' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -67,6 +78,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -74,7 +90,13 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                <td>
+                    <form method="post" action="{% url 'export_in_bt' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -112,6 +134,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -119,8 +146,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+              <td>
+                    <form method="post" action="{% url 'export_in_cc' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -156,6 +189,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -163,8 +201,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+               <td>
+                    <form method="post" action="{% url 'export_in_cr' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -200,6 +244,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                     <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -207,8 +256,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                <td>
+                    <form method="post" action="{% url 'export_in_cl' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -244,6 +299,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -251,8 +311,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                 <td>
+                    <form method="post" action="{% url 'export_in_kc' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -288,6 +354,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -295,8 +366,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                   <td>
+                    <form method="post" action="{% url 'export_in_mt' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -332,6 +409,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -339,8 +421,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                 <td>
+                    <form method="post" action="{% url 'export_in_mbcb' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -376,6 +464,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -383,8 +476,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                   <td>
+                    <form method="post" action="{% url 'export_in_pk' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -420,6 +519,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -427,8 +531,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                 <td>
+                    <form method="post" action="{% url 'export_in_pb' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -464,6 +574,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -471,8 +586,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                 <td>
+                    <form method="post" action="{% url 'export_in_rw' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -508,6 +629,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -515,8 +641,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                 <td>
+                    <form method="post" action="{% url 'export_in_swd' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -552,6 +684,11 @@
                         <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
                     </div>
                   </th>
+                    <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Export</a>
+                    </div>
+                  </th>
               </tr>
               </thead>
               <tbody>
@@ -559,8 +696,14 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
+                 <td>
+                    <form method="post" action="{% url 'export_in_wb' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
               </tbody>
           </table>
@@ -612,579 +755,6 @@
                 <td> {{ row.District }} </td>
                 <td> {{ row.count }}</td>
                 <td> {{ row.district_c }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="busstand" tabindex="-1" role="dialog" aria-labelledby="busstand" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="busstandLabel">KNMT - District Wise Progress - Bus Stand</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in busstand_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="btroad" tabindex="-1" role="dialog" aria-labelledby="btroad" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="btroadLabel">KNMT - District Wise Progress - BT Road</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in btroad_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
- <div class="modal fade" id="ccroad" tabindex="-1" role="dialog" aria-labelledby="ccroad" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ccroadLabel">KNMT - District Wise Progress - CC Road</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in ccroad_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="crematorium" tabindex="-1" role="dialog" aria-labelledby="crematorium" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="crematoriumLabel">KNMT - District Wise Progress - Crematorium</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in crematorium_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="culvert" tabindex="-1" role="dialog" aria-labelledby="culvert" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="CulvertLabel">KNMT - District Wise Progress - Culvert</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in culvert_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="KnowledgeCentre" tabindex="-1" role="dialog" aria-labelledby="KnowledgeCentre" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="KnowledgeCentreLabel">KNMT - District Wise Progress - Knowledge Centre</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in KnowledgeCentre_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="Market" tabindex="-1" role="dialog" aria-labelledby="Market" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="MarketLabel">KNMT - District Wise Progress - Market</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in Market_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="MetalBeamCrashBarriers" tabindex="-1" role="dialog" aria-labelledby="MetalBeamCrashBarriers" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="MetalBeamCrashBarriersLabel">KNMT - District Wise Progress - Metal Beam Crash Barriers</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in MetalBeamCrashBarriers_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="Parks" tabindex="-1" role="dialog" aria-labelledby="Parks" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ParksLabel">KNMT - District Wise Progress - Parks</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in Parks_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="PaverBlock" tabindex="-1" role="dialog" aria-labelledby="PaverBlock" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="PaverBlockLabel">KNMT - District Wise Progress - Paver Block</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in PaverBlock_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="Retainingwall" tabindex="-1" role="dialog" aria-labelledby="Retainingwall" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="RetainingwallLabel">KNMT - District Wise Progress - Retaining wall</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in Retainingwall_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="SWD" tabindex="-1" role="dialog" aria-labelledby="SWD" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="SWDLabel">KNMT - District Wise Progress - SWD</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in SWD_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
- <div class="modal fade" id="WaterBodies" tabindex="-1" role="dialog" aria-labelledby="WaterBodies" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="SWDLabel">KNMT - District Wise Progress - Water Bodies</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in WaterBodies_district %}
-              <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent }} %</td>
                 </tr>
               {% endfor %}
               </tbody>

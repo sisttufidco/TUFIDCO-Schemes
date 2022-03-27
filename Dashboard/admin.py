@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Dashboard
-from django.db.models import Count, Sum, Avg, Func
+from django.db.models import Count, Sum, Avg, Func, FloatField, F
 from django.db.models import Q
 from TUFIDCOapp.models import *
 from ULBForms.models import *
@@ -1100,7 +1100,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         busstand_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         btroad_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='BT Road').count()
@@ -1118,6 +1118,7 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='BT Road').filter(~Q(Project_ID__in=final_list)).count()
         btroad_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='BT Road').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
+
         btroad_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='BT Road').filter(
             status='In Progress').annotate(percent=Avg('percentageofworkdone'))
@@ -1140,7 +1141,7 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='CC Road').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         ccroad_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='CC Road').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         communityhall_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Community Hall').count()
@@ -1161,7 +1162,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         communityhall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Community Hall').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         crematorium_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Crematorium').count()
@@ -1182,7 +1183,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         crematorium_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Crematorium').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         culvert_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Culvert').count()
@@ -1203,7 +1204,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         culvert_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Culvert').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         Market_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Market').count()
@@ -1223,7 +1224,7 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='Market').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         Market_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Market').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         KnowledgeCentre_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Knowledge Centre').count()
@@ -1244,7 +1245,8 @@ class DashboardAdmin(admin.ModelAdmin):
 
         KnowledgeCentre_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Knowledge Centre').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
+
         MetalBeamCrashBarriers_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').count()
         MetalBeamCrashBarriers_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1267,7 +1269,9 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list)).count()
         MetalBeamCrashBarriers_tobecommenced_project_cost =MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
-
+        MetalBeamCrashBarriers_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
 
 
         Parks_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1290,7 +1294,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         Parks_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Parks').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         PaverBlock_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Paver Block').count()
@@ -1314,7 +1318,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         PaverBlock_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Paver Block').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         Retainingwall_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Retaining wall').count()
@@ -1337,7 +1341,7 @@ class DashboardAdmin(admin.ModelAdmin):
             ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         Retainingwall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Retaining wall').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         SolidWasteMgt_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Solid Waste Mgt.').count()
@@ -1360,7 +1364,7 @@ class DashboardAdmin(admin.ModelAdmin):
             ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         SolidWasteMgt_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Solid Waste Mgt.').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
         SWD_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='SWD').count()
         SWD_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1381,7 +1385,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         SWD_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='SWD').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
         WaterBodies_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Water Bodies').count()
         WaterBodies_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1404,7 +1408,7 @@ class DashboardAdmin(admin.ModelAdmin):
 
         WaterBodies_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Water Bodies').filter(status='In Progress').annotate(
-            percent=Sum('percentageofworkdone'))
+            percent=Avg('percentageofworkdone'))
 
         total_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').count()
         total_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(
@@ -1426,6 +1430,7 @@ class DashboardAdmin(admin.ModelAdmin):
             Scheme='KNMT').filter(status='In Progress').annotate(
             percent=Sum('percentageofworkdone'))
         extra_context = {
+            'MetalBeamCrashBarriers_district':MetalBeamCrashBarriers_district,
             'CTPRW_pt': CTPRW_pt,
             'RWDMA_pt': RWDMA_pt,
             'rw_pt': rw_pt,
