@@ -20,17 +20,25 @@ from django.contrib.admin.sites import AdminSite
 class MunicipalityDetailsAdmin(ImportExportModelAdmin, admin.AdminSite):
     resource_class = MunicipalityDetailsResource
     exclude = ['user']
-    list_filter = [
-        'region'
-    ]
+
     search_fields = [
         'municipality_name',
         'district',
         'region'
     ]
+    list_display = [
+        'municipality_name',
+        'district',
+        'region',
+        'mc',
+        'me',
+        'email_id1',
+        'date_and_time'
+    ]
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
+        obj.date_and_time = datetime.now()
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):

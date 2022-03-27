@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from TUFIDCOapp.models import MasterSanctionForm
-
+from django.utils.datetime_safe import datetime
 
 # Create your models here.
 
@@ -21,7 +21,7 @@ class MunicipalityDetails(models.Model):
     email_id2 = models.EmailField('Alternative Email ID', max_length=40, blank=True, null=True)
     mc = models.CharField('Municipal Commissioner Phone Number', max_length=20, null=True)
     me = models.CharField('Municipal Engineer Phone Number', max_length=20, null=True)
-
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
     def __str__(self):
         return self.municipality_name
 
