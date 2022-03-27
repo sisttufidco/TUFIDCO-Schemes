@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.datetime_safe import datetime
+from TUFIDCOapp.models import *
+from ULBForms.models import *
 
 # Create your models here.
 class TownPanchayatDetails(models.Model):
@@ -19,3 +21,10 @@ class TownPanchayatDetails(models.Model):
     class Meta:
         verbose_name = 'Town Panchayat Detail'
         verbose_name_plural = 'Town Panchayat Details'
+
+
+class MasterReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "KNMT Physical & Financial Progress Report"
+        verbose_name_plural = "KNMT Physical & Financial Progress Reports"

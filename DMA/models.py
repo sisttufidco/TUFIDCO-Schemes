@@ -28,3 +28,10 @@ class MunicipalityDetails(models.Model):
     class Meta:
         verbose_name = 'Municipality Detail'
         verbose_name_plural = 'Municipality Details'
+
+
+class MasterReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "KNMT Physical & Financial Progress Report"
+        verbose_name_plural = "KNMT Physical & Financial Progress Reports"
