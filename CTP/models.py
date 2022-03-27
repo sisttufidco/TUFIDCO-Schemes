@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from django.utils.datetime_safe import datetime
 
 # Create your models here.
 class TownPanchayatDetails(models.Model):
@@ -12,7 +12,7 @@ class TownPanchayatDetails(models.Model):
     cell2 = models.CharField('Cell 2', max_length=20, blank=True, null=True)
     cell3 = models.CharField('Cell 3', max_length=20, blank=True, null=True)
     email = models.EmailField('Email ID', max_length=40, null=True)
-
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
     def __str__(self):
         return self.name_tp
 

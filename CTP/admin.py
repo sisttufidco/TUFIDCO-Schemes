@@ -6,11 +6,12 @@ from CTP.models import *
 
 @admin.register(TownPanchayatDetails)
 class TownPanchayatDetailsAdmin(admin.ModelAdmin):
-    exclude = ['user']
+    exclude = ['user', 'date_and_time']
 
     search_fields = [
         'user__first_name',
-        'district'
+        'district',
+        'date_and_time'
     ]
 
     list_display = [
@@ -18,13 +19,13 @@ class TownPanchayatDetailsAdmin(admin.ModelAdmin):
         'district',
         'zone',
         'cell1',
-        'email'
+        'email',
+        'date_and_time'
     ]
-
-
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
+        obj.date_and_time = datetime.now()
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
@@ -36,7 +37,7 @@ class TownPanchayatDetailsAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(TownPanchayatDetailsAdmin, self).get_queryset(request)
-        if not request.user.groups.filter(name__in=["Admin",]).exists():
+        if not request.user.groups.filter(name__in=["Admin", ]).exists():
             return qs.filter(user=request.user)
         return qs
 

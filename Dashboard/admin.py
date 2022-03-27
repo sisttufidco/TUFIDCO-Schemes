@@ -1430,7 +1430,7 @@ class DashboardAdmin(admin.ModelAdmin):
             Scheme='KNMT').filter(status='In Progress').annotate(
             percent=Sum('percentageofworkdone'))
         extra_context = {
-            'MetalBeamCrashBarriers_district':MetalBeamCrashBarriers_district,
+            'MetalBeamCrashBarriers_district': MetalBeamCrashBarriers_district,
             'CTPRW_pt': CTPRW_pt,
             'RWDMA_pt': RWDMA_pt,
             'rw_pt': rw_pt,
