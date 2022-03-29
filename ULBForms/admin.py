@@ -46,7 +46,7 @@ class AgencyBankDetailsAdmin(admin.ModelAdmin):
         'user__first_name',
     ]
     search_fields = [
-        'user',
+        'user__first_name',
         'beneficiary_name',
         'bank_name',
         'branch',
@@ -98,7 +98,7 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
         'date_and_time'
     ]
     search_fields = [
-        'user',
+        'user__first_name',
         'PANno',
         'name',
     ]
