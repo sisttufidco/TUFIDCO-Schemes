@@ -4,6 +4,7 @@ from django.utils.datetime_safe import datetime
 from TUFIDCOapp.models import *
 from ULBForms.models import *
 
+
 # Create your models here.
 class TownPanchayatDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -15,6 +16,7 @@ class TownPanchayatDetails(models.Model):
     cell3 = models.CharField('Cell 3', max_length=20, blank=True, null=True)
     email = models.EmailField('Email ID', max_length=40, null=True)
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
+
     def __str__(self):
         return self.name_tp
 

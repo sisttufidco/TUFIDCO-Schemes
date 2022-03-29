@@ -1,0 +1,333 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+  <style>
+      .object-tools a.addlink {
+          display: none;
+      }
+  </style>
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" >
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+{% endblock %}
+{% block result_list %}
+    <div id="carousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner carousel-t">
+        <div class="carousel-item active">
+          <div class="row row-card">
+            <p class="p-details">Singara Chennai 2.0 - Project Details - Overall (2021-22)</p>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-blue">
+                <div class="inner">
+                  <p class="card-title">Total Projects</p>
+                  <h3 class="card-info"> {{ total_projects }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-green">
+                <div class="inner">
+                  <p class="card-title">Total Cost</p>
+                  <h3 class="card-info">&#8377; {{ project_cost.project_cost }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-orange">
+                <div class="inner">
+                  <p class="card-title">Singara Chennai 2.0 Share</p>
+                  <h3 class="card-info">&#8377; {{ singara.singara_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="card-box bg-red">
+                <div class="inner">
+                  <p class="card-title">ULB Share</p>
+                  <h3 class="card-info">&#8377; {{ ulb_share.ulb_share }} lakhs</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     <div class="charts">
+        <div class="row">
+            <div class="col piechart pl-150" style="margin-left:13px;">
+                <p class="p-details">Singara Chennai 2.0 - Sector Wise Number of Works Sanctioned<br>Overall<br>(2021-22)</p>
+                <div id="pieSector" style="max-width: 520px; margin: 35px auto;"></div>
+            </div>
+            <div class="col piechart pl-150" style="margin-right:13px;">
+                <p class="p-details">Singara Chennai 2.0 - Sector Wise Number of Works Sanctioned<br>Overall <br>(2021-22)</p>
+                <div id="donutSector" style="max-width: 520px; margin: 35px auto;"></div>
+            </div>
+        </div>
+    </div>
+<div class="row charts piechart">
+            <p class="p-details" style="margin-top:40px">Singara Chennai 2.0 <br>Sector Wise Project Sanctioned - Cost in lakhs<br>Overall<br>(2021-22)</p>
+            <div id="SectorProjectCost" ></div>
+    </div>
+
+    <div class="row row-card2 table-sector">
+      <table class="border-grey" style="border-radius:5px;">
+        <p class="p-details">Singara Chennai 2.0 <br>Sector Wise Progress Details - Cost in lakhs<br>(2021-22)</p>
+        <thead>
+        <col>
+          <colgroup span="2"></colgroup>
+          <colgroup span="2"></colgroup>
+          <tr class="border-grey">
+            <th class="border-grey th-t1-center">S.No</th>
+            <th class="border-grey th-t1-center">Name of the Sector</th>
+            <th class="border-grey th-t1-center"  colspan="2">Approved</th>
+            <th class="border-grey th-t1-center" colspan="2">Completed</th>
+            <th class="border-grey th-t1-center" colspan="2">In Progress</th>
+              <th class="border-grey th-t1-center" colspan="2">To be Commenced</th>
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right" >No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+            <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+        </tr>
+        </thead>
+       <tbody>
+       {% include 'includes/singaraChennaiProgress.html' %}
+       </tbody>
+           <tfoot style="font-weight:bold; border-top:2px solid #DDDDDD;">
+          <tr class="border-grey {% cycle 'row1' 'row2'%}">
+    <td class="border-grey" style="text-align:center"></td>
+     <td class="border-grey" style="text-align:right">Total</td>
+    <td class="border-grey" style="text-align:right">{{ total_approved_project_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ total_approved_project_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align:right">{{ total_completed_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ total_completed_approved_project_cost.project_cost }}</td>
+
+     <td class="border-grey" style="text-align:right;">{{ total_inprogress_count }}</td>
+     <td class="border-grey" style="text-align:right">&#8377; {{ total_inprogress_approved_project_cost.project_cost }}</td>
+
+     <td class="border-grey" style="text-align:right">{{ total_tobecommenced_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ total_tobecommenced_project_cost.project_cost }}</td>
+</tr>
+          </tfoot>
+
+      </table>
+
+    </div>
+{% include 'includes/sinagaraChennaiProgressModal.html' %}
+      <script>
+      $(function() {
+
+  $('[data-toggle="modal"]').hover(function() {
+    var modalId = $(this).data('target');
+    $(modalId).modal('show');
+
+  });
+
+});
+      </script>
+    <script>
+    var options = {
+        series: [{% for i in pie_chart_sector %} {{ i.Sector_total }}, {% endfor %}],
+        chart: {
+            width: '100%',
+        type: 'pie',
+        toolbar: {
+            show: true
+          }
+
+      },
+      labels: [{% for i in pie_chart_sector %} '{{ i.Sector }}', {% endfor %}],
+      responsive: [{
+        breakpoint: 1000,
+        options: {
+          chart: {
+            width: 300,
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+
+      };
+      var chart = new ApexCharts(document.querySelector("#pieSector"), options);
+      chart.render();
+</script>
+<script>
+            var options = {
+                series: [{% for i in pie_chart_sector %} {{ i.Sector_count }}, {% endfor %}],
+
+                dataLabels: {
+                    formatter: function(val, opts){
+                        return opts.w.config.series[opts.seriesIndex]
+                    },
+                },
+                chart: {
+                    width: '100%',
+                    type: 'donut',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                theme:{
+                    palette: 'palette2',
+                },
+                plotOptions:{
+                    pie:{
+                        donut:{
+                            labels:{
+                                show: true,
+                            },
+                            total: {
+                                showAlways: true,
+                                label: 'Total',
+                                fontSize: '22px',
+                                fontFamily: 'Helvetica, Arial, sans-serif',
+                                fontWeight: 600,
+                                color: '#373d3f',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => {
+                                        return a + b
+                                    }, 0)
+                                },
+                            },
+                        },
+                    },
+                },
+                labels: [{% for i in pie_chart_sector %} '{{ i.Sector }}', {% endfor %}],
+                responsive: [{
+                    breakpoint: 300,
+                    options: {
+                        chart: {
+                            width: '60%'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#donutSector"), options);
+            chart.render();
+        </script>
+    <script>
+    var options =
+    {
+        series: [
+        {
+
+            name: 'Cost (in lakhs.)',
+            data: [{% for row in pie_chart_sector %} {{row.Sector_total}}, {% endfor %}]
+        }],
+        chart:{
+             width: '100%',
+            height: 480,
+            type: 'bar',
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 10,
+                distributed: true,
+                dataLabels: {
+                    position: 'top', // top, center, bottom
+                    enabled: false
+                },
+            }
+        },
+        legend: {
+            show:false,
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            },
+            offsetY: -20,
+            style: {
+                fontSize: '12px',
+                colors: ["#304758"]
+            }
+        },
+
+        xaxis: {
+            categories: [{% for row in pie_chart_sector %} "{{ row.Sector }}", {% endfor %}],
+            axisBorder: {
+                show: true
+            },
+            axisTicks: {
+                show: false
+            },
+            title: {
+                text: 'Sector',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Cost',
+                style: {
+                    fontFamily: 'Roboto',
+                    fontSize: '14px',
+                    fontWeight: 'bolder',
+                }
+            },
+            axisBorder: {
+            show: false
+        },
+        axisTicks: {
+            show: false,
+        },
+        labels: {
+            show: true,
+            formatter: function (val) {
+                return "\u20B9" + val;
+            }
+        }
+        },
+    };
+
+
+    var chart = new ApexCharts(document.querySelector("#SectorProjectCost"), options);
+    chart.render();
+
+</script>
+{% endblock %}
+{% block pagination %}{% endblock  %}

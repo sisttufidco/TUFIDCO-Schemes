@@ -209,6 +209,7 @@ class MasterSanctionForm(models.Model):
     Date_AS = models.DateField("Date of AS", blank=True, null=True)
     Project_ID = models.CharField('Project ID', max_length=40, blank=True, null=True)
     total = models.DecimalField("Total", decimal_places=2, blank=True, max_digits=10, null=True)
+    zone = models.IntegerField("Zone", blank=True, null=True)
 
     def save(self, **kwargs):
         self.Project_ID = "%s_%s_%.3d_%d_%s_%.4d" % (self.Scheme.Scheme[:1],

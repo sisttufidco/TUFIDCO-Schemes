@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Dashboard
+from .models import Dashboard, DashboardSingara
 from django.db.models import Count, Sum, Avg, Func, FloatField, F
 from django.db.models import Q
 from TUFIDCOapp.models import *
@@ -13,6 +13,311 @@ class Round(Func):
     function = "ROUND"
     arity = 2
 
+@admin.register(DashboardSingara)
+class DashboardSingaraAdmin(admin.ModelAdmin):
+    change_list_template = "admin/dashboard2.html"
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+        a = AgencyProgressModel.objects.values_list('Project_ID', flat=True).filter(Scheme='Singara Chennai 2.0').filter(
+            status='Completed')
+
+        b = AgencyProgressModel.objects.values_list('Project_ID', flat=True).filter(Scheme='Singara Chennai 2.0').filter(
+            status='In Progress')
+        total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').count()
+        project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        singara = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').aggregate(singara_share=Sum('SchemeShare'))
+        ulb_share = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').aggregate(ulb_share=Sum('ULBShare'))
+
+        list_agency_progress = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).filter(
+            Scheme='Singara Chennai 2.0').filter(status='In Progress'))
+
+        list_agency_completed = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).filter(
+            Scheme='Singara Chennai 2.0').filter(status='Completed'))
+        final_list = list_agency_progress + list_agency_completed
+
+        crematorium_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').count()
+        crematorium_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        crematorium_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').filter(status='Completed').count()
+        crematorium_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        crematorium_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').filter(status='In Progress').count()
+        crematorium_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        crematorium_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').filter(~Q(Project_ID__in=final_list)).count()
+        crematorium_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Crematorium').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_crematorium = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+                Sector='Crematorium').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(count=Count('Project_ID')))
+
+        Lighting_System_approved_project_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').count()
+        Lighting_System_approved_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Lighting_System_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(status='Completed').count()
+        Lighting_System_completed_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Lighting_System_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(status='In Progress').count()
+        Lighting_System_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Lighting_System_tobecommenced_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(~Q(Project_ID__in=final_list)).count()
+        Lighting_System_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_Lighting_System = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Lighting System').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(
+            count=Count('Project_ID')))
+
+        Name_Boards_for_Streets_approved_project_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').count()
+        Name_Boards_for_Streets_approved_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Name_Boards_for_Streets_completed_count = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(status='Completed').count()
+        Name_Boards_for_Streets_completed_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(status='Completed').aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        Name_Boards_for_Streets_inprogress_count = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(status='In Progress').count()
+        Name_Boards_for_Streets_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(status='In Progress').aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        Name_Boards_for_Streets_tobecommenced_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(~Q(Project_ID__in=final_list)).count()
+        Name_Boards_for_Streets_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_Name_Boards_for_Streets = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Name Boards for Streets').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(
+            count=Count('Project_ID')))
+
+        Parks_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').count()
+        Parks_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Parks_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(status='Completed').count()
+        Parks_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Parks_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(status='In Progress').count()
+        Parks_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Parks_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(~Q(Project_ID__in=final_list)).count()
+        Parks_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_Parks = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Parks').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(
+            count=Count('Project_ID')))
+        Play_Field_approved_project_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').count()
+        Play_Field_approved_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Play_Field_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(status='Completed').count()
+        Play_Field_completed_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Play_Field_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(status='In Progress').count()
+        Play_Field_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Play_Field_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(~Q(Project_ID__in=final_list)).count()
+        Play_Field_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_Play_Field = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Play Field').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(
+            count=Count('Project_ID')))
+        Roads_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').count()
+        Roads_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Roads_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(status='Completed').count()
+        Roads_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Roads_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(status='In Progress').count()
+        Roads_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Roads_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(~Q(Project_ID__in=final_list)).count()
+        Roads_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_Roads = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Roads').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(
+            count=Count('Project_ID')))
+
+        Water_Fountain_approved_project_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').count()
+        Water_Fountain_approved_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Water_Fountain_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Water_Fountain').filter(status='Completed').count()
+        Water_Fountain_completed_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Water_Fountain_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').filter(status='In Progress').count()
+        Water_Fountain_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        Water_Fountain_tobecommenced_count = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').filter(~Q(Project_ID__in=final_list)).count()
+        Water_Fountain_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        zone_Water_Fountain = list(qs.values('zone').order_by('zone').filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            Sector='Water Fountain').filter(~Q(Project_ID__in=a)).filter(~Q(Project_ID__in=b)).annotate(
+            count=Count('Project_ID')))
+        total_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').count()
+        total_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
+        total_completed_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            status='Completed').count()
+        total_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        total_inprogress_count = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            status='In Progress').count()
+        total_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='Singara Chennai 2.0').filter(
+            status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        total_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            ~Q(Project_ID__in=final_list)).count()
+        total_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='Singara Chennai 2.0').filter(
+            ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
+
+
+        extra_context = {
+            'zone_Water_Fountain':zone_Water_Fountain,
+            'zone_Roads':zone_Roads,
+            'zone_Play_Field':zone_Play_Field,
+            'zone_Parks':zone_Parks,
+            'zone_Name_Boards_for_Streets':zone_Name_Boards_for_Streets,
+            'zone_Lighting_System':zone_Lighting_System,
+            'zone_crematorium':zone_crematorium,
+            'total_tobecommenced_project_cost':total_tobecommenced_project_cost,
+            'total_tobecommenced_count':total_tobecommenced_count,
+            'total_inprogress_approved_project_cost':total_inprogress_approved_project_cost,
+            'total_inprogress_count':total_inprogress_count,
+            'total_completed_approved_project_cost':total_completed_approved_project_cost,
+            'total_completed_count':total_completed_count,
+            'total_approved_project_cost':total_approved_project_cost,
+            'total_approved_project_count':total_approved_project_count,
+            'crematorium_tobecommenced_count': crematorium_tobecommenced_count,
+            'crematorium_tobecommenced_project_cost': crematorium_tobecommenced_project_cost,
+            'crematorium_inprogress_count': crematorium_inprogress_count,
+            'crematorium_inprogress_approved_project_cost': crematorium_inprogress_approved_project_cost,
+            'crematorium_approved_project_cost': crematorium_approved_project_cost,
+            'crematorium_completed_approved_project_cost': crematorium_completed_approved_project_cost,
+            'crematorium_approved_project_count': crematorium_approved_project_count,
+            'crematorium_completed_count': crematorium_completed_count,
+            'Lighting_System_tobecommenced_count': Lighting_System_tobecommenced_count,
+            'Lighting_System_tobecommenced_project_cost': Lighting_System_tobecommenced_project_cost,
+            'Lighting_System_inprogress_count': Lighting_System_inprogress_count,
+            'Lighting_System_inprogress_approved_project_cost': Lighting_System_inprogress_approved_project_cost,
+            'Lighting_System_approved_project_cost': Lighting_System_approved_project_cost,
+            'Lighting_System_completed_approved_project_cost': Lighting_System_completed_approved_project_cost,
+            'Lighting_System_approved_project_count': Lighting_System_approved_project_count,
+            'Lighting_System_completed_count': Lighting_System_completed_count,
+            'Name_Boards_for_Streets_tobecommenced_count': Name_Boards_for_Streets_tobecommenced_count,
+            'Name_Boards_for_Streets_tobecommenced_project_cost': Name_Boards_for_Streets_tobecommenced_project_cost,
+            'Name_Boards_for_Streets_inprogress_count': Name_Boards_for_Streets_inprogress_count,
+            'Name_Boards_for_Streets_inprogress_approved_project_cost': Name_Boards_for_Streets_inprogress_approved_project_cost,
+            'Name_Boards_for_Streets_approved_project_cost': Name_Boards_for_Streets_approved_project_cost,
+            'Name_Boards_for_Streets_completed_approved_project_cost': Name_Boards_for_Streets_completed_approved_project_cost,
+            'Name_Boards_for_Streets_approved_project_count': Name_Boards_for_Streets_approved_project_count,
+            'Name_Boards_for_Streets_completed_count': Name_Boards_for_Streets_completed_count,
+            'Parks_tobecommenced_count': Parks_tobecommenced_count,
+            'Parks_tobecommenced_project_cost': Parks_tobecommenced_project_cost,
+            'Parks_inprogress_count': Parks_inprogress_count,
+            'Parks_inprogress_approved_project_cost': Parks_inprogress_approved_project_cost,
+            'Parks_approved_project_cost': Parks_approved_project_cost,
+            'Parks_completed_approved_project_cost': Parks_completed_approved_project_cost,
+            'Parks_approved_project_count': Parks_approved_project_count,
+            'Parks_completed_count': Parks_completed_count,
+            'Play_Field_tobecommenced_count': Play_Field_tobecommenced_count,
+            'Play_Field_tobecommenced_project_cost': Play_Field_tobecommenced_project_cost,
+            'Play_Field_inprogress_count': Play_Field_inprogress_count,
+            'Play_Field_inprogress_approved_project_cost': Play_Field_inprogress_approved_project_cost,
+            'Play_Field_approved_project_cost': Play_Field_approved_project_cost,
+            'Play_Field_completed_approved_project_cost': Play_Field_completed_approved_project_cost,
+            'Play_Field_approved_project_count': Play_Field_approved_project_count,
+            'Play_Field_completed_count': Play_Field_completed_count,
+            'Roads_tobecommenced_count': Roads_tobecommenced_count,
+            'Roads_tobecommenced_project_cost': Roads_tobecommenced_project_cost,
+            'Roads_inprogress_count': Roads_inprogress_count,
+            'Roads_inprogress_approved_project_cost': Roads_inprogress_approved_project_cost,
+            'Roads_approved_project_cost': Roads_approved_project_cost,
+            'Roads_completed_approved_project_cost': Roads_completed_approved_project_cost,
+            'Roads_approved_project_count': Roads_approved_project_count,
+            'Roads_completed_count': Roads_completed_count,
+            'Water_Fountain_tobecommenced_count': Water_Fountain_tobecommenced_count,
+            'Water_Fountain_tobecommenced_project_cost': Water_Fountain_tobecommenced_project_cost,
+            'Water_Fountain_inprogress_count': Water_Fountain_inprogress_count,
+            'Water_Fountain_inprogress_approved_project_cost': Water_Fountain_inprogress_approved_project_cost,
+            'Water_Fountain_approved_project_cost': Water_Fountain_approved_project_cost,
+            'Water_Fountain_completed_approved_project_cost': Water_Fountain_completed_approved_project_cost,
+            'Water_Fountain_approved_project_count': Water_Fountain_approved_project_count,
+            'Water_Fountain_completed_count': Water_Fountain_completed_count,
+            'total_projects': total_projects,
+            'project_cost': project_cost,
+            'singara': singara,
+            'ulb_share': ulb_share,
+        }
+        metrics = {
+            'Sector_total': Sum('ApprovedProjectCost'),
+            'Sector_count': Count('Project_ID'),
+        }
+        response.context_data['pie_chart_sector'] = list(
+            qs.values('Sector').filter(Scheme__Scheme='Singara Chennai 2.0').annotate(**metrics).order_by('Sector'))
+
+
+        response.context_data.update(extra_context)
+        return response
 
 @admin.register(Dashboard)
 class DashboardAdmin(admin.ModelAdmin):
@@ -1423,7 +1728,7 @@ class DashboardAdmin(admin.ModelAdmin):
             status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
         total_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             ~Q(Project_ID__in=final_list)).count()
-        total_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+        total_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
 
         total_district = AgencyProgressModel.objects.values('District').order_by('District').filter(

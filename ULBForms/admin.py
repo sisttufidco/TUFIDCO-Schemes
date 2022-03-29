@@ -8,7 +8,26 @@ from django.db.models import Count, Sum, Avg, Func
 
 
 # Register your models here.
+@admin.register(ProjectDetails)
+class ProjectDetailsAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/projectDetailsReport.html'
 
+    list_filter = [
+        'Sector'
+    ]
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        response.context_data['report'] = list(
+            qs.values('Sector', 'Project_ID', 'ProjectName').order_by('Sector').filter(
+                Scheme__Scheme='Singara Chennai 2.0'))
+        return response
 
 class AgencyBankDetailsAdmin(admin.ModelAdmin):
     change_form_template = 'admin/bankdetails.html'
@@ -27,7 +46,7 @@ class AgencyBankDetailsAdmin(admin.ModelAdmin):
         'user__first_name',
     ]
     search_fields = [
-        'user__first_name',
+        'user',
         'beneficiary_name',
         'bank_name',
         'branch',
@@ -79,7 +98,7 @@ class ULBPANDetailsAdmin(admin.ModelAdmin):
         'date_and_time'
     ]
     search_fields = [
-        'user__first_name',
+        'user',
         'PANno',
         'name',
     ]

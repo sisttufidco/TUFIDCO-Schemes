@@ -6,5 +6,12 @@ from TUFIDCOapp.models import *
 class Dashboard(MasterSanctionForm):
     class Meta:
         proxy = True
-        verbose_name = "Dashboard"
-        verbose_name_plural = "Dashboard"
+        verbose_name = "KNMT"
+        verbose_name_plural = "KNMT"
+
+
+class DashboardSingara(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "Singara Chennai 2.0"
+        verbose_name_plural = "Singara Chennai 2.0"

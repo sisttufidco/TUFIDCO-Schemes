@@ -53,6 +53,7 @@ class MasterSanctionResource(resources.ModelResource):
                           widget=widgets.ForeignKeyWidget(Scheme, "Scheme"))
     Sector = fields.Field(saves_null_values=True, column_name="Sector", attribute="Sector",
                           widget=widgets.CharWidget())
+    zone = fields.Field(saves_null_values=False, column_name='zone', attribute='zone', widget=widgets.IntegerWidget())
     ProjectName = fields.Field(saves_null_values=True, column_name="ProjectName", attribute="ProjectName",
                                widget=widgets.CharWidget())
     Project_ID = fields.Field(saves_null_values=True, column_name="Project_ID", attribute="Project_ID",
@@ -71,6 +72,7 @@ class MasterSanctionResource(resources.ModelResource):
                              attribute="GoMeeting", widget=widgets.IntegerWidget())
     Date_AS = fields.Field(saves_null_values=True, column_name="Date_AS",
                            attribute="Date_AS", widget=widgets.DateWidget())
+
 
     class Meta:
         model = MasterSanctionForm
