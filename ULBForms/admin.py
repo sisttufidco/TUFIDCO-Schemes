@@ -151,9 +151,11 @@ class AgencyProgressAdmin(admin.ModelAdmin):
               'upload2')
 
     list_filter = [
+        'ULBType',
         'status',
         'Scheme',
         'Sector',
+
     ]
     list_display = [
         'Project_ID',
@@ -164,11 +166,12 @@ class AgencyProgressAdmin(admin.ModelAdmin):
         'status',
         'percentageofworkdone',
         'date_and_time',
+
     ]
 
     search_fields = [
         'Scheme',
-        'user__first_name',
+        'ULBName',
         'ProjectName',
         'Project_ID',
         'Sector',
@@ -216,11 +219,14 @@ class AgencySanctionAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
+        'ULBType',
         'Scheme',
         'Sector',
         'ts_awarded',
         'tr_awarded',
         'wd_awarded',
+        'work_awarded_amount1',
+        'work_awarded_amount2'
     ]
 
     def save_model(self, request, obj, form, change):

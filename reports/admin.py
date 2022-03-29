@@ -61,6 +61,10 @@ class ULBSanctionReportErrorAdmin(admin.ModelAdmin):
 @admin.register(ProgressNotEntered)
 class ProgressNotEnteredAdmin(admin.ModelAdmin):
     change_list_template = 'admin/progressnotentered.html'
+    list_filter = [
+        'AgencyType',
+        'Sector'
+    ]
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
@@ -84,6 +88,11 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
 
 @admin.register(SanctionNotEntered)
 class ProgressNotEnteredAdmin(admin.ModelAdmin):
+    list_filter = [
+        'AgencyType',
+        'Sector'
+    ]
+
     change_list_template = 'admin/sanctionnotentereddetails.html'
 
     def changelist_view(self, request, extra_context=None):
