@@ -5,6 +5,7 @@ from .models import *
 import pickle
 from .forms import *
 from django.db.models import Count, Sum, Avg, Func
+from import_export.admin import ImportExportModelAdmin
 
 
 # Register your models here.
@@ -142,8 +143,8 @@ def Decimal(x):
     return float(x)
 
 
-@admin.register(AgencyProgressModel)
-class AgencyProgressAdmin(admin.ModelAdmin):
+
+class AgencyProgressAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     change_form_template = 'admin/ulbprogress.html'
     form = AgencyProgressForm
     fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
@@ -196,9 +197,9 @@ class AgencyProgressAdmin(admin.ModelAdmin):
         Form = super().get_form(request, obj=None, **kwargs)
         return functools.partial(Form, request)
 
+admin.site.register(AgencyProgressModel, AgencyProgressAdmin)
 
-@admin.register(AgencySanctionModel)
-class AgencySanctionAdmin(admin.ModelAdmin):
+class AgencySanctionAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     form = AgencySanctionForm
     search_fields = [
         'Scheme',
@@ -245,7 +246,7 @@ class AgencySanctionAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         formset = super().get_form(request, obj, **kwargs)
         return functools.partial(formset, request)
-
+admin.site.register(AgencySanctionModel,AgencySanctionAdmin)
 
 @admin.register(MasterReport)
 class MasterReportAdmin(admin.ModelAdmin):

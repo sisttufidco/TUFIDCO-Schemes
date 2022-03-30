@@ -21,7 +21,7 @@ class AgencyBankDetails(models.Model):
     passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
-
+    
 
     @property
     def passbook_preview(self):
@@ -110,7 +110,7 @@ class AgencyProgressModel(models.Model):
                                       blank=True, null=True,
                                       help_text="Agency has to send a hard copy of the release request along with "
                                                 "photos,etc in the prescribed format")
-    valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=4, blank=True,
+    valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=6, blank=True,
                                           default=0.0, null=True)
     percentageofworkdone = models.DecimalField("Percentage of work done", decimal_places=2, max_digits=12, blank=True,
                                                default=0.0, null=True)
