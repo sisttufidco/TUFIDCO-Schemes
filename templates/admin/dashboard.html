@@ -266,7 +266,7 @@
     </div>
        <div class="row row-card2 table-sector">
       <table class="border-grey" style="border-radius:5px;">
-        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>(2021-22)</p>
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Overall (2021-22)</p>
         <thead>
         <col>
           <colgroup span="2"></colgroup>
@@ -275,6 +275,7 @@
             <th class="border-grey th-t1-center">S.No</th>
             <th class="border-grey th-t1-center">Name of the Sector</th>
             <th class="border-grey th-t1-center"  colspan="2">Approved</th>
+              <th class="border-grey th-t1-center"style="text-align: right;">Awarded Cost</th>
             <th class="border-grey th-t1-center" colspan="2">Completed</th>
             <th class="border-grey th-t1-center" colspan="2">In Progress</th>
               <th class="border-grey th-t1-center" colspan="2">To be Commenced</th>
@@ -284,6 +285,7 @@
           <th class="border-grey th-t2-right"></th>
           <th class="border-grey th-t2-right" >No. of Works</th>
           <th class="border-grey th-t2-right">Project Cost</th>
+                <th class="border-grey th-t2-right"></th>
           <th class="border-grey th-t2-right">No. of Works</th>
           <th class="border-grey th-t2-right">Project Cost</th>
 
@@ -304,6 +306,7 @@
      <td class="border-grey" style="text-align:right">Total</td>
     <td class="border-grey" style="text-align:right">{{ total_projects }}</td>
     <td class="border-grey" style="text-align:right">&#8377; {{ total_approved_project_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align: right;">&#8377; {{ total_awarded_cost.project_cost }}</td>
     <td class="border-grey" style="text-align:right">{{ total_completed_count }}</td>
     <td class="border-grey" style="text-align:right">&#8377; {{ total_completed_approved_project_cost.project_cost }}</td>
 
@@ -319,6 +322,122 @@
 
     </div>
       {% include 'includes/sector_progress_modal.html' %}
+
+      <div class="row row-card2 table-sector">
+      <table class="border-grey" style="border-radius:5px;">
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Directorate of Municipalities (2021-22)</p>
+        <thead>
+        <col>
+          <colgroup span="2"></colgroup>
+          <colgroup span="2"></colgroup>
+          <tr class="border-grey">
+            <th class="border-grey th-t1-center">S.No</th>
+            <th class="border-grey th-t1-center">Name of the Sector</th>
+            <th class="border-grey th-t1-center"  colspan="2">Approved</th>
+              <th class="border-grey th-t1-center"style="text-align: right;">Awarded Cost</th>
+            <th class="border-grey th-t1-center" colspan="2">Completed</th>
+            <th class="border-grey th-t1-center" colspan="2">In Progress</th>
+              <th class="border-grey th-t1-center" colspan="2">To be Commenced</th>
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right" >No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+                <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+            <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+        </tr>
+        </thead>
+       <tbody>
+       {% include 'includes/DMAsector_progress.html' %}
+       </tbody>
+          <tfoot style="font-weight:bold; border-top:2px solid #DDDDDD;">
+          <tr class="border-grey {% cycle 'row1' 'row2'%}">
+    <td class="border-grey" style="text-align:center"></td>
+     <td class="border-grey" style="text-align:right">Total</td>
+    <td class="border-grey" style="text-align:right">{{ DMAtotal_approved_project_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ DMAtotal_approved_project_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align: right;">&#8377; {{ DMAtotal_awarded_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align:right">{{ DMAtotal_completed_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ DMAtotal_completed_approved_project_cost.project_cost }}</td>
+
+     <td class="border-grey" style="text-align:right;">{{ DMAtotal_inprogress_count }}</td>
+     <td class="border-grey" style="text-align:right">&#8377; {{ DMAtotal_inprogress_approved_project_cost.project_cost }}</td>
+
+     <td class="border-grey" style="text-align:right">{{ DMAtotal_tobecommenced_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ DMAtotal_tobecommenced_project_cost.project_cost }}</td>
+</tr>
+          </tfoot>
+
+      </table>
+
+    </div>
+     <div class="row row-card2 table-sector">
+      <table class="border-grey" style="border-radius:5px;">
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Commissionerate of Town Panchayats (2021-22)</p>
+        <thead>
+        <col>
+          <colgroup span="2"></colgroup>
+          <colgroup span="2"></colgroup>
+          <tr class="border-grey">
+            <th class="border-grey th-t1-center">S.No</th>
+            <th class="border-grey th-t1-center">Name of the Sector</th>
+            <th class="border-grey th-t1-center"  colspan="2">Approved</th>
+              <th class="border-grey th-t1-center"style="text-align: right;">Awarded Cost</th>
+            <th class="border-grey th-t1-center" colspan="2">Completed</th>
+            <th class="border-grey th-t1-center" colspan="2">In Progress</th>
+              <th class="border-grey th-t1-center" colspan="2">To be Commenced</th>
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right" >No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+                <th class="border-grey th-t2-right"></th>
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+          <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+            <th class="border-grey th-t2-right">No. of Works</th>
+          <th class="border-grey th-t2-right">Project Cost</th>
+
+        </tr>
+        </thead>
+       <tbody>
+       {% include 'includes/CTPsector_progress.html' %}
+       </tbody>
+          <tfoot style="font-weight:bold; border-top:2px solid #DDDDDD;">
+          <tr class="border-grey {% cycle 'row1' 'row2'%}">
+    <td class="border-grey" style="text-align:center"></td>
+     <td class="border-grey" style="text-align:right">Total</td>
+    <td class="border-grey" style="text-align:right">{{ CTPtotal_approved_project_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ CTPtotal_approved_project_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align: right;">&#8377; {{ CTPtotal_awarded_cost.project_cost }}</td>
+    <td class="border-grey" style="text-align:right">{{ CTPtotal_completed_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ CTPtotal_completed_approved_project_cost.project_cost }}</td>
+
+     <td class="border-grey" style="text-align:right;">{{ CTPtotal_inprogress_count }}</td>
+     <td class="border-grey" style="text-align:right">&#8377; {{ CTPtotal_inprogress_approved_project_cost.project_cost }}</td>
+
+     <td class="border-grey" style="text-align:right">{{ CTPtotal_tobecommenced_count }}</td>
+    <td class="border-grey" style="text-align:right">&#8377; {{ CTPtotal_tobecommenced_project_cost.project_cost }}</td>
+</tr>
+          </tfoot>
+
+      </table>
+
+    </div>
+
     <div class="row-card2 table-sector">
       <div id="map"></div>
     </div>
