@@ -85,6 +85,11 @@
             <a href="#">Project ID</a>
           </div>
         </th>
+          <th>
+          <div class="text">
+            <a href="#">ULB Type</a>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -94,6 +99,7 @@
         <td> {{ row.AgencyName__AgencyName }} </td>
           <td> {{ row.Sector }} </td>
         <td> {{ row.Project_ID }} </td>
+      <td>{{ row.AgencyType__AgencyType }}</td>
       </tr>
       {% endfor %}
     </tbody>

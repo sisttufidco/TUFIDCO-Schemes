@@ -13,7 +13,7 @@ class ULBProgressIncompletedAdmin(admin.ModelAdmin):
 
     list_filter = [
         'ULBType',
-        'Sector'
+        'Sector',
     ]
 
     def changelist_view(self, request, extra_context=None):
@@ -25,7 +25,7 @@ class ULBProgressIncompletedAdmin(admin.ModelAdmin):
             return response
 
         response.context_data['report'] = list(
-            qs.values('ULBName', 'Project_ID', 'Sector').order_by('ULBName').order_by('Sector').filter(
+            qs.values('ULBName', 'Project_ID', 'Sector', 'ULBType').order_by('ULBName').order_by('Sector').filter(
                 Scheme='KNMT').filter(status='In Progress').filter(valueofworkdone=0.0))
         return response
 
@@ -51,7 +51,8 @@ class ULBSanctionReportErrorAdmin(admin.ModelAdmin):
             qs.values(
                 'ULBName',
                 'Project_ID',
-                'Sector'
+                'Sector',
+                'ULBType'
             ).order_by('ULBName').filter(Scheme='KNMT').filter(
                 wd_awarded='0'
             ).filter(work_awarded_amount1=None).filter(work_awarded_amount2=None)
@@ -80,7 +81,8 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
             qs.values(
                 'AgencyName__AgencyName',
                 'Project_ID',
-                'Sector'
+                'Sector',
+                'AgencyType__AgencyType'
             ).order_by('AgencyName__AgencyName').exclude(Sector='Solid Waste Mgt.').filter(AgencyType__AgencyType='Town Panchayat').filter(
                 ~Q(Project_ID__in=agencyProgresslist)).filter(Scheme__Scheme='KNMT')
         )
@@ -109,7 +111,8 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
             qs.values(
                 'AgencyName__AgencyName',
                 'Project_ID',
-                'Sector'
+                'Sector',
+                'AgencyType__AgencyType'
             ).order_by('AgencyName__AgencyName').exclude(Sector='Solid Waste Mgt.').filter(AgencyType__AgencyType='Town Panchayat').filter(
                 ~Q(Project_ID__in=agencySanctionlist)).filter(Scheme__Scheme='KNMT')
         )

@@ -85,6 +85,11 @@
             <a href="#">Project ID</a>
           </div>
         </th>
+          <th>
+          <div class="text">
+            <a href="#">ULB Type</a>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -94,7 +99,7 @@
         <td> {{ row.ULBName }} </td>
           <td> {{ row.Sector }} </td>
         <td> {{ row.Project_ID }} </td>
-
+        <td> {{ row.ULBType }}</td>
       </tr>
       {% endfor %}
     </tbody>
