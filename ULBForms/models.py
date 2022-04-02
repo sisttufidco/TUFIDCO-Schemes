@@ -21,7 +21,7 @@ class AgencyBankDetails(models.Model):
     passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
-    
+    ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
 
     @property
     def passbook_preview(self):
@@ -44,6 +44,7 @@ class ULBPanCard(models.Model):
     panphoto = models.FileField("PAN Photo", upload_to='PAN/', null=True,
                                 help_text="Please Upload a Clear Scanned Copy of PAN")
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
+    ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
 
     @property
     def pan_preview(self):
