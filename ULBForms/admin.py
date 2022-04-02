@@ -68,6 +68,8 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             obj.ULBType = "Municipality"
         if request.user.groups.filter(name__in=["Town Panchayat", ]).exists():
             obj.ULBType = "Town Panchayat"
+        if request.user.groups.filter(name__in=["Corporation", ]).exists():
+            obj.ULBType = "Corporation"
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
@@ -128,6 +130,8 @@ class ULBPANDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             obj.ULBType = "Municipality"
         if request.user.groups.filter(name__in=["Town Panchayat", ]).exists():
             obj.ULBType = "Town Panchayat"
+        if request.user.groups.filter(name__in=["Corporation", ]).exists():
+            obj.ULBType = "Corporation"
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
