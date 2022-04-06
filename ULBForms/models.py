@@ -165,8 +165,8 @@ class AgencySanctionModel(models.Model):
     tawddate = models.DateField("Tender Awarded Date", blank=True, null=True)
     wdawddate = models.DateField("Work Order Awarded Date", blank=True, null=True)
     YN_CHOICES = (
-        ('0', 'Yes'),
-        ('1', 'No'),
+        ('Yes', 'Yes'),
+        ('No', 'No'),
     )
     ts_awarded = models.CharField("Technical Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES,
                                   null=True)

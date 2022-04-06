@@ -165,7 +165,8 @@ def Decimal(x):
     return float(x)
 
 
-class AgencyProgressAdmin(admin.ModelAdmin):
+class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = AgencyProgressResource
     change_form_template = 'admin/ulbprogress.html'
     form = AgencyProgressForm
     fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
@@ -220,7 +221,8 @@ class AgencyProgressAdmin(admin.ModelAdmin):
 admin.site.register(AgencyProgressModel, AgencyProgressAdmin)
 
 
-class AgencySanctionAdmin(admin.ModelAdmin):
+class AgencySanctionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = AgencySanctionResource
     form = AgencySanctionForm
     search_fields = [
         'Scheme',
@@ -247,8 +249,6 @@ class AgencySanctionAdmin(admin.ModelAdmin):
         'ts_awarded',
         'tr_awarded',
         'wd_awarded',
-        'work_awarded_amount1',
-        'work_awarded_amount2'
     ]
 
     def save_model(self, request, obj, form, change):
