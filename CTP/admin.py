@@ -1,11 +1,12 @@
 from django.contrib import admin
 from CTP.models import *
 from django.db.models import Count, Sum, Avg, Func
+from import_export.admin import ImportExportModelAdmin
 
 # Register your models here.
 
 @admin.register(TownPanchayatDetails)
-class TownPanchayatDetailsAdmin(admin.ModelAdmin):
+class TownPanchayatDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     exclude = ['user', 'date_and_time']
 
     search_fields = [

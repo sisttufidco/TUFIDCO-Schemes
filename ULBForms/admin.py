@@ -169,10 +169,10 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = AgencyProgressResource
     change_form_template = 'admin/ulbprogress.html'
     form = AgencyProgressForm
-    fields = (('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
+    fields = ('ApprovedProjectCost', ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
               'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
               'upload2')
-
+    readonly_fields = ('ApprovedProjectCost',)
     list_filter = [
         'ULBType',
         'status',
@@ -186,6 +186,7 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'ProjectName',
         'ULBName',
         'District',
+        'ApprovedProjectCost',
         'status',
         'percentageofworkdone',
         'date_and_time',
@@ -231,9 +232,11 @@ class AgencySanctionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'user__first_name',
         'Sector'
     ]
-    fields = (
+
+    fields = ('ApprovedProjectCost',
         ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', 'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate',
         'wd_awarded', 'wdawddate', 'work_awarded_amount2', 'work_awarded_amount1')
+    readonly_fields = ('ApprovedProjectCost',)
     list_display = [
         'Project_ID',
         'Sector',

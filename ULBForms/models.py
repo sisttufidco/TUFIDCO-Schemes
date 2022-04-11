@@ -156,6 +156,8 @@ class AgencyProgressModel(models.Model):
 
 class AgencySanctionModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
+                                              null=True)
     Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True, null=True)
     Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True, null=True)
     Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
@@ -163,6 +165,7 @@ class AgencySanctionModel(models.Model):
     tsrefno = models.CharField("Technical Sanction Reference No.", max_length=30, blank=True, null=True)
     tsdate = models.DateField("Technical Sanction Date", blank=True, null=True)
     tawddate = models.DateField("Tender Awarded Date", blank=True, null=True)
+
     wdawddate = models.DateField("Work Order Awarded Date", blank=True, null=True)
     YN_CHOICES = (
         ('Yes', 'Yes'),
@@ -188,6 +191,8 @@ class AgencySanctionModel(models.Model):
         self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
             Project_ID=self.Project_ID)
         self.District = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(
             Project_ID=self.Project_ID)
         self.date_and_time = datetime.now()
         super(AgencySanctionModel, self).save(**kwargs)
