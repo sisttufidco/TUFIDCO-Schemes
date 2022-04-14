@@ -30,7 +30,7 @@ class AgencyBankDetails(models.Model):
         return ""
 
     def __str__(self):
-        return self.beneficiary_name
+        return str(self.user.first_name)
 
     class Meta:
         verbose_name = "Bank Detail"
@@ -227,3 +227,4 @@ class ProjectDetails(MasterSanctionForm):
         proxy = True
         verbose_name = 'Project Detail'
         verbose_name_plural = 'Project Details'
+

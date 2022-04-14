@@ -9,9 +9,7 @@ from .resources import *
 from .forms import *
 import pickle
 from django.db.models import Q
-
-
-
+from ULBForms.models import AgencyBankDetails
 
 admin.site.index_title = ""
 
@@ -113,9 +111,6 @@ class SchemeAdmin(ImportExportModelAdmin, admin.AdminSite):
 admin.site.register(Scheme, SchemeAdmin)
 
 admin.site.register(SchemeSanctionPdf)
-
-
-
 
 
 @admin.register(Scheme_Faq_Questions)
@@ -354,15 +349,9 @@ class SectorReportAdmin(admin.ModelAdmin):
 """
 
 
-
-
-
 class FundReleaseDetailsAdmin(admin.StackedInline):
     model = FundReleaseDetails
     extra = 5
-
-
-
 
 
 @admin.register(LatestReports)
@@ -5099,12 +5088,66 @@ class Round(Func):
     template = "%(function)s(%(expressions)s::numeric, 2)"
 
 
-
-
 admin.site.register(ULBReleaseRequest)
 
-
-
-
-
 admin.site.register(PageCounter)
+
+
+@admin.register(ReleaseRequestModel)
+class ReleaseRequestAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': (('Scheme', 'ULBType', 'ULBName'), ('Sector', 'Project_ID'))
+        }),
+        (
+            'Bank Details', {
+                'fields': ('bank_name_ulb',
+                           'bank_branch_name',
+                           'bank_branch',
+                           'account_number',
+                           'ifsc_code')
+            }
+        ),
+        (
+            'Fund Release Details', {
+                'fields': (
+                    (
+                        'release1Date',
+                        'release1Amount',
+                    ), (
+                        'release2Date',
+                        'release2Amount',
+                        'sqm_report2',
+                    ), (
+                        'release3Date',
+                        'release3Amount',
+                        'sqm_report3',
+                    ), (
+                        'release4Date',
+                        'release4Amount',
+                        'sqm_report4',
+                    ), (
+                        'release5Date',
+                        'release5Amount',
+                        'sqm_report5'
+                    )
+                )
+            }
+        )
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.account_number = AgencyBankDetails.objects.values_list('account_number', flat=True).filter(
+            user__first_name=form.cleaned_data['ULBName'])
+        obj.bank_name_ulb = AgencyBankDetails.objects.values_list('beneficiary_name', flat=True).filter(
+            user__first_name=form.cleaned_data['ULBName'])
+        obj.bank_branch_name = AgencyBankDetails.objects.values_list('bank_name', flat=True).filter(
+            user__first_name=form.cleaned_data['ULBName'])
+        obj.bank_branch = AgencyBankDetails.objects.values_list('branch', flat=True).filter(
+            user__first_name=form.cleaned_data['ULBName'])
+        obj.ifsc_code = AgencyBankDetails.objects.values_list('IFSC_code', flat=True).filter(
+            user__first_name=form.cleaned_data['ULBName'])
+        obj.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(
+            Sector=form.cleaned_data['Sector']
+        )
+        obj.save()

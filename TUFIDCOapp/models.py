@@ -2,15 +2,14 @@ from weakref import proxy
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.safestring import mark_safe
+import ULBForms
 
 """
     Models
-    
     1. tufidco_info
     2. Officer
     3. body_images
     4. postphotogallery_slider
-    
 """
 
 
@@ -237,16 +236,11 @@ class Report(MasterSanctionForm):
 # Agency Form
 
 
-
-
 class MasterReport(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "KNMT Physical & Financial Progress Report"
         verbose_name_plural = "KNMT Physical & Financial Progress Reports"
-
-
-
 
 
 class SectorMasterReport(MasterSanctionForm):
@@ -263,8 +257,6 @@ class CTPDistrictWiseReport(MasterSanctionForm):
         verbose_name_plural = 'District Wise Report (CTP)'
 
 
-
-
 class FundReleaseDetails(models.Model):
     date_of_release = models.DateField('Date of Release', null=True)
     amount = models.CharField('Amount', max_length=20, null=True)
@@ -273,7 +265,7 @@ class FundReleaseDetails(models.Model):
 
     class Meta:
         verbose_name = "Fund Release Detail"
-        verbose_name_plural = "Fund Release Details"
+        verbose_name_plural = "pytd Release Details"
 
 
 class ULBReleaseRequest(models.Model):
@@ -298,3 +290,44 @@ class LatestReports(models.Model):
         return self.name
 
 
+def sector_make_choices():
+    return [(str(c), str(c)) for c in MasterSanctionForm.objects.values_list('Sector', flat=True).distinct()]
+
+
+def product_id_make_choices():
+    return [(str(c), str(c)) for c in
+            MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('SNo').distinct()]
+
+
+class ReleaseRequestModel(models.Model):
+    Scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
+    ULBType = models.ForeignKey(AgencyType, blank=True, on_delete=models.CASCADE, null=True)
+    ULBName = models.ForeignKey(AgencyName, blank=True, on_delete=models.CASCADE, null=True)
+    Sector = models.CharField(max_length=100,  choices=sector_make_choices(), blank=True, null=True)
+    Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
+    bank_name_ulb = models.CharField('Name of the ULB', blank=True, max_length=100, null=True)
+    bank_branch_name = models.CharField('Name of the Bank', blank=True, max_length=100, null=True)
+    bank_branch = models.CharField('Branch', blank=True, max_length=100, null=True)
+    account_number = models.CharField('Account Number', blank=True, max_length=100, null=True)
+    ifsc_code = models.CharField('IFSC Code', blank=True, max_length=100, null=True)
+    release1Date = models.DateField('Release Date 1', blank=True, null=True)
+    release1Amount = models.CharField('Release Amount 1', blank=True, max_length=10, null=True)
+    release2Date = models.DateField('Release Date 2', blank=True, null=True)
+    release2Amount = models.CharField('Release Amount 2', blank=True,max_length=10, null=True)
+    sqm_report2 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
+    release3Date = models.DateField('Release Date 3', blank=True, null=True)
+    release3Amount = models.CharField('Release Amount 3', blank=True, max_length=10, null=True)
+    sqm_report3 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
+    release4Date = models.DateField('Release Date 4', blank=True, null=True)
+    release4Amount = models.CharField('Release Amount 4', blank=True, max_length=10, null=True)
+    sqm_report4 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
+    release5Date = models.DateField('Release Date 5', blank=True, null=True)
+    release5Amount = models.CharField('Release Amount 5', blank=True, max_length=10, null=True)
+    sqm_report5 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
+
+    def __str__(self):
+        return '{} - {}'.format(str(self.ULBName), str(self.Project_ID))
+
+    class Meta:
+        verbose_name = 'Fund Release Request'
+        verbose_name_plural = 'Fund Release Requests'
