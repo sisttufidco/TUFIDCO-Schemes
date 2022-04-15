@@ -5168,4 +5168,7 @@ class SRPMasterSanctionFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'R1_Date',
         'R2_Date'
     ]
+    ordering = [
+        'SNo'
+    ]
 admin.site.register(SRPMasterSanctionForm, SRPMasterSanctionFormAdmin)
