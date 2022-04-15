@@ -55,7 +55,6 @@ class ULBPanCard(models.Model):
     def __str__(self):
         return self.user.first_name
 
-
     class Meta:
         verbose_name = "PAN Detail"
         verbose_name_plural = "PAN Details"
@@ -125,6 +124,10 @@ class AgencyProgressModel(models.Model):
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
+    SchemeShare = models.DecimalField('Scheme Share', blank=True, decimal_places=2, max_digits=10,
+                                      null=True)
+    ULBShare = models.DecimalField('ULB Share', blank=True, decimal_places=2, max_digits=10,
+                                   null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
@@ -138,6 +141,10 @@ class AgencyProgressModel(models.Model):
         self.ULBType = MasterSanctionForm.objects.values_list('AgencyType__AgencyType', flat=True).filter(
             Project_ID=self.Project_ID)
         self.date_and_time = datetime.now()
+        self.SchemeShare = MasterSanctionForm.objects.values_list('SchemeShare', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.ULBShare = MasterSanctionForm.objects.values_list('ULBShare', flat=True).filter(
+            Project_ID=self.Project_ID)
 
         if self.valueofworkdone is not None:
             self.percentageofworkdone = (
@@ -158,6 +165,10 @@ class AgencySanctionModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
                                               null=True)
+    SchemeShare = models.DecimalField('Scheme Share', blank=True, decimal_places=2, max_digits=10,
+                                      null=True)
+    ULBShare = models.DecimalField('ULB Share', blank=True, decimal_places=2, max_digits=10,
+                                      null=True)
     Scheme = models.CharField(max_length=30, choices=scheme_make_choices(), blank=True, null=True)
     Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True, null=True)
     Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
@@ -176,9 +187,11 @@ class AgencySanctionModel(models.Model):
     tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
     wd_awarded = models.CharField("Work Order Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
     work_awarded_amount1 = models.DecimalField("Work Order Amount", max_digits=6, decimal_places=2, blank=True,
-                                               null=True, help_text="With Tax. (Add GST, LWF etc on the above basic cost)")
+                                               null=True,
+                                               help_text="With Tax. (Add GST, LWF etc on the above basic cost)")
     work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=6, decimal_places=2, blank=True,
-                                               null=True, help_text='Without Tax (Basic cost/agreed amount, without GST tax etc)')
+                                               null=True,
+                                               help_text='Without Tax (Basic cost/agreed amount, without GST tax etc)')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
     ULBName = models.CharField('ULB Name', max_length=50, blank=True, null=True)
@@ -193,6 +206,10 @@ class AgencySanctionModel(models.Model):
         self.District = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(
             Project_ID=self.Project_ID)
         self.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.SchemeShare = MasterSanctionForm.objects.values_list('SchemeShare', flat=True).filter(
+            Project_ID=self.Project_ID)
+        self.ULBShare = MasterSanctionForm.objects.values_list('ULBShare', flat=True).filter(
             Project_ID=self.Project_ID)
         self.date_and_time = datetime.now()
         super(AgencySanctionModel, self).save(**kwargs)
@@ -222,9 +239,9 @@ class Location(models.Model):
 
 admin.site.register(Location, MapAdmin)
 
+
 class ProjectDetails(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = 'Project Detail'
         verbose_name_plural = 'Project Details'
-

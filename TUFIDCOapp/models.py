@@ -303,7 +303,7 @@ class ReleaseRequestModel(models.Model):
     Scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
     ULBType = models.ForeignKey(AgencyType, blank=True, on_delete=models.CASCADE, null=True)
     ULBName = models.ForeignKey(AgencyName, blank=True, on_delete=models.CASCADE, null=True)
-    Sector = models.CharField(max_length=100,  choices=sector_make_choices(), blank=True, null=True)
+    Sector = models.CharField(max_length=100, choices=sector_make_choices(), blank=True, null=True)
     Project_ID = models.CharField(max_length=900, choices=product_id_make_choices(), blank=True, null=True)
     bank_name_ulb = models.CharField('Name of the ULB', blank=True, max_length=100, null=True)
     bank_branch_name = models.CharField('Name of the Bank', blank=True, max_length=100, null=True)
@@ -313,7 +313,7 @@ class ReleaseRequestModel(models.Model):
     release1Date = models.DateField('Release Date 1', blank=True, null=True)
     release1Amount = models.CharField('Release Amount 1', blank=True, max_length=10, null=True)
     release2Date = models.DateField('Release Date 2', blank=True, null=True)
-    release2Amount = models.CharField('Release Amount 2', blank=True,max_length=10, null=True)
+    release2Amount = models.CharField('Release Amount 2', blank=True, max_length=10, null=True)
     sqm_report2 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
     release3Date = models.DateField('Release Date 3', blank=True, null=True)
     release3Amount = models.CharField('Release Amount 3', blank=True, max_length=10, null=True)
@@ -331,3 +331,29 @@ class ReleaseRequestModel(models.Model):
     class Meta:
         verbose_name = 'Fund Release Request'
         verbose_name_plural = 'Fund Release Requests'
+
+
+# Special Road Programme Scheme
+
+class SRPMasterSanctionForm(models.Model):
+    SNo = models.IntegerField('S No.', null=True)
+    AgencyName = models.ForeignKey(AgencyName, on_delete=models.CASCADE, verbose_name='ULB Name', null=True)
+    AgencyType = models.ForeignKey(AgencyType, on_delete=models.CASCADE, verbose_name='ULB Type', null=True)
+    Project_ID = models.CharField('Project ID', max_length=10, null=True)
+    ProjectCost = models.DecimalField('Project Cost', max_digits=8, decimal_places=2, null=True)
+    SchemeShare = models.DecimalField('Scheme Share', max_digits=8, decimal_places=2, null=True)
+    R1_Date = models.DateField('Date of 1st Release', blank=True, null=True)
+    R1_Amount = models.DecimalField('Amount', max_digits=8, decimal_places=2, blank=True, null=True)
+    R2_Date = models.DateField('Date of 2nd Release', blank=True, null=True)
+    R2_Amount = models.DecimalField('Amount', max_digits=8, decimal_places=2, blank=True, null=True)
+    R_Total = models.DecimalField('Total Released', max_digits=8, decimal_places=2, blank=True, null=True)
+    Balance = models.DecimalField('Balance', max_digits=8, decimal_places=2, blank=True, null=True)
+    Dropped = models.DecimalField('Dropped Amount', max_digits=8, blank=True, decimal_places=2, null=True)
+    BalanceEligible = models.DecimalField('Eligible for loan', max_digits=8, blank=True, decimal_places=2, null=True)
+
+    def __str__(self):
+        return str(self.Project_ID)
+
+    class Meta:
+        verbose_name = 'SRP Master Sanction Form'
+        verbose_name_plural = 'SRP Master Sanction Form'

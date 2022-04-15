@@ -124,7 +124,8 @@ class ULBPANDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ]
 
     def save_model(self, request, obj, form, change):
-        obj.user = request.user
+        if request.user.groups.filter(name__in=['Agency',]).exists():
+            obj.user = request.user
         obj.date_and_time = datetime.now()
         if request.user.groups.filter(name__in=["Municipality", ]).exists():
             obj.ULBType = "Municipality"
@@ -169,10 +170,10 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = AgencyProgressResource
     change_form_template = 'admin/ulbprogress.html'
     form = AgencyProgressForm
-    fields = ('ApprovedProjectCost', ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
+    fields = (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'), ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
               'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
               'upload2')
-    readonly_fields = ('ApprovedProjectCost',)
+    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare')
     list_filter = [
         'ULBType',
         'status',
@@ -233,10 +234,10 @@ class AgencySanctionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'Sector'
     ]
 
-    fields = ('ApprovedProjectCost',
+    fields = (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'),
         ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', 'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate',
         'wd_awarded', 'wdawddate', 'work_awarded_amount2', 'work_awarded_amount1')
-    readonly_fields = ('ApprovedProjectCost',)
+    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare')
     list_display = [
         'Project_ID',
         'Sector',

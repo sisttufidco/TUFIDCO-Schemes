@@ -5151,3 +5151,21 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
             Sector=form.cleaned_data['Sector']
         )
         obj.save()
+
+
+class SRPMasterSanctionFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = SRPMasterSanctionResource
+
+    list_display = [
+        'SNo',
+        'AgencyType',
+        'AgencyName',
+        'Project_ID',
+        'ProjectCost',
+        'SchemeShare'
+    ]
+    list_filter = [
+        'R1_Date',
+        'R2_Date'
+    ]
+admin.site.register(SRPMasterSanctionForm, SRPMasterSanctionFormAdmin)

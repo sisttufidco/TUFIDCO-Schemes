@@ -63,7 +63,7 @@ class MasterSanctionResource(resources.ModelResource):
     ProposedCostByULB = fields.Field(saves_null_values=True, column_name="ProposedCostByULB",
                                      attribute="ProposedCostByULB", widget=widgets.DecimalWidget())
     ApprovedProjectCost = fields.Field(saves_null_values=True, column_name="ApprovedProjectCost",
-                                          attribute="ApprovedProjectCost", widget=widgets.DecimalWidget())
+                                       attribute="ApprovedProjectCost", widget=widgets.DecimalWidget())
     SchemeShare = fields.Field(saves_null_values=True, column_name="SchemeShare",
                                attribute="SchemeShare", widget=widgets.DecimalWidget())
     ULBShare = fields.Field(saves_null_values=True, column_name="ULBShare",
@@ -73,10 +73,42 @@ class MasterSanctionResource(resources.ModelResource):
     Date_AS = fields.Field(saves_null_values=True, column_name="Date_AS",
                            attribute="Date_AS", widget=widgets.DateWidget())
 
-
     class Meta:
         model = MasterSanctionForm
         fields = ('id', 'SNo', 'AgencyType', 'Agency_Name', 'District',
                   'Scheme', 'Sector', 'ProjectName', 'Project_ID', 'ProjectCost', 'ProposedCostByTufidco',
                   'ApprovedProjectCost', 'SchemeShare', 'ULBShare', 'GoMeeting', 'Date_AS')
 
+
+class SRPMasterSanctionResource(resources.ModelResource):
+    id = fields.Field(saves_null_values=False, column_name='id', attribute='id', widget=widgets.IntegerWidget())
+    SNo = fields.Field(saves_null_values=False, column_name='SNo', attribute='SNo', widget=widgets.IntegerWidget())
+    AgencyType = fields.Field(saves_null_values=True, column_name='AgencyType', attribute='AgencyType',
+                              widget=widgets.ForeignKeyWidget(AgencyType, "AgencyType"))
+    AgencyName = fields.Field(saves_null_values=True, column_name='AgencyName', attribute='AgencyName',
+                              widget=widgets.ForeignKeyWidget(AgencyName, "AgencyName"))
+
+    Project_ID = fields.Field(saves_null_values=True, column_name="Project_ID", attribute="Project_ID",
+                              widget=widgets.CharWidget())
+    ProjectCost = fields.Field(saves_null_values=True, column_name="ProjectCost", attribute="ProjectCost",
+                               widget=widgets.DecimalWidget())
+    R1_Date = fields.Field(saves_null_values=True, column_name="R1_Date",
+                           attribute="R1_Date", widget=widgets.DateWidget())
+    R1_Amount = fields.Field(saves_null_values=True, column_name="R1_Amount", attribute="R1_Amount",
+                             widget=widgets.DecimalWidget())
+    R2_Date = fields.Field(saves_null_values=True, column_name="R2_Date",
+                           attribute="R2_Date", widget=widgets.DateWidget())
+    R2_Amount = fields.Field(saves_null_values=True, column_name="R2_Amount", attribute="R2_Amount",
+                             widget=widgets.DecimalWidget())
+    Balance = fields.Field(saves_null_values=True, column_name="Balance", attribute="Balance",
+                           widget=widgets.DecimalWidget())
+    Dropped = fields.Field(saves_null_values=True, column_name="Dropped", attribute="Dropped",
+                           widget=widgets.DecimalWidget())
+    BalanceEligible = fields.Field(saves_null_values=True, column_name="BalanceEligible", attribute="BalanceEligible",
+                                   widget=widgets.DecimalWidget())
+
+    class Meta:
+        model = SRPMasterSanctionForm
+        fields = ('id', 'SNo', 'AgencyType', 'Agency_Name',
+                   'Project_ID', 'ProjectCost', 'SchemeShare', 'R1_Date', 'R1_Amount',
+                  'R2_Date', 'R2_Amount', 'R_Total', 'Balance', 'Dropped', 'BalanceEligible')
