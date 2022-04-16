@@ -40,6 +40,12 @@
       <!-- Custom JS-->
       {% load static %}
         <script src="{% static 'js/plugins.js' %}"></script>
+        <script>
+    var dt = new Date();
+    var dt2 = new Date();
+    document.getElementById("date").innerHTML = (("0"+dt.getDate()).slice(-2)) +"."+ (("0"+(dt.getMonth()+1)).slice(-2)) +"."+ (dt.getFullYear());
+    document.getElementById('time').innerHTML = (("0"+dt2.getHours()).slice(-2)) +":"+ (("0"+dt2.getMinutes()).slice(-2));
+    </script>
       {% block js-foot %}{% endblock %}
 
     </body>

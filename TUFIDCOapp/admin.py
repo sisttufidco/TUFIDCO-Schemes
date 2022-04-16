@@ -1,14 +1,8 @@
-import functools
-from urllib import request
 from django.contrib import admin
-from django.contrib.admin import AdminSite
-import json
 from django.db.models import Count, Sum, Avg, Func
 from import_export.admin import ImportExportModelAdmin
 from .resources import *
 from .forms import *
-import pickle
-from django.db.models import Q
 from ULBForms.models import AgencyBankDetails
 
 admin.site.index_title = ""
@@ -5165,10 +5159,18 @@ class SRPMasterSanctionFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'SchemeShare'
     ]
     list_filter = [
+        'AgencyType',
         'R1_Date',
         'R2_Date'
     ]
     ordering = [
         'SNo'
     ]
+    search_fields = [
+        'AgencyType__AgencyType',
+        'AgencyName__AgencyName',
+        'SchemeShare',
+        'Project_ID',
+    ]
+
 admin.site.register(SRPMasterSanctionForm, SRPMasterSanctionFormAdmin)

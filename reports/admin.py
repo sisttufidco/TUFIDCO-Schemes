@@ -117,3 +117,33 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
                 ~Q(Project_ID__in=agencySanctionlist)).filter(Scheme__Scheme='KNMT')
         )
         return response
+
+class SRPAbstractAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/reports/srp/srp_abstract_report.html'
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        agencySanctionlist = list(AgencySanctionModel.objects.values_list('Project_ID', flat=True).all())
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        metrics = {
+            'AgencyName': Count('AgencyName', distinct=True),
+            'ApprovedCost': Sum('ProjectCost'),
+            'RevisedSrpShare': Sum('BalanceEligible'),
+            'total_released': Sum('R_Total'),
+            'dropped': Sum('Dropped'),
+            'balance': Sum('Balance')
+        }
+        response.context_data['report_total'] = dict(
+            qs.aggregate(**metrics)
+        )
+        response.context_data['report'] = list(
+            qs.values('AgencyType__AgencyType').annotate(**metrics).order_by('AgencyType__AgencyType')
+        )
+        return response
+
+admin.site.register(SRPAbstract, SRPAbstractAdmin)

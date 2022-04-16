@@ -31,3 +31,10 @@ class SanctionNotEntered(MasterSanctionForm):
         proxy = True
         verbose_name = 'Sanction Detail Not Entered'
         verbose_name_plural = 'Sanction Details Not Entered'
+
+class SRPAbstract(SRPMasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = 'SRP Abstract'
+        verbose_name_plural = 'SRP Abstract'
+
