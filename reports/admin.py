@@ -118,12 +118,11 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
         )
         return response
 
+@admin.register(SRPAbstract)
 class SRPAbstractAdmin(admin.ModelAdmin):
     change_list_template = 'admin/reports/srp/srp_abstract_report.html'
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
-
-        agencySanctionlist = list(AgencySanctionModel.objects.values_list('Project_ID', flat=True).all())
 
         try:
             qs = response.context_data['cl'].queryset
@@ -146,4 +145,3 @@ class SRPAbstractAdmin(admin.ModelAdmin):
         )
         return response
 
-admin.site.register(SRPAbstract, SRPAbstractAdmin)
