@@ -145,3 +145,24 @@ class SRPAbstractAdmin(admin.ModelAdmin):
         )
         return response
 
+@admin.register(ReleaseReport)
+class ReleaseReportAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/reports/fundreleases/fundreleasereport.html'
+    date_hierarchy = 'release1Date'
+    list_filter = [
+        'Scheme',
+        'release1Date'
+    ]
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+
+
+        response.context_data['report'] = list(
+            qs.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release1Amount', 'release1Date').order_by('AgencyName__AgencyName')
+        )
+        return response
