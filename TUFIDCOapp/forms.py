@@ -34,3 +34,4 @@ class EmailForm2(forms.Form):
                                                                     'class': 'form-control'}))
     message = forms.CharField(widget=forms.Textarea(
         attrs={'placeholder': 'Enter Message', 'style': 'width: 450px;', 'class': 'form-control'}))
+

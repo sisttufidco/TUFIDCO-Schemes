@@ -17,9 +17,7 @@ def bus_export_tobecommenced_xls(request):
     ws = wb.add_sheet('ToBeCommenced')
     row_num = 0
 
-    if request.method == 'POST':
-        d = request.POST
-    print(d)
+
 
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
@@ -29,7 +27,7 @@ def bus_export_tobecommenced_xls(request):
 
     font_style = xlwt.XFStyle()
     rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'nc_status').filter(
-        District=d).filter(status='Not Commenced').filter(Scheme='KNMT').filter(Sector='Bus Stand')
+        District=request.POST['district']).filter(status='Not Commenced').filter(Scheme='KNMT').filter(Sector='Bus Stand')
 
     for row in rows:
         row_num += 1

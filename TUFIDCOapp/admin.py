@@ -5131,6 +5131,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
+
         obj.account_number = AgencyBankDetails.objects.values_list('account_number', flat=True).filter(
             user__first_name=form.cleaned_data['AgencyName'])
         obj.bank_name_ulb = AgencyBankDetails.objects.values_list('beneficiary_name', flat=True).filter(
@@ -5142,7 +5143,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         obj.ifsc_code = AgencyBankDetails.objects.values_list('IFSC_code', flat=True).filter(
             user__first_name=form.cleaned_data['AgencyName'])
         obj.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(
-            Sector=form.cleaned_data['Sector']
+            Project_ID=form.cleaned_data['Project_ID']
         )
         obj.save()
 
@@ -5176,6 +5177,7 @@ class SRPMasterSanctionFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 admin.site.register(SRPMasterSanctionForm, SRPMasterSanctionFormAdmin)
 
 class ReceiptFormAdmin(admin.ModelAdmin):
+
     list_display = [
         'Scheme',
         'go_ref',

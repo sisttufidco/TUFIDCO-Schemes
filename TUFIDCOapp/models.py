@@ -326,7 +326,7 @@ class ReleaseRequestModel(models.Model):
     sqm_report5 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
 
     def __str__(self):
-        return '{} - {}'.format(str(self.ULBName), str(self.Project_ID))
+        return '{} - {}'.format(str(self.AgencyName ), str(self.Project_ID))
 
     class Meta:
         verbose_name = 'Ledger: Release to ULBs'
