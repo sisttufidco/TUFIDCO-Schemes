@@ -236,11 +236,7 @@ class Report(MasterSanctionForm):
 # Agency Form
 
 
-class MasterReport(MasterSanctionForm):
-    class Meta:
-        proxy = True
-        verbose_name = "KNMT Physical & Financial Progress Report"
-        verbose_name_plural = "KNMT Physical & Financial Progress Reports"
+
 
 
 class SectorMasterReport(MasterSanctionForm):

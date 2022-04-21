@@ -720,41 +720,35 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="busstandLabel">KNMT - District Wise To Be Commenced - Bus Stand</h5>
+          <h5 class="modal-title" id="busstandLabel">KNMT - Works To Be Commenced - Bus Stand</h5>
         </div>
         <div class="modal-body">
           <table>
               <thead>
               <tr>
-                  <th>
+                   <th>
                       <div class="text">
                         <a href="#">S. No</a>
                       </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
               </thead>
               <tbody>
               {% for row in district_c %}
-              <tr class="{% cycle 'row1' 'row2' %}">
+             <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td> {{ row.count }}</td>
-                <td> {{ row.district_c }}</td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -772,7 +766,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="busstandmodalLabel">KNMT - District Wise To Be Commenced - Bus Stand</h5>
+          <h5 class="modal-title" id="busstandmodalLabel">KNMT - Works To Be Commenced - Bus Stand</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -785,17 +779,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -804,14 +793,8 @@
               {% for row in district_c %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_bus' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -826,7 +809,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="btroad1Label">KNMT - District Wise To Be Commenced - BT Road</h5>
+          <h5 class="modal-title" id="btroad1Label">KNMT - Works To Be Commenced - BT Road</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -839,17 +822,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -858,14 +836,8 @@
               {% for row in district_btroad %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-               <td style="text-align: center">
-                  <form method="post" action="{% url 'export_bt' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -882,30 +854,25 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="ccroad1Label">KNMT - District Wise To Be Commenced - CC Road</h5>
+          <h5 class="modal-title" id="ccroad1Label">KNMT - Works To Be Commenced - CC Road</h5>
         </div>
         <div class="modal-body">
           <table>
               <thead>
               <tr>
-                  <th>
+                 <th>
                       <div class="text">
                         <a href="#">S. No</a>
                       </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -914,14 +881,8 @@
               {% for row in district_ccroad %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-               <td style="text-align: center">
-                  <form method="post" action="{% url 'export_cc' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -939,7 +900,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="communityhall11Label">KNMT - District Wise To Be Commenced - Community Hall</h5>
+          <h5 class="modal-title" id="communityhall11Label">KNMT - Works To Be Commenced - Community Hall</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -952,17 +913,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
 
@@ -972,15 +928,8 @@
               {% for row in district_ch%}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District}} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-
-               <td style="text-align: center">
-                  <form method="post" action="{% url 'export_ch' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.Districtt }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -996,7 +945,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="crematorium1Label">KNMT - District Wise To Be Commenced - Crematorium</h5>
+          <h5 class="modal-title" id="crematorium1Label">KNMT - Works To Be Commenced - Crematorium</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1009,33 +958,22 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
               </thead>
               <tbody>
               {% for row in district_cr%}
-              <tr class="{% cycle 'row1' 'row2' %}">
+             <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-                    <td style="text-align: center">
-                  <form method="post" action="{% url 'export_cr' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1051,7 +989,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="crematorium1Label">KNMT - District Wise To Be Commenced - Culvert</h5>
+          <h5 class="modal-title" id="crematorium1Label">KNMT - Works To Be Commenced - Culvert</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1064,33 +1002,22 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
               </thead>
               <tbody>
               {% for row in district_cul %}
-              <tr class="{% cycle 'row1' 'row2' %}">
+             <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_cl' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1106,7 +1033,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="KnowledgeCentre1Label">KNMT - District Wise To Be Commenced - Knowledge Centre</h5>
+          <h5 class="modal-title" id="KnowledgeCentre1Label">KNMT - Works To Be Commenced - Knowledge Centre</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1119,17 +1046,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1138,14 +1060,8 @@
               {% for row in district_kc %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-               <td style="text-align: center">
-                  <form method="post" action="{% url 'export_kc' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1161,7 +1077,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="KnowledgeCentre1Label">KNMT - District Wise To Be Commenced - Market</h5>
+          <h5 class="modal-title" id="KnowledgeCentre1Label">KNMT - Works To Be Commenced - Market</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1174,17 +1090,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1193,14 +1104,8 @@
               {% for row in district_m%}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-               <td style="text-align: center">
-                  <form method="post" action="{% url 'export_mt' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1217,7 +1122,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="KnowledgeCentre1Label">KNMT - District Wise To Be Commenced - Metal Beam Crash Barriers</h5>
+          <h5 class="modal-title" id="KnowledgeCentre1Label">KNMT - Works To Be Commenced - Metal Beam Crash Barriers</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1230,17 +1135,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1249,14 +1149,8 @@
               {% for row in district_mbcb %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-               <td style="text-align: center">
-                  <form method="post" action="{% url 'export_mbcb' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1272,53 +1166,36 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="Parks1Label">KNMT - District Wise To Be Commenced - Parks</h5>
+          <h5 class="modal-title" id="Parks1Label">KNMT - Works To Be Commenced - Parks</h5>
         </div>
         <div class="modal-body">
           <table>
               <thead>
               <tr>
-                  <th>
+                 <th>
                       <div class="text">
                         <a href="#">S. No</a>
                       </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Details</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
               </thead>
               <tbody>
               {% for row in district_p %}
-                     <tr class="{% cycle 'row1' 'row2' %}">
+                 <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_pk' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
-
               {% endfor %}
               </tbody>
           </table>
@@ -1335,7 +1212,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="PaverBlock1Label">KNMT - District Wise To Be Commenced - Paver Block</h5>
+          <h5 class="modal-title" id="PaverBlock1Label">KNMT - Works To Be Commenced - Paver Block</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1348,17 +1225,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1367,14 +1239,8 @@
               {% for row in district_pb %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_pb' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1391,7 +1257,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="Retainingwall1Label">KNMT - District Wise To Be Commenced - Retaining wall</h5>
+          <h5 class="modal-title" id="Retainingwall1Label">KNMT - Works To Be Commenced - Retaining wall</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1404,33 +1270,22 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
               </thead>
               <tbody>
               {% for row in district_rw  %}
-              <tr class="{% cycle 'row1' 'row2' %}">
+             <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_rw' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1447,7 +1302,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="SWM1Label">KNMT - District Wise To Be Commenced - Solid Waste Mgt.</h5>
+          <h5 class="modal-title" id="SWM1Label">KNMT - Works To Be Commenced - Solid Waste Mgt.</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1460,17 +1315,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1479,14 +1329,8 @@
               {% for row in district_swm  %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_swm' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -1506,30 +1350,25 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="SWM1Label">KNMT - District Wise To Be Commenced - SWD</h5>
+          <h5 class="modal-title" id="SWM1Label">KNMT - Works To Be Commenced - SWD</h5>
         </div>
         <div class="modal-body">
           <table>
               <thead>
               <tr>
-                  <th>
+                 <th>
                       <div class="text">
                         <a href="#">S. No</a>
                       </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                     <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1538,14 +1377,8 @@
               {% for row in district_swd  %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-              <td style="text-align: center">
-                  <form method="post" action="{% url 'export_swd' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
 
               {% endfor %}
@@ -1562,7 +1395,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="WaterBodies1Label">KNMT - District Wise To Be Commenced - Water Bodies</h5>
+          <h5 class="modal-title" id="WaterBodies1Label">KNMT - Works To Be Commenced - Water Bodies</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1575,17 +1408,12 @@
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#">Name of District</a>
+                        <a href="#">Name of the ULB</a>
                     </div>
                   </th>
                   <th>
                     <div class="text">
-                        <a href="#" style="text-align: center">No of Works</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
+                        <a href="#" style="text-align: center">Project ID</a>
                     </div>
                   </th>
               </tr>
@@ -1594,14 +1422,8 @@
               {% for row in district_wb  %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> {{ row.count }}</td>
-                  <td style="text-align: center">
-                  <form method="post" action="{% url 'export_wb' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-              </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
               {% endfor %}
               </tbody>

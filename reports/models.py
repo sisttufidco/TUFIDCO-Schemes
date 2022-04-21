@@ -45,3 +45,9 @@ class ReleaseReport(ReleaseRequestModel):
         proxy = True
         verbose_name = 'Release Report'
         verbose_name_plural = 'Release Reports'
+
+class PhysicalandFinancialReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "KNMT Physical & Financial Progress Report"
+        verbose_name_plural = "KNMT Physical & Financial Progress Reports"
