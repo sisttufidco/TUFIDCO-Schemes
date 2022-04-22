@@ -399,9 +399,24 @@ class DashboardAdmin(admin.ModelAdmin):
                 Scheme__Scheme='KNMT').filter(
                 Sector='Bus Stand').filter(~Q(Project_ID__in=final_list))
         )
-
+        response.context_data['CTPdistrict_c'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').filter(
+                Sector='Bus Stand').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_btroad'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='BT Road').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_btroad'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='BT Road').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_btroad'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='BT Road').filter(~Q(Project_ID__in=final_list))
         )
@@ -410,8 +425,30 @@ class DashboardAdmin(admin.ModelAdmin):
                 Scheme__Scheme='KNMT').filter(
                 Sector='CC Road').filter(~Q(Project_ID__in=final_list))
         )
+        response.context_data['DMAdistrict_ccroad'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='CC Road').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_ccroad'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='CC Road').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_ch'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Community Hall').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_ch'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Community Hall').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_ch'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Community Hall').filter(~Q(Project_ID__in=final_list))
         )
@@ -420,8 +457,30 @@ class DashboardAdmin(admin.ModelAdmin):
                 Scheme__Scheme='KNMT').filter(
                 Sector='Crematorium').filter(~Q(Project_ID__in=final_list))
         )
+        response.context_data['DMAdistrict_cr'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Crematorium').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_cr'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Crematorium').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_cul'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Culvert').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_cul'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Culvert').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_cul'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Culvert').filter(~Q(Project_ID__in=final_list))
         )
@@ -430,8 +489,30 @@ class DashboardAdmin(admin.ModelAdmin):
                 Scheme__Scheme='KNMT').filter(
                 Sector='Knowledge Centre').filter(~Q(Project_ID__in=final_list))
         )
+        response.context_data['DMAdistrict_kc'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Knowledge Centre').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_kc'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Knowledge Centre').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_m'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Market').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_m'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Market').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_m'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Market').filter(~Q(Project_ID__in=final_list))
         )
@@ -440,15 +521,46 @@ class DashboardAdmin(admin.ModelAdmin):
             Scheme__Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list))
         )
-
+        response.context_data['DMAdistrict_mbcb'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_mbcb'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_p'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Parks').filter(~Q(Project_ID__in=final_list))
         )
-
+        response.context_data['DMAdistrict_p'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Parks').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_p'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Parks').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_pb'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Paver Block').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_pb'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Paver Block').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_pb'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Paver Block').filter(~Q(Project_ID__in=final_list))
         )
@@ -457,8 +569,30 @@ class DashboardAdmin(admin.ModelAdmin):
                 Scheme__Scheme='KNMT').filter(
                 Sector='Retaining wall').filter(~Q(Project_ID__in=final_list))
         )
+        response.context_data['DMAdistrict_rw'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Retaining wall').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_rw'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Retaining wall').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_swm'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Solid Waste Mgt.').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_swm'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Solid Waste Mgt.').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_swm'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Solid Waste Mgt.').filter(~Q(Project_ID__in=final_list))
         )
@@ -467,8 +601,30 @@ class DashboardAdmin(admin.ModelAdmin):
                 Scheme__Scheme='KNMT').filter(
                 Sector='SWD').filter(~Q(Project_ID__in=final_list))
         )
+        response.context_data['DMAdistrict_swd'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='SWD').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_swd'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='SWD').filter(~Q(Project_ID__in=final_list))
+        )
         response.context_data['district_wb'] = list(
             qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Water Bodies').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['DMAdistrict_wb'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(AgencyType__AgencyType='Municipality').filter(
+                Scheme__Scheme='KNMT').filter(
+                Sector='Water Bodies').filter(~Q(Project_ID__in=final_list))
+        )
+        response.context_data['CTPdistrict_wb'] = list(
+            qs.values('AgencyName__AgencyName', 'Project_ID').order_by('AgencyName__AgencyName').filter(
+                AgencyType__AgencyType='Town Panchayat').filter(
                 Scheme__Scheme='KNMT').filter(
                 Sector='Water Bodies').filter(~Q(Project_ID__in=final_list))
         )
@@ -1433,6 +1589,16 @@ class DashboardAdmin(admin.ModelAdmin):
         busstand_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        DMAbusstand_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Municipality'
+        ).filter(
+            Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPbusstand_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Town Panchayat'
+        ).filter(
+            Scheme='KNMT').filter(Sector='Bus Stand').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
 
         btroad_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(Sector='BT Road').count()
         btroad_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1451,6 +1617,13 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='BT Road').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
 
         btroad_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='BT Road').filter(
+            status='In Progress').annotate(percent=Avg('percentageofworkdone'))
+        DMAbtroad_district = AgencyProgressModel.objects.values('District').filter(ULBType='Municipality').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='BT Road').filter(
+            status='In Progress').annotate(percent=Avg('percentageofworkdone'))
+        CTPbtroad_district = AgencyProgressModel.objects.values('District').filter(ULBType='Town Panchayat').order_by(
+            'District').filter(
             Scheme='KNMT').filter(Sector='BT Road').filter(
             status='In Progress').annotate(percent=Avg('percentageofworkdone'))
         btroad_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
@@ -1473,6 +1646,16 @@ class DashboardAdmin(admin.ModelAdmin):
         ccroad_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='CC Road').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         ccroad_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='CC Road').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMAccroad_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Municipality'
+        ).filter(
+            Scheme='KNMT').filter(Sector='CC Road').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPccroad_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Town Panchayat'
+        ).filter(
             Scheme='KNMT').filter(Sector='CC Road').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
         ccroad_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
@@ -1500,6 +1683,9 @@ class DashboardAdmin(admin.ModelAdmin):
         communityhall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Community Hall').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        CTPcommunityhall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Town Panchayat').filter(Sector='Community Hall').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
 
         crematorium_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Crematorium').count()
@@ -1521,6 +1707,13 @@ class DashboardAdmin(admin.ModelAdmin):
         crematorium_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Crematorium').aggregate(project_cost=Sum('work_awarded_amount1'))
         crematorium_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Crematorium').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMAcrematorium_district = AgencyProgressModel.objects.values('District').order_by('District').filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Crematorium').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPcrematorium_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Town Panchayat').filter(
             Scheme='KNMT').filter(Sector='Crematorium').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
 
@@ -1545,6 +1738,13 @@ class DashboardAdmin(admin.ModelAdmin):
         culvert_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Culvert').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        DMAculvert_district = AgencyProgressModel.objects.values('District').order_by('District').filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Culvert').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPculvert_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Town Panchayat').filter(
+            Scheme='KNMT').filter(Sector='Culvert').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
 
         Market_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Market').count()
@@ -1564,6 +1764,12 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='Market').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         Market_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Market').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMAMarket_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Market').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPMarket_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Town Panchayat').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
         Market_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Market').aggregate(project_cost=Sum('work_awarded_amount1'))
@@ -1589,6 +1795,13 @@ class DashboardAdmin(admin.ModelAdmin):
             Sector='Knowledge Centre').aggregate(project_cost=Sum('work_awarded_amount1'))
         KnowledgeCentre_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Knowledge Centre').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMAKnowledgeCentre_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Knowledge Centre').filter(status='In Progress').filter(ULBType='Municipality').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPKnowledgeCentre_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Knowledge Centre').filter(status='In Progress').filter(
+            ULBType='Town Panchayat').annotate(
             percent=Avg('percentageofworkdone'))
 
         MetalBeamCrashBarriers_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1618,6 +1831,13 @@ class DashboardAdmin(admin.ModelAdmin):
         MetalBeamCrashBarriers_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        DMAMetalBeamCrashBarriers_district = AgencyProgressModel.objects.values('District').order_by('District').filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPMetalBeamCrashBarriers_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Town Panchayat').filter(
+            Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
         MetalBeamCrashBarriers_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').aggregate(project_cost=Sum('work_awarded_amount1'))
 
@@ -1641,6 +1861,13 @@ class DashboardAdmin(admin.ModelAdmin):
         Parks_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Parks').aggregate(project_cost=Sum('work_awarded_amount1'))
         Parks_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Parks').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMAParks_district = AgencyProgressModel.objects.values('District').order_by('District').filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Parks').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPParks_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            ULBType='Town Panchayat').filter(
             Scheme='KNMT').filter(Sector='Parks').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
 
@@ -1668,6 +1895,13 @@ class DashboardAdmin(admin.ModelAdmin):
         PaverBlock_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Paver Block').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        DMAPaverBlock_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Municipality').filter(Sector='Paver Block').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPPaverBlock_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Town Panchayat').filter(Sector='Paver Block').filter(
+            status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
 
         Retainingwall_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Retaining wall').count()
@@ -1690,6 +1924,13 @@ class DashboardAdmin(admin.ModelAdmin):
             ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         Retainingwall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Retaining wall').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMARetainingwall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Municipality').filter(Sector='Retaining wall').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPRetainingwall_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Town Panchayat').filter(Sector='Retaining wall').filter(
+            status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
         Retainingwall_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Retaining wall').aggregate(project_cost=Sum('work_awarded_amount1'))
@@ -1716,6 +1957,13 @@ class DashboardAdmin(admin.ModelAdmin):
         SolidWasteMgt_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Solid Waste Mgt.').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        DMASolidWasteMgt_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Municipality').filter(Sector='Solid Waste Mgt.').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPSolidWasteMgt_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(ULBType='Town Panchayat').filter(Sector='Solid Waste Mgt.').filter(
+            status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
         SolidWasteMgt_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Solid Waste Mgt.').aggregate(project_cost=Sum('work_awarded_amount1'))
         SWD_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1740,6 +1988,12 @@ class DashboardAdmin(admin.ModelAdmin):
         SWD_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='SWD').filter(status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
+        DMASWD_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='SWD').filter(ULBType='Municipality').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPSWD_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='SWD').filter(ULBType='Town Panchayat').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
         WaterBodies_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
             Sector='Water Bodies').count()
         WaterBodies_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
@@ -1762,6 +2016,13 @@ class DashboardAdmin(admin.ModelAdmin):
 
         WaterBodies_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
             Scheme='KNMT').filter(Sector='Water Bodies').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        DMAWaterBodies_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Water Bodies').filter(ULBType='Municipality').filter(status='In Progress').annotate(
+            percent=Avg('percentageofworkdone'))
+        CTPWaterBodies_district = AgencyProgressModel.objects.values('District').order_by('District').filter(
+            Scheme='KNMT').filter(Sector='Water Bodies').filter(ULBType='Town Panchayat').filter(
+            status='In Progress').annotate(
             percent=Avg('percentageofworkdone'))
         WaterBodies_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
             Sector='Water Bodies').aggregate(project_cost=Sum('work_awarded_amount1'))
@@ -2253,28 +2514,39 @@ class DashboardAdmin(admin.ModelAdmin):
             AgencyType__AgencyType='Town Panchayat').filter(
             ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
 
-        DMAbusstand_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAbusstand_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Bus Stand').count()
-        DMAbusstand_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAbusstand_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Bus Stand').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAbusstand_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(
+        DMAbusstand_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Bus Stand').filter(
             status='Completed').count()
-        DMAbusstand_completed_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAbusstand_completed_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(
             Sector='Bus Stand').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAbusstand_inprogress_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(
+        DMAbusstand_inprogress_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Bus Stand').filter(
             status='In Progress').count()
-        DMAbusstand_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAbusstand_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
+            ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Bus Stand').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAbusstand_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Bus Stand').filter(
-            status='Not Commenced').count()
-        DMAbusstand_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Bus Stand').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAbusstand_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAbusstand_tobecommenced_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Bus Stand').filter(~Q(Project_ID__in=final_list)).count()
+        DMAbusstand_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Bus Stand').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAbusstand_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(
             Sector='Bus Stand').aggregate(project_cost=Sum('work_awarded_amount1'))
 
-        DMAbtroad_approved_project_count =AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAbtroad_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='BT Road').count()
-        DMAbtroad_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAbtroad_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='BT Road').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAbtroad_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='BT Road').filter(
@@ -2288,16 +2560,20 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAbtroad_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='BT Road').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAbtroad_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='BT Road').filter(
-            status='Not Commenced').count()
-        DMAbtroad_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='BT Road').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAbtroad_tobecommenced_count = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').filter(
+            Scheme__Scheme='KNMT').filter(
+            Sector='BT Road').filter(~Q(Project_ID__in=final_list)).count()
+        DMAbtroad_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='BT Road').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAbtroad_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='BT Road').aggregate(project_cost=Sum('work_awarded_amount1'))
-        DMAccroad_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAccroad_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='CC Road').count()
-        DMAccroad_approved_project_cost =AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAccroad_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='CC Road').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAccroad_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='CC Road').filter(
@@ -2311,17 +2587,21 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAccroad_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='CC Road').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAccroad_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='CC Road').filter(
-            status='Not Commenced').count()
-        DMAccroad_tobecommenced_project_cost =AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='CC Road').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAccroad_tobecommenced_count = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').filter(
+            Scheme__Scheme='KNMT').filter(
+            Sector='CC Road').filter(~Q(Project_ID__in=final_list)).count()
+        DMAccroad_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='CC Road').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAccroad_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='CC Road').aggregate(project_cost=Sum('work_awarded_amount1'))
-        DMAcommunityhall_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAcommunityhall_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Community Hall').count()
 
-        DMAcommunityhall_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAcommunityhall_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Community Hall').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAcommunityhall_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='Community Hall').filter(
@@ -2335,10 +2615,13 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAcommunityhall_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
             ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Community Hall').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAcommunityhall_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Community Hall').filter(
-            status='Not Commenced').count()
-        DMAcommunityhall_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Community Hall').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAcommunityhall_tobecommenced_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Community Hall').filter(~Q(Project_ID__in=final_list)).count()
+        DMAcommunityhall_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Community Hall').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
         DMAcommunityhall_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Community Hall').aggregate(project_cost=Sum('work_awarded_amount1'))
@@ -2346,10 +2629,12 @@ class DashboardAdmin(admin.ModelAdmin):
             AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Crematorium').count()
 
-        DMAcrematorium_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
-            Sector='Crematorium').count()
-        DMAcrematorium_completed_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAcrematorium_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Crematorium').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAcrematorium_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
+            Scheme='KNMT').filter(Sector='Crematorium').filter(
+            status='Completed').count()
         DMAcrematorium_completed_approved_project_cost = AgencyProgressModel.objects.filter(
             ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Crematorium').filter(status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
@@ -2359,18 +2644,23 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAcrematorium_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
             ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Crematorium').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAcrematorium_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Crematorium').filter(
-            status='Not Commenced').count()
-        DMAcrematorium_tobecommenced_project_cost =AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Crematorium').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAcrematorium_tobecommenced_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Crematorium').filter(~Q(Project_ID__in=final_list)).count()
+        DMAcrematorium_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Crematorium').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
         DMAcrematorium_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Crematorium').aggregate(project_cost=Sum('work_awarded_amount1'))
 
-        DMAculvert_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAculvert_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Culvert').count()
 
-        DMAculvert_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAculvert_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Culvert').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAculvert_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='Culvert').filter(
@@ -2384,17 +2674,21 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAculvert_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Culvert').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAculvert_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Culvert').filter(
-            status='Not Commenced').count()
-        DMAculvert_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Culvert').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAculvert_tobecommenced_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Culvert').filter(~Q(Project_ID__in=final_list)).count()
+        DMAculvert_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Culvert').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAculvert_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Culvert').aggregate(project_cost=Sum('work_awarded_amount1'))
-        DMAKnowledgeCentre_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAKnowledgeCentre_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Knowledge Centre').count()
 
-        DMAKnowledgeCentre_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAKnowledgeCentre_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Knowledge Centre').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAKnowledgeCentre_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='Knowledge Centre').filter(
@@ -2408,17 +2702,22 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAKnowledgeCentre_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(
             ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Knowledge Centre').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAKnowledgeCentre_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Knowledge Centre').filter(
-            status='Not Commenced').count()
-        DMAKnowledgeCentre_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Knowledge Centre').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAKnowledgeCentre_tobecommenced_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Knowledge Centre').filter(~Q(Project_ID__in=final_list)).count()
+        DMAKnowledgeCentre_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Knowledge Centre').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
         DMAKnowledgeCentre_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Knowledge Centre').aggregate(project_cost=Sum('work_awarded_amount1'))
-        DMAMarket_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        DMAMarket_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Market').count()
 
-        DMAMarket_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAMarket_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Market').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAMarket_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='Market').filter(
@@ -2432,17 +2731,21 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAMarket_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Market').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAMarket_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Market').filter(
-            status='Not Commenced').count()
-        DMAMarket_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Market').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAMarket_tobecommenced_count = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').filter(
+            Scheme__Scheme='KNMT').filter(
+            Sector='Market').filter(~Q(Project_ID__in=final_list)).count()
+        DMAMarket_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Market').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAMarket_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Market').aggregate(project_cost=Sum('work_awarded_amount1'))
-        DMAMetalBeamCrashBarriers_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(
-            status='Not Commenced').count()
+        DMAMetalBeamCrashBarriers_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Metal Beam Crash Barriers').count()
 
-        DMAMetalBeamCrashBarriers_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAMetalBeamCrashBarriers_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAMetalBeamCrashBarriers_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(
@@ -2458,17 +2761,22 @@ class DashboardAdmin(admin.ModelAdmin):
             ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').filter(status='In Progress').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
-        DMAMetalBeamCrashBarriers_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers').filter(
-            status='Not Commenced').count()
-        DMAMetalBeamCrashBarriers_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Metal Beam Crash Barriers').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAMetalBeamCrashBarriers_tobecommenced_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list)).count()
+        DMAMetalBeamCrashBarriers_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Metal Beam Crash Barriers').filter(~Q(Project_ID__in=final_list)).aggregate(
+            project_cost=Sum('ApprovedProjectCost'))
         DMAMetalBeamCrashBarriers_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Metal Beam Crash Barriers').aggregate(project_cost=Sum('work_awarded_amount1'))
-        DMAParks_approved_project_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Market').filter(
-            status='Not Commenced').count()
+        DMAParks_approved_project_count = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Parks').count()
 
-        DMAParks_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAParks_approved_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
             Sector='Parks').aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAParks_completed_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(Sector='Parks').filter(
@@ -2482,10 +2790,12 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAParks_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(
             Scheme='KNMT').filter(
             Sector='Parks').filter(status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAParks_tobecommenced_count = AgencyProgressModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(Sector='Parks').filter(
-            status='Not Commenced').count()
-        DMAParks_tobecommenced_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
-            Sector='Parks').filter(status='Not Commenced').aggregate(project_cost=Sum('ApprovedProjectCost'))
+        DMAParks_tobecommenced_count = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').filter(
+            Scheme__Scheme='KNMT').filter(
+            Sector='Parks').filter(~Q(Project_ID__in=final_list)).count()
+        DMAParks_tobecommenced_project_cost = MasterSanctionForm.objects.filter(
+            AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').filter(
+            Sector='Parks').filter(~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
         DMAParks_awarded_cost = AgencySanctionModel.objects.filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
             Sector='Parks').aggregate(project_cost=Sum('work_awarded_amount1'))
         DMAPaverBlock_approved_project_count = MasterSanctionForm.objects.filter(
@@ -2632,25 +2942,63 @@ class DashboardAdmin(admin.ModelAdmin):
             Scheme='KNMT').filter(
             Sector='Water Bodies').aggregate(project_cost=Sum('work_awarded_amount1'))
 
-        DMAtotal_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').aggregate(
+        DMAtotal_awarded_cost = AgencySanctionModel.objects.filter(Scheme='KNMT').filter(
+            ULBType='Municipality').aggregate(
             project_cost=Sum('work_awarded_amount1'))
-        DMAtotal_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').count()
-        DMAtotal_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').aggregate(
+        DMAtotal_approved_project_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').count()
+        DMAtotal_approved_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').aggregate(
             project_cost=Sum('ApprovedProjectCost'))
-        DMAtotal_completed_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAtotal_completed_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            ULBType='Municipality').filter(
             status='Completed').count()
-        DMAtotal_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAtotal_completed_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            ULBType='Municipality').filter(
             status='Completed').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAtotal_inprogress_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAtotal_inprogress_count = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            ULBType='Municipality').filter(
             status='In Progress').count()
-        DMAtotal_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(ULBType='Municipality').filter(
+        DMAtotal_inprogress_approved_project_cost = AgencyProgressModel.objects.filter(Scheme='KNMT').filter(
+            ULBType='Municipality').filter(
             status='In Progress').aggregate(project_cost=Sum('ApprovedProjectCost'))
-        DMAtotal_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').filter(
+        DMAtotal_tobecommenced_count = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').filter(
             ~Q(Project_ID__in=final_list)).count()
-        DMAtotal_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Municipality').filter(
+        DMAtotal_tobecommenced_project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').filter(
+            AgencyType__AgencyType='Municipality').filter(
             ~Q(Project_ID__in=final_list)).aggregate(project_cost=Sum('ApprovedProjectCost'))
 
         extra_context = {
+            'CTPWaterBodies_district': CTPWaterBodies_district,
+            'CTPSWD_district': CTPSWD_district,
+            'CTPSolidWasteMgt_district': CTPSolidWasteMgt_district,
+            'CTPRetainingwall_district': CTPRetainingwall_district,
+            'CTPPaverBlock_district': CTPPaverBlock_district,
+            'CTPParks_district': CTPParks_district,
+            'CTPMetalBeamCrashBarriers_district': CTPMetalBeamCrashBarriers_district,
+            'CTPMarket_district': CTPMarket_district,
+            'CTPKnowledgeCentre_district': CTPKnowledgeCentre_district,
+            'CTPculvert_district': CTPculvert_district,
+            'CTPcrematorium_district': CTPcrematorium_district,
+            'CTPcommunityhall_district':CTPcommunityhall_district,
+            'CTPbusstand_district': CTPbusstand_district,
+            'CTPccroad_district': CTPccroad_district,
+            'CTPbtroad_district': CTPbtroad_district,
+            'DMAWaterBodies_district':DMAWaterBodies_district,
+            'DMASWD_district':DMASWD_district,
+            'DMASolidWasteMgt_district':DMASolidWasteMgt_district,
+            'DMARetainingwall_district':DMARetainingwall_district,
+            'DMAPaverBlock_district':DMAPaverBlock_district,
+            'DMAParks_district':DMAParks_district,
+            'DMAMetalBeamCrashBarriers_district':DMAMetalBeamCrashBarriers_district,
+            'DMAMarket_district':DMAMarket_district,
+            'DMAKnowledgeCentre_district':DMAKnowledgeCentre_district,
+            'DMAculvert_district':DMAculvert_district,
+            'DMAcrematorium_district':DMAcrematorium_district,
+            'DMAbusstand_district':DMAbusstand_district,
+            'DMAccroad_district':DMAccroad_district,
+            'DMAbtroad_district':DMAbtroad_district,
             'total_ap_project_count':total_ap_project_count,
             'CTPtotal_awarded_cost': CTPtotal_awarded_cost,
             'CTPtotal_tobecommenced_project_cost': CTPtotal_tobecommenced_project_cost,

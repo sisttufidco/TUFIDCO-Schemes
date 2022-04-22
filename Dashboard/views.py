@@ -464,6 +464,33 @@ def btroad_export_progress_xls(request):
     wb.save(response)
     return response
 
+def DMAbtroad_export_progress_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="DMAbtroad.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
+
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='BT Road')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
 def swd_export_progress_xls(request):
     print('INSIDE')
     response = HttpResponse(content_type='application/ms-excel')
@@ -603,6 +630,34 @@ def pk_export_progress_xls(request):
     wb.save(response)
     return response
 
+def DMApk_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="parks.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
+
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(ULBType='Municipality').filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Parks')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
 def mbcb_export_progress_xls(request):
     print('INSIDE')
     response = HttpResponse(content_type='application/ms-excel')
@@ -622,6 +677,34 @@ def mbcb_export_progress_xls(request):
     font_style = xlwt.XFStyle()
     rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
         District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def DMAmbcb_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="Metalbeamcrashbarrier.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
+
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(ULBType='Municipality').filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Metal Beam Crash Barriers')
 
     for row in rows:
         row_num += 1
@@ -659,7 +742,33 @@ def mt_export_progress_xls(request):
 
     wb.save(response)
     return response
+def DMAmt_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="market.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
 
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Market')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
 def kc_export_progress_xls(request):
     print('INSIDE')
     response = HttpResponse(content_type='application/ms-excel')
@@ -678,6 +787,33 @@ def kc_export_progress_xls(request):
 
     font_style = xlwt.XFStyle()
     rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Knowledge Centre')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+def DMAkc_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="knowledgecentre.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
+
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(ULBType='Municipality').filter(Scheme='KNMT').filter(
         District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Knowledge Centre')
 
     for row in rows:
@@ -714,7 +850,34 @@ def bs_export_progress_xls(request):
 
     wb.save(response)
     return response
+def DMAbs_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="busstand.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
 
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(
+    ULBType='Municipality').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Bus Stand')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
 def cc_export_progress_xls(request):
     print('INSIDE')
     response = HttpResponse(content_type='application/ms-excel')
@@ -742,7 +905,62 @@ def cc_export_progress_xls(request):
 
     wb.save(response)
     return response
+def DMAcc_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="ccroad.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
 
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(
+        ULBType='Municipality'
+    ).filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='CC Road')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+def ch_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="crematorium.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
+
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Community Hall')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
 def cr_export_progress_xls(request):
     print('INSIDE')
     response = HttpResponse(content_type='application/ms-excel')
@@ -770,7 +988,35 @@ def cr_export_progress_xls(request):
 
     wb.save(response)
     return response
+def DMAcr_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="crematorium.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
 
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
+        ULBType='Municipality'
+    ).filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Crematorium')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
 def cl_export_progress_xls(request):
     print('INSIDE')
     response = HttpResponse(content_type='application/ms-excel')
@@ -789,6 +1035,36 @@ def cl_export_progress_xls(request):
 
     font_style = xlwt.XFStyle()
     rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(Scheme='KNMT').filter(
+        District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Culvert')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def DMAcl_export_progress_xls(request):
+    print('INSIDE')
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="culvert.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('InProgress')
+    row_num = 0
+
+    print(request.POST['district'])
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['District', 'ULB', 'Project ID', 'Percentage of Progress', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = AgencyProgressModel.objects.values_list('District', 'ULBName', 'Project_ID', 'percentageofworkdone').filter(
+        ULBType='Municipality'
+    ).filter(Scheme='KNMT').filter(
         District=request.POST['district']).filter(status='In Progress').filter(Scheme='KNMT').filter(Sector='Culvert')
 
     for row in rows:

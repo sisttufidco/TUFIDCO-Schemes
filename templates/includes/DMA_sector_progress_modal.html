@@ -1,4 +1,4 @@
- <div class="modal fade" id="busstand" tabindex="-1" role="dialog" aria-labelledby="busstand" aria-hidden="true">
+ <div class="modal fade" id="DMAbusstand" tabindex="-1" role="dialog" aria-labelledby="busstand" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -31,13 +31,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in busstand_district %}
+              {% for row in DMAbusstand_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
               <td>
-                    <form method="post" action="{% url 'export_in_bs' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_bs' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -53,11 +53,11 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="communityhall" tabindex="-1" role="dialog" aria-labelledby="communityhall" aria-hidden="true">
+ <div class="modal fade" id="DMASolidWasteMgt" tabindex="-1" role="dialog" aria-labelledby="DMASolidWasteMgt" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="communityhallLabel">KNMT - District Wise Progress - Community Hall</h5>
+          <h5 class="modal-title" id="DMASolidWasteMgtLabel">KNMT - District Wise Progress - Solid Waste Mgt.</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -86,13 +86,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in communityhall_district %}
+              {% for row in DMASolidWasteMgt_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
               <td>
-                    <form method="post" action="{% url 'export_in_ch' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_bs' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -108,7 +108,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="btroad" tabindex="-1" role="dialog" aria-labelledby="btroad" aria-hidden="true">
+ <div class="modal fade" id="DMAbtroad" tabindex="-1" role="dialog" aria-labelledby="btroad" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -141,13 +141,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in btroad_district %}
+              {% for row in DMAbtroad_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                 <td>
-                    <form method="post" action="{% url 'export_in_bt' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_bt' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -164,7 +164,7 @@
     </div>
   </div>
 
- <div class="modal fade" id="ccroad" tabindex="-1" role="dialog" aria-labelledby="ccroad" aria-hidden="true">
+ <div class="modal fade" id="DMAccroad" tabindex="-1" role="dialog" aria-labelledby="ccroad" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -197,13 +197,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in ccroad_district %}
+              {% for row in DMAccroad_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
               <td>
-                    <form method="post" action="{% url 'export_in_cc' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_cc' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -219,7 +219,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="crematorium" tabindex="-1" role="dialog" aria-labelledby="crematorium" aria-hidden="true">
+ <div class="modal fade" id="DMAcrematorium" tabindex="-1" role="dialog" aria-labelledby="crematorium" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -252,13 +252,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in crematorium_district %}
+              {% for row in DMAcrematorium_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                <td>
-                    <form method="post" action="{% url 'export_in_cr' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_cr' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -274,7 +274,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="culvert" tabindex="-1" role="dialog" aria-labelledby="culvert" aria-hidden="true">
+ <div class="modal fade" id="DMAculvert" tabindex="-1" role="dialog" aria-labelledby="DMAculvert" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -307,13 +307,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in culvert_district %}
+              {% for row in DMAculvert_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                 <td>
-                    <form method="post" action="{% url 'export_in_cl' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_cl' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -329,7 +329,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="KnowledgeCentre" tabindex="-1" role="dialog" aria-labelledby="KnowledgeCentre" aria-hidden="true">
+ <div class="modal fade" id="DMAKnowledgeCentre" tabindex="-1" role="dialog" aria-labelledby="KnowledgeCentre" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -362,13 +362,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in KnowledgeCentre_district %}
+              {% for row in DMAKnowledgeCentre_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                  <td>
-                    <form method="post" action="{% url 'export_in_kc' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_kc' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -384,7 +384,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="Market" tabindex="-1" role="dialog" aria-labelledby="Market" aria-hidden="true">
+ <div class="modal fade" id="DMAMarket" tabindex="-1" role="dialog" aria-labelledby="Market" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -417,13 +417,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in Market_district %}
+              {% for row in DMAMarket_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                    <td>
-                    <form method="post" action="{% url 'export_in_mt' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_mt' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -439,7 +439,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="MetalBeamCrashBarriers" tabindex="-1" role="dialog" aria-labelledby="MetalBeamCrashBarriers" aria-hidden="true">
+ <div class="modal fade" id="DMAMetalBeamCrashBarriers" tabindex="-1" role="dialog" aria-labelledby="MetalBeamCrashBarriers" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -472,13 +472,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in MetalBeamCrashBarriers_district %}
+              {% for row in DMAMetalBeamCrashBarriers_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                  <td>
-                    <form method="post" action="{% url 'export_in_mbcb' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_mbcb' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -494,7 +494,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="Parks" tabindex="-1" role="dialog" aria-labelledby="Parks" aria-hidden="true">
+ <div class="modal fade" id="DMAParks" tabindex="-1" role="dialog" aria-labelledby="DMAParks" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -527,13 +527,13 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in Parks_district %}
+              {% for row in DMAParks_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
                 <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
                    <td>
-                    <form method="post" action="{% url 'export_in_pk' %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'DMAexport_in_pk' %}" enctype="multipart/form-data">
                       {% csrf_token %}
                       <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
                   </form>
@@ -549,7 +549,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="PaverBlock" tabindex="-1" role="dialog" aria-labelledby="PaverBlock" aria-hidden="true">
+ <div class="modal fade" id="DMAPaverBlock" tabindex="-1" role="dialog" aria-labelledby="PaverBlock" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -582,7 +582,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in PaverBlock_district %}
+              {% for row in DMAPaverBlock_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
@@ -604,7 +604,7 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="Retainingwall" tabindex="-1" role="dialog" aria-labelledby="Retainingwall" aria-hidden="true">
+ <div class="modal fade" id="DMARetainingwall" tabindex="-1" role="dialog" aria-labelledby="Retainingwall" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -637,7 +637,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in Retainingwall_district %}
+              {% for row in DMARetainingwall_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
@@ -659,11 +659,11 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="SWD" tabindex="-1" role="dialog" aria-labelledby="SWD" aria-hidden="true">
+ <div class="modal fade" id="DMASWD" tabindex="-1" role="dialog" aria-labelledby="DMASWD" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="SWDLabel">KNMT - District Wise Progress - SWD</h5>
+          <h5 class="modal-title" id="DMASWDLabel">KNMT - District Wise Progress - SWD</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -692,7 +692,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in SWD_district %}
+              {% for row in DMASWD_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
@@ -714,11 +714,11 @@
       </div>
     </div>
   </div>
- <div class="modal fade" id="WaterBodies" tabindex="-1" role="dialog" aria-labelledby="WaterBodies" aria-hidden="true">
+ <div class="modal fade" id="DMAWaterBodies" tabindex="-1" role="dialog" aria-labelledby="DMAWaterBodies" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="SWDLabel">KNMT - District Wise Progress - Water Bodies</h5>
+          <h5 class="modal-title" id="DMASWDLabel">KNMT - District Wise Progress - Water Bodies</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -747,7 +747,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in WaterBodies_district %}
+              {% for row in DMAWaterBodies_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.District }} </td>
@@ -771,53 +771,9 @@
   </div>
 
 
- <div class="modal fade" id="busstand1" tabindex="-1" role="dialog" aria-labelledby="busstand1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="busstandLabel">KNMT - Works To Be Commenced - Bus Stand</h5>
-        </div>
-        <div class="modal-body">
-          <table>
-              <thead>
-              <tr>
-                   <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of the ULB</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Project ID</a>
-                    </div>
-                  </th>
-              </tr>
-              </thead>
-              <tbody>
-              {% for row in district_c %}
-             <tr class="{% cycle 'row1' 'row2' %}">
-                <td> {{ forloop.counter }} </td>
-                <td> {{ row.AgencyName__AgencyName }} </td>
-                <td style="text-align: center"> {{ row.Project_ID }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
- <div class="modal fade" id="busstand_modal" tabindex="-1" role="dialog" aria-labelledby="busstand_modal" aria-hidden="true">
+ <div class="modal fade" id="DMAbusstand_modal" tabindex="-1" role="dialog" aria-labelledby="busstand_modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -845,7 +801,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_c %}
+              {% for row in DMAdistrict_c %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -860,7 +816,7 @@
         </div>
       </div>
     </div>
-  </div> <div class="modal fade" id="btroad1" tabindex="-1" role="dialog" aria-labelledby="btroad1" aria-hidden="true">
+  </div> <div class="modal fade" id="DMAbtroad1" tabindex="-1" role="dialog" aria-labelledby="btroad1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -888,7 +844,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_btroad %}
+              {% for row in DMAdistrict_btroad %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -905,7 +861,7 @@
     </div>
   </div>
 
-<div class="modal fade" id="ccroad1" tabindex="-1" role="dialog" aria-labelledby="ccroad1" aria-hidden="true">
+<div class="modal fade" id="DMAccroad1" tabindex="-1" role="dialog" aria-labelledby="ccroad1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -933,7 +889,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_ccroad %}
+              {% for row in DMAdistrict_ccroad %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -951,7 +907,7 @@
   </div>
 
 
-<div class="modal fade" id="communityhall1" tabindex="-1" role="dialog" aria-labelledby="communityhall1" aria-hidden="true">
+<div class="modal fade" id="DMAcommunityhall1" tabindex="-1" role="dialog" aria-labelledby="communityhall1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -996,7 +952,7 @@
       </div>
     </div>
   </div>
-<div class="modal fade" id="crematorium1" tabindex="-1" role="dialog" aria-labelledby="crematorium1" aria-hidden="true">
+<div class="modal fade" id="DMAcrematorium1" tabindex="-1" role="dialog" aria-labelledby="crematorium1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1024,7 +980,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_cr%}
+              {% for row in DMAdistrict_cr%}
              <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1084,7 +1040,7 @@
       </div>
     </div>
   </div>
-<div class="modal fade" id="KnowledgeCentre1" tabindex="-1" role="dialog" aria-labelledby="KnowledgeCentre1" aria-hidden="true">
+<div class="modal fade" id="DMAKnowledgeCentre1" tabindex="-1" role="dialog" aria-labelledby="KnowledgeCentre1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1112,7 +1068,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_kc %}
+              {% for row in DMAdistrict_kc %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1128,7 +1084,7 @@
       </div>
     </div>
   </div>
-<div class="modal fade" id="Market1" tabindex="-1" role="dialog" aria-labelledby="Market1" aria-hidden="true">
+<div class="modal fade" id="DMAMarket1" tabindex="-1" role="dialog" aria-labelledby="Market1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1156,7 +1112,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_m%}
+              {% for row in DMAdistrict_m%}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1173,7 +1129,7 @@
     </div>
   </div>
 
-<div class="modal fade" id="MetalBeamCrashBarriers1" tabindex="-1" role="dialog" aria-labelledby="MetalBeamCrashBarriers1" aria-hidden="true">
+<div class="modal fade" id="DMAMetalBeamCrashBarriers1" tabindex="-1" role="dialog" aria-labelledby="MetalBeamCrashBarriers1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1201,7 +1157,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_mbcb %}
+              {% for row in DMAdistrict_mbcb %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1217,7 +1173,7 @@
       </div>
     </div>
   </div>
-<div class="modal fade" id="Parks1" tabindex="-1" role="dialog" aria-labelledby="Parks1" aria-hidden="true">
+<div class="modal fade" id="DMAParks1" tabindex="-1" role="dialog" aria-labelledby="Parks1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1245,7 +1201,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_p %}
+              {% for row in DMAdistrict_p %}
                  <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1263,7 +1219,7 @@
     </div>
   </div>
 
-<div class="modal fade" id="PaverBlock1" tabindex="-1" role="dialog" aria-labelledby="PaverBlock1" aria-hidden="true">
+<div class="modal fade" id="DMAPaverBlock1" tabindex="-1" role="dialog" aria-labelledby="PaverBlock1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1291,7 +1247,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_pb %}
+              {% for row in DMAdistrict_pb %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1353,11 +1309,11 @@
     </div>
   </div>
 
-<div class="modal fade" id="SWM1" tabindex="-1" role="dialog" aria-labelledby="SWM1" aria-hidden="true">
+<div class="modal fade" id="DMASWM1" tabindex="-1" role="dialog" aria-labelledby="DMASWM1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="SWM1Label">KNMT - Works To Be Commenced - Solid Waste Mgt.</h5>
+          <h5 class="modal-title" id="DMASWM1Label">KNMT - Works To Be Commenced - Solid Waste Mgt.</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1381,7 +1337,7 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_swm  %}
+              {% for row in DMAdistrict_swm  %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
@@ -1401,11 +1357,11 @@
 
 
 
-<div class="modal fade" id="SWD1" tabindex="-1" role="dialog" aria-labelledby="SWD1" aria-hidden="true">
+<div class="modal fade" id="DMASWD1" tabindex="-1" role="dialog" aria-labelledby="DMASWD1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="SWM1Label">KNMT - Works To Be Commenced - SWD</h5>
+          <h5 class="modal-title" id="DMASWM1Label">KNMT - Works To Be Commenced - SWD</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1429,13 +1385,12 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_swd  %}
+              {% for row in DMAdistrict_swd  %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
                 <td style="text-align: center"> {{ row.Project_ID }}</td>
                 </tr>
-
               {% endfor %}
               </tbody>
           </table>
@@ -1446,11 +1401,11 @@
       </div>
     </div>
   </div>
-<div class="modal fade" id="WaterBodies1" tabindex="-1" role="dialog" aria-labelledby="WaterBodies1" aria-hidden="true">
+<div class="modal fade" id="DMAWaterBodies1" tabindex="-1" role="dialog" aria-labelledby="DMAWaterBodies1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="WaterBodies1Label">KNMT - Works To Be Commenced - Water Bodies</h5>
+          <h5 class="modal-title" id="DMAWaterBodies1Label">KNMT - Works To Be Commenced - Water Bodies</h5>
         </div>
         <div class="modal-body">
           <table>
@@ -1474,7 +1429,51 @@
               </tr>
               </thead>
               <tbody>
-              {% for row in district_wb  %}
+              {% for row in DMAdistrict_wb  %}
+              <tr class="{% cycle 'row1' 'row2' %}">
+                <td> {{ forloop.counter }} </td>
+                <td> {{ row.AgencyName__AgencyName }} </td>
+                <td style="text-align: center"> {{ row.Project_ID }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="modal fade" id="DMAculvert1" tabindex="-1" role="dialog" aria-labelledby="DMAculvert1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="DMAWaterBodies1Label">KNMT - Works To Be Commenced - Culvert</h5>
+        </div>
+        <div class="modal-body">
+          <table>
+              <thead>
+              <tr>
+                  <th>
+                      <div class="text">
+                        <a href="#">S. No</a>
+                      </div>
+                  </th>
+                  <th>
+                    <div class="text">
+                        <a href="#">Name of the ULB</a>
+                    </div>
+                  </th>
+                  <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Project ID</a>
+                    </div>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for row in DMAdistrict_cul  %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
                 <td> {{ row.AgencyName__AgencyName }} </td>
