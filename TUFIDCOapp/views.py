@@ -90,7 +90,7 @@ def about(request):
 def gallery(request):
     Counter = PageCounter.objects.all()[0]
     data = tufidco_info.objects.all()
-    gallery_img = AgencyProgressModel.objects.values('ULBName', 'ULBType', 'upload1', 'date_and_time').order_by('date_and_time').order_by('ULBName').filter(status='In Progress').filter(date_and_time__gte=two_week_d).exclude(upload1='')
+    gallery_img = AgencyProgressModel.objects.values('ULBName', 'ULBType', 'upload1', 'date_and_time').order_by('date_and_time').order_by('ULBName').filter(status='In Progress').filter(date_and_time__gte=two_week_d).exclude(upload1='').exclude(ULBName='Adigaratty')
     gallery_places = AgencyProgressModel.objects.values_list('ULBType', flat=True).filter(date_and_time__gte=two_week_d).distinct()
 
     context = {
