@@ -7,7 +7,10 @@ from django.views import View
 from .models import *
 from .forms import EmailForm, EmailForm2
 from TUFIDCO.settings import EMAIL_HOST_USER
+from datetime import date, timedelta
+from ULBForms.models import AgencyProgressModel
 
+two_week_d = date.today() - timedelta(days=14)
 
 # Create your views here.
 def home(request):
@@ -87,8 +90,8 @@ def about(request):
 def gallery(request):
     Counter = PageCounter.objects.all()[0]
     data = tufidco_info.objects.all()
-    gallery_img = gallery_Images.objects.all()
-    gallery_places = gallery_Images.objects.values_list('type', flat=True).order_by('type').distinct()
+    gallery_img = AgencyProgressModel.objects.values('ULBName', 'ULBType', 'upload1', 'date_and_time').order_by('date_and_time').order_by('ULBName').filter(status='In Progress').filter(date_and_time__gte=two_week_d).exclude(upload1='')
+    gallery_places = AgencyProgressModel.objects.values_list('ULBType', flat=True).filter(date_and_time__gte=two_week_d).distinct()
 
     context = {
         'num_visits': Counter,
@@ -96,7 +99,8 @@ def gallery(request):
         "gallery": gallery_img,
         "gallery_places": gallery_places,
     }
-
+    print(gallery_img)
+    print(gallery_places)
     return render(request, 'pages/gallery.html', context)
 
 

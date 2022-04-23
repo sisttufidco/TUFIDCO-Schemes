@@ -3,7 +3,8 @@ from django.db.models import Count, Sum, Avg, Func
 from import_export.admin import ImportExportModelAdmin
 from .resources import *
 from .forms import *
-from ULBForms.models import AgencyBankDetails
+from ULBForms.models import AgencyBankDetails, AgencyProgressModel
+
 
 admin.site.index_title = ""
 
@@ -5131,7 +5132,6 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-
         obj.account_number = AgencyBankDetails.objects.values_list('account_number', flat=True).filter(
             user__first_name=form.cleaned_data['AgencyName'])
         obj.bank_name_ulb = AgencyBankDetails.objects.values_list('beneficiary_name', flat=True).filter(
@@ -5174,10 +5174,11 @@ class SRPMasterSanctionFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'Project_ID',
     ]
 
+
 admin.site.register(SRPMasterSanctionForm, SRPMasterSanctionFormAdmin)
 
-class ReceiptFormAdmin(admin.ModelAdmin):
 
+class ReceiptFormAdmin(admin.ModelAdmin):
     list_display = [
         'Scheme',
         'go_ref',
@@ -5185,5 +5186,6 @@ class ReceiptFormAdmin(admin.ModelAdmin):
         'purpose',
         'amount'
     ]
+
 
 admin.site.register(ReceiptForm, ReceiptFormAdmin)
