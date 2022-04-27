@@ -40,11 +40,6 @@ class SRPAbstract(SRPMasterSanctionForm):
         verbose_name_plural = 'SRP Abstract'
 
 
-class ReleaseReport(ReleaseRequestModel):
-    class Meta:
-        proxy = True
-        verbose_name = 'Release Report'
-        verbose_name_plural = 'Release Reports'
 
 class PhysicalandFinancialReport(MasterSanctionForm):
     class Meta:

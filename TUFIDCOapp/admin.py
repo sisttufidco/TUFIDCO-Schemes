@@ -5088,64 +5088,6 @@ admin.site.register(ULBReleaseRequest)
 admin.site.register(PageCounter)
 
 
-@admin.register(ReleaseRequestModel)
-class ReleaseRequestAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None, {
-            'fields': (('Scheme', 'AgencyType', 'AgencyName'), ('Sector', 'Project_ID'))
-        }),
-        (
-            'Bank Details', {
-                'fields': ('bank_name_ulb',
-                           'bank_branch_name',
-                           'bank_branch',
-                           'account_number',
-                           'ifsc_code')
-            }
-        ),
-        (
-            'Fund Release Details', {
-                'fields': (
-                    (
-                        'release1Date',
-                        'release1Amount',
-                    ), (
-                        'release2Date',
-                        'release2Amount',
-                        'sqm_report2',
-                    ), (
-                        'release3Date',
-                        'release3Amount',
-                        'sqm_report3',
-                    ), (
-                        'release4Date',
-                        'release4Amount',
-                        'sqm_report4',
-                    ), (
-                        'release5Date',
-                        'release5Amount',
-                        'sqm_report5'
-                    )
-                )
-            }
-        )
-    )
-
-    def save_model(self, request, obj, form, change):
-        obj.account_number = AgencyBankDetails.objects.values_list('account_number', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
-        obj.bank_name_ulb = AgencyBankDetails.objects.values_list('beneficiary_name', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
-        obj.bank_branch_name = AgencyBankDetails.objects.values_list('bank_name', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
-        obj.bank_branch = AgencyBankDetails.objects.values_list('branch', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
-        obj.ifsc_code = AgencyBankDetails.objects.values_list('IFSC_code', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
-        obj.Sector = MasterSanctionForm.objects.values_list('Sector', flat=True).filter(
-            Project_ID=form.cleaned_data['Project_ID']
-        )
-        obj.save()
 
 
 class SRPMasterSanctionFormAdmin(ImportExportModelAdmin, admin.ModelAdmin):

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'CTP.apps.CtpConfig',
     'Dashboard.apps.DashboardConfig',
     'ULBForms.apps.UlbformsConfig',
+    'Accounts.apps.AccountsConfig',
     'smart_selects',
     'import_export',
     'nested_admin',
@@ -165,7 +166,6 @@ LOGIN_REDIRECT_URL = '/admin/Dashboard/dashboard/'
 LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = os.getenv('MAPBOX_KEY')
-
 
 SECURE_HSTS_SECONDS = 12121212
 SECURE_SSL_REDIRECT = True
