@@ -5,9 +5,6 @@ from TUFIDCOapp.models import *
 # Register your models here.
 import time
 
-a = []
-
-
 
 @admin.register(ReleaseRequestModel)
 class ReleaseRequestAdmin(admin.ModelAdmin):
@@ -745,14 +742,10 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         ZaminUthukulam=MasterSanctionForm.objects.values_list('Sector', flat=True).order_by('Sector').filter(AgencyName=2062).distinct()
 
 
-
-        global a
-        if request.POST.get('purpose')=='Project':
-            a = []
-            achanpudur_project = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST.get('AgencyType')).filter(AgencyName=request.POST.get('AgencyName')).filter(Sector=request.POST.get('Sector'))
-            a=achanpudur_project
+        a = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST.get('AgencyType')).filter(AgencyName=request.POST.get('AgencyName')).filter(Sector=request.POST.get('Sector'))
         print(a)
-        time.sleep(5)
+      
+
 
         extra_context = {
             'ZaminUthukulam':ZaminUthukulam,
