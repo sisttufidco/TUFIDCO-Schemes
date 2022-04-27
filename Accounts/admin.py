@@ -3,6 +3,7 @@ from .models import *
 from ULBForms.models import AgencyBankDetails, AgencyProgressModel
 from TUFIDCOapp.models import *
 # Register your models here.
+import time
 
 a = []
 
@@ -751,6 +752,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
             achanpudur_project = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST.get('AgencyType')).filter(AgencyName=request.POST.get('AgencyName')).filter(Sector=request.POST.get('Sector'))
             a=achanpudur_project
         print(a)
+        time.sleep(5)
 
         extra_context = {
             'ZaminUthukulam':ZaminUthukulam,
