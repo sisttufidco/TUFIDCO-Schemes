@@ -72,6 +72,12 @@
             async>
     </script>
 {% endblock %}
+
+{# JavaScript for prepopulated fields #}
+{% prepopulated_fields_js %}
+
+</div>
+</form></div>
 <script src="{% static 'vendors/jquery-3.4.1/jquery-3.4.1.slim.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/choicefilter.js' %}"></script>
 <script type="text/javascript">
@@ -804,10 +810,5 @@ for (var i = 0; i < myArray.length; ++i) {
 
 
 </script>
-{# JavaScript for prepopulated fields #}
-{% prepopulated_fields_js %}
-
-</div>
-</form></div>
 {% endblock %}
 
