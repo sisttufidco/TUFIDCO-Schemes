@@ -743,9 +743,8 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         global a
         if request.method == 'POST':    
             a=[]
-            if request.POST['purpose']=='Project':
-                achanpudur_project = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST['AgencyType']).filter(AgencyName=request.POST['AgencyName']).filter(Sector=request.POST['Sector'])
-                a=achanpudur_project
+            achanpudur_project = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST['AgencyType']).filter(AgencyName=request.POST['AgencyName']).filter(Sector=request.POST['Sector'])
+            a=achanpudur_project
 
         extra_context = {
             'ZaminUthukulam':ZaminUthukulam,
