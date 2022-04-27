@@ -64,12 +64,6 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         obj.save()
 
     def changeform_view(self, request, obj_id, form_url, extra_context=None):
-        global a
-        if request.method == 'POST':    
-            a=[]
-            achanpudur_project = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST['AgencyType']).filter(AgencyName=request.POST['AgencyName']).filter(Sector=request.POST['Sector'])
-            a=achanpudur_project
-            
         municipality = MasterSanctionForm.objects.values_list('AgencyName', flat=True).order_by('AgencyName').filter(AgencyType__AgencyType='Municipality')
         townPanchayat = MasterSanctionForm.objects.values_list('AgencyName', flat=True).order_by('AgencyName').filter(AgencyType__AgencyType='Town Panchayat')
         corporation = MasterSanctionForm.objects.values_list('AgencyName', flat=True).order_by('AgencyName').filter(AgencyType__AgencyType='Corporation')
@@ -746,7 +740,13 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
 
 
 
-        
+        global a
+        if request.method == 'POST':    
+            a=[]
+            if request.POST['purpose']=='Project':
+                achanpudur_project = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST['AgencyType']).filter(AgencyName=request.POST['AgencyName']).filter(Sector=request.POST['Sector'])
+                a=achanpudur_project
+            print(a)
 
         extra_context = {
             'ZaminUthukulam':ZaminUthukulam,
