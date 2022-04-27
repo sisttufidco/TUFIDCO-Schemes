@@ -7,6 +7,13 @@ def purpose_choices():
         ('DPR Preparation', 'DPR Preparation')
         
     ]
+
+def product_id_make_choices():
+    a = [(str(c), str(c)) for c in
+            MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('SNo').distinct()]
+    a.append(("--------", "--------"))
+    return a
+
 class ReleaseRequestModel(models.Model):
     Scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
     AgencyType = models.ForeignKey(AgencyType, blank=True, on_delete=models.CASCADE, null=True, verbose_name='ULB Type')

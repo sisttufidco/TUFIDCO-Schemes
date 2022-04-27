@@ -6,6 +6,8 @@ from TUFIDCOapp.models import *
 
 a = []
 
+
+
 @admin.register(ReleaseRequestModel)
 class ReleaseRequestAdmin(admin.ModelAdmin):
     change_form_template = 'admin/releaseRequestForm.html'
