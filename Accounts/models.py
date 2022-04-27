@@ -11,7 +11,7 @@ def purpose_choices():
 def product_id_make_choices():
     a = [(str(c), str(c)) for c in
             MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('SNo').distinct()]
-    a.append(("--------", "--------"))
+    #a.append(("--------", "--------"))
     return a
 
 class ReleaseRequestModel(models.Model):
