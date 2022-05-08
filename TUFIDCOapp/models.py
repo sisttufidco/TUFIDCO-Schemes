@@ -337,3 +337,15 @@ class ReceiptForm(models.Model):
     class Meta:
         verbose_name = 'Receipt Form'
         verbose_name_plural = 'Receipt Form'
+
+class scrollModel(models.Model):
+    message = models.TextField('Message', null=True)
+    file = models.FileField('File', blank=True, null=True)
+
+    def __str__(self):
+        return self.message
+
+    class Meta:
+        verbose_name = 'Scroll Message'
+        verbose_name_plural = 'Scroll Messages'
+

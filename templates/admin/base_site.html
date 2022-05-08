@@ -22,8 +22,9 @@
                 <div class="col-md-12">
                     <marquee class="topbar-marquee" direction="right">
                         <div class="d-flex">
-                            <p style="padding-right: 50px;">KNMT: Release format are available in webpage/Download               </p>
-                        <p>     KNMT: ULBs are requested to mention the Project ID in all the correspondence to TUFIDCO   </p>
+                          {% for i in scroll %}
+                            <a style="padding-right: 50px; color: white;" href="{{ i.file }}">{{ i.message }}               </a>
+                          {% endfor %}
                         </div>
                     </marquee>
                 </div>
