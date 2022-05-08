@@ -8,40 +8,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAbusstand_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-              <td>
-                    <form method="post" action="{% url 'DMAexport_in_bs' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -63,40 +58,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMASolidWasteMgt_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-              <td>
-                    <form method="post" action="{% url 'DMAexport_in_bs' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -118,40 +108,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAbtroad_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                <td>
-                    <form method="post" action="{% url 'DMAexport_in_bt' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -174,40 +159,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAccroad_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-              <td>
-                    <form method="post" action="{% url 'DMAexport_in_cc' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -229,40 +209,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                   <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAcrematorium_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-               <td>
-                    <form method="post" action="{% url 'DMAexport_in_cr' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -284,40 +259,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                     <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAculvert_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                <td>
-                    <form method="post" action="{% url 'DMAexport_in_cl' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -339,40 +309,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAKnowledgeCentre_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                 <td>
-                    <form method="post" action="{% url 'DMAexport_in_kc' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -394,40 +359,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAMarket_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                   <td>
-                    <form method="post" action="{% url 'DMAexport_in_mt' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -449,40 +409,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAMetalBeamCrashBarriers_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                 <td>
-                    <form method="post" action="{% url 'DMAexport_in_mbcb' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -504,40 +459,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAParks_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                   <td>
-                    <form method="post" action="{% url 'DMAexport_in_pk' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -559,40 +509,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAPaverBlock_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                 <td>
-                    <form method="post" action="{% url 'export_in_pb' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -614,40 +559,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMARetainingwall_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                 <td>
-                    <form method="post" action="{% url 'export_in_rw' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -669,40 +609,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMASWD_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                 <td>
-                    <form method="post" action="{% url 'export_in_swd' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
@@ -724,40 +659,35 @@
           <table>
               <thead>
               <tr>
-                  <th>
-                      <div class="text">
-                        <a href="#">S. No</a>
-                      </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#">Name of District</a>
-                    </div>
-                  </th>
-                  <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Progress<br>(Value of Work Done/ Project Cost)</a>
-                    </div>
-                  </th>
-                    <th>
-                    <div class="text">
-                        <a href="#" style="text-align: center">Export</a>
-                    </div>
-                  </th>
+                <th>
+                  <div class="text">
+                    <a href="#">S.No</a>
+                  </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#">Name of the ULB</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Project ID</a>
+                </div>
+              </th>
+              <th>
+                <div class="text">
+                    <a href="#" style="text-align: center">Progress</a>
+                </div>
+              </th>
               </tr>
               </thead>
               <tbody>
               {% for row in DMAWaterBodies_district %}
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td> {{ forloop.counter }} </td>
-                <td> {{ row.District }} </td>
-                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percent|floatformat:2 }} %</td>
-                 <td>
-                    <form method="post" action="{% url 'export_in_wb' %}" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <button type="submit" name="district" value="{{ row.District }}" class="btn btn-danger">Export</button>
-                  </form>
-                </td>
+                <td> {{ row.ULBName }} </td>
+                <td> {{ row.Project_ID }} </td>
+                <td style="text-align: center"> <input type="range" min="0" max="100" value="{{ row.percent }}" class="slider" id="myRange"> {{ row.percentageofworkdone|floatformat:2 }} %</td>
               </tr>
               {% endfor %}
               </tbody>
