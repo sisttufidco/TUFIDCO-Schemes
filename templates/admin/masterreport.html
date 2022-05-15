@@ -49,7 +49,7 @@
           <th class="border-grey" style="text-align:right;" >S.No</th>
           <th class="border-grey"> Name of the Sector</th>
           <th class="border-grey" style="text-align:center;" colspan="5">Financial Progress (Rs.in Cr)</th>
-          <th class="border-grey" style="text-align:center;" colspan="5">Physical Progress</th>
+          <th class="border-grey" style="text-align:center;" colspan="8">Physical Progress</th>
         </tr>
       <tr class="border-grey">
         <th class="border-grey">(C1)</th>
@@ -59,9 +59,9 @@
         <th class="border-grey" style="text-align:center;" scope="col">Amount Spend<br>(Value of<br>Work Done)<br>(C5)</th>
         <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>approved<br><br>(C6)</th>
         <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>taken<br><br>(C7)=(C8)+(C9)</th>
-        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>completed<br><br>(C8)</th>
-        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>in progress<br><br>(C9)</th>
-        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>to be<br>Commenced<br>(C10)</th>
+        <th class="border-grey" style="text-align:right;" colspan="2" scope="col">Completed<br><br>(C8)</th>
+        <th class="border-grey" style="text-align:right;" colspan="2" scope="col">In progress<br><br>(C9)</th>
+        <th class="border-grey" style="text-align:right;" colspan="3" scope="col">To be<br>Commenced<br>(C10)</th>
       </tr>
       <tr class="border-grey">
         <th class="border-grey"></th>
@@ -73,8 +73,13 @@
         <th class="border-grey"></th>
         <th class="border-grey"></th>
         <th class="border-grey"></th>
-        <th class="border-grey"></th>
-        <th class="border-grey"></th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.<br>(C8.1)</th>
+        <th class="border-grey" style="text-align:right;">Value of<br>workdone<BR>(c8.2)</th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.<br>(C9.1)</th>
+        <th class="border-grey" style="text-align:right;">Value of<br>workdone<BR>(C9.2)</th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.<br>(C10.1)</th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.of<br>TS Issued<br>(C10.2)</th>
+        <th class="border-grey" style="text-align:right;">No.of<br>work order<br>Issued<br>(C10.3)</th>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">1</td>
@@ -87,8 +92,12 @@
         <td class="border-grey" style="text-align:right;"> {{ BT_Road_Approved }}</td>
         <td class="border-grey" style="text-align:right;"> {{ BT_Road_Taken }}</td>
         <td class="border-grey" style="text-align:right;"> {{ BT_Road_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ BT_Road_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;"> {{ BT_Road_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ BT_Road_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ BT_Road_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ BT_Road_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">2</td>
@@ -98,12 +107,15 @@
         <td class="border-grey" style="text-align:right;">&#8377 {{ Bus_Stand_Total }}</td>
               <td class="border-grey" style="text-align:right;">&#8377 {{ Bus_Stand_workorder.sum }}</td>
         <td class="border-grey" style="text-align:right;">&#8377 {{ Bus_Stand_amountspend.sum }}</td>
-
         <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Bus_Stand_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Bus_Stand_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Bus_Stand_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Bus_Stand_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Bus_Stand_TobeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Bus_Stand_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">3</td>
@@ -116,8 +128,12 @@
         <td class="border-grey" style="text-align:right;">{{ CC_Road_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ CC_Road_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ CC_Road_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ CC_Road_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ CC_Road_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ CC_Road_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ CC_Road_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ CC_Road_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">4</td>
@@ -130,8 +146,12 @@
         <td class="border-grey" style="text-align:right;">{{ Community_Hall_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Community_Hall_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Community_Hall_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Community_Hall_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Community_Hall_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Community_Hall_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Community_Hall_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Community_Hall_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">5</td>
@@ -144,8 +164,12 @@
         <td class="border-grey" style="text-align:right;">{{ Crematorium_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Crematorium_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Crematorium_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Crematorium_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Crematorium_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Crematorium_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Crematorium_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Crematorium_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">6</td>
@@ -158,8 +182,12 @@
         <td class="border-grey" style="text-align:right;">{{ Culvert_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Culvert_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Culvert_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Culvert_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Culvert_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Culvert_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Culvert_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Culvert_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">7</td>
@@ -172,8 +200,12 @@
         <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Knowledge_Centre_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;" >{{ Knowledge_Centre_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Knowledge_Centre_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Knowledge_Centre_WO_Awarded }}</td>
       </tr>
         <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">8</td>
@@ -186,8 +218,12 @@
         <td class="border-grey" style="text-align:right;">{{ Market_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Market_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Market_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Market_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;" >{{ Market_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Market_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Market_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Market_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Market_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">9</td>
@@ -200,8 +236,12 @@
         <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ M_B_C_B_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ M_B_C_B_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ M_B_C_B_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ M_B_C_B_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ MBCB_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ M_B_C_B_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">10</td>
@@ -214,8 +254,12 @@
         <td class="border-grey" style="text-align:right;">{{ Parks_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Parks_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Parks_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Parks_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;" >{{ Parks_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Parks_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Parks_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Parks_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey"style="text-align:right;" >11</td>
@@ -228,8 +272,12 @@
         <td class="border-grey" style="text-align:right;">{{ Paver_Block_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Paver_Block_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Paver_Block_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Paver_Block_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;" >{{ Paver_Block_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Paver_Block_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Paver_Block_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Paver_Block_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">12</td>
@@ -242,8 +290,12 @@
         <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Retaining_wall_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Retaining_wall_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Retaining_wall_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Retaining_wall_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Retaining_wall_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Retaining_wall_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">13</td>
@@ -256,8 +308,12 @@
         <td class="border-grey" style="text-align:right;">{{ SWM_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWM_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWM_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ SWM_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWM_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ SWM_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWM_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWM_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">14</td>
@@ -270,8 +326,12 @@
         <td class="border-grey" style="text-align:right;">{{ SWD_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWD_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWD_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ SWD_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWD_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ SWD_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ SWD_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ SWD_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey {% cycle 'row1' 'row2'%}">
         <td class="border-grey" style="text-align:right;">15</td>
@@ -284,8 +344,12 @@
         <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Approved }}</td>
         <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Taken }}</td>
         <td class="border-grey" style="text-align:right;">{{ Water_Bodies_Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Water_Bodies_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Water_Bodies_inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Water_Bodies_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;">{{ Water_Bodies_ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Water_Bodies_WO_Awarded }}</td>
       </tr>
       <tr class="border-grey" style="font-weight:bold; border-top:2px solid #DDDDDD;">
         <td class="border-grey" ></td>
@@ -298,8 +362,12 @@
         <td class="border-grey" style="text-align:right;"> {{ work_approved_total }} </td>
         <td class="border-grey" style="text-align:right;"> {{ works_taken_total }} </td>
         <td class="border-grey" style="text-align:right;"> {{ works_completed_total }} </td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Overall_value_work_done_completed.sum }}</td>
         <td class="border-grey" style="text-align:right;"> {{ works_inprogress_total}} </td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Overall_value_work_done_inprogress.sum }}</td>
         <td class="border-grey" style="text-align:right;"> {{ works_ToBeCommenced }} </td>
+        <td class="border-grey" style="text-align:right;">{{ Overall_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Overall_WO_Awarded }}</td>
       </tr>
     </table>
   </div>

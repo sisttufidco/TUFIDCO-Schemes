@@ -1,5 +1,4 @@
 import functools
-
 from django.contrib import admin
 from .models import *
 import pickle

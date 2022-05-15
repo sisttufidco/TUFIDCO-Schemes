@@ -63,6 +63,9 @@
 ::-webkit-scrollbar-thumb:window-inactive {
   background: #145F8E;
 }
+a.addlink{
+    display: none;
+}
 .site-btn:hover,.site-btn:focus,.site-btn:active, 
 .site-btn:active:focus:not(:disabled):not(.disabled),
 .btn:focus, .btn:active, .btn:hover{
