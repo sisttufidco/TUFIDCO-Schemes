@@ -66,7 +66,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
     
 
     def changeform_view(self, request, obj_id, form_url, extra_context=None):
-    
+        
         municipality = MasterSanctionForm.objects.values_list('AgencyName', flat=True).order_by('AgencyName').filter(AgencyType__AgencyType='Municipality')
         townPanchayat = MasterSanctionForm.objects.values_list('AgencyName', flat=True).order_by('AgencyName').filter(AgencyType__AgencyType='Town Panchayat')
         corporation = MasterSanctionForm.objects.values_list('AgencyName', flat=True).order_by('AgencyName').filter(AgencyType__AgencyType='Corporation')
@@ -743,11 +743,13 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
 
 
         a = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST.get('AgencyType')).filter(AgencyName=request.POST.get('AgencyName')).filter(Sector=request.POST.get('Sector'))
-        print(a)
-      
+
+        project_ids = MasterSanctionForm.objects.values('AgencyName', 'Sector', 'Project_ID').all()
+        print(project_ids)
 
 
         extra_context = {
+            'project_ids':project_ids,
             'ZaminUthukulam':ZaminUthukulam,
             'W_Pudupatti':W_Pudupatti,
             'Watrap':Watrap,

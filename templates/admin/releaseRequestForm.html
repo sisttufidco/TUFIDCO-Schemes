@@ -805,14 +805,43 @@
 
  var dropdown = document.getElementById("id_Project_ID");
 
-for (var i = 0; i < myArray.length; ++i) {
-    dropdown[dropdown.length] = new Option(myArray[i], myArray[i]);
-}
+var agencyName = $("#id_AgencyName option:selected").html();
+        console.log("hello");
+        var sector = $("#id_Sector option:selected").html();
+        console.log(sector);
+        console.log(agencyName);
+        
 
 
 </script>
 
 -->
+<script>
+    
+    $('#id_Project_ID').html(''); 
+    const myArray2 = [{% for i in project_ids %} ["{{ i.AgencyName }}", "{{ i.Sector }}", "{{ i.Project_ID }}"], {%endfor%}];
+    $("#id_purpose").change(abc);
+    function abc(){
+        const myArray = new Array("--------",);
+        var dropdown = document.getElementById("id_Project_ID");
+        var agencyName = $("#id_AgencyName").val();
+        var sector = $("#id_Sector").val();
+        var purpose = $("#id_purpose").val();
+        
+       
+        for (var i=0; i<myArray2.length; ++i){
+            if((myArray2[i][0]==agencyName) && (myArray2[i][1]==sector) && (purpose == "Project")){
+                myArray.push(myArray2[i][2]);
+            }
+        }
+
+        for (var i = 0; i < myArray.length; ++i) {
+            dropdown[dropdown.length] = new Option(myArray[i], myArray[i]);
+        }
+        
+    }
+    
+</script>
 
 {% endblock %}
 
