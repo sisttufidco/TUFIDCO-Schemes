@@ -83,7 +83,7 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
                 'Project_ID',
                 'Sector',
                 'AgencyType__AgencyType'
-            ).order_by('AgencyName__AgencyName').exclude(Sector='Solid Waste Mgt.').filter(AgencyType__AgencyType='Town Panchayat').filter(
+            ).order_by('AgencyName__AgencyName').exclude(Sector='Solid Waste Mgt.').filter(
                 ~Q(Project_ID__in=agencyProgresslist)).filter(Scheme__Scheme='KNMT')
         )
         return response
