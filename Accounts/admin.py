@@ -9,6 +9,13 @@ import time
 @admin.register(ReleaseRequestModel)
 class ReleaseRequestAdmin(admin.ModelAdmin):
     change_form_template = 'admin/releaseRequestForm.html'
+    readonly_fields = [
+        'bank_name_ulb',
+        'bank_branch_name',
+        'bank_branch',
+        'account_number',
+        'ifsc_code'
+    ]
     fieldsets = (
         (None, {
             'fields': (('Scheme', 'AgencyType', 'AgencyName'), ('Sector', 'purpose', 'Project_ID'))
