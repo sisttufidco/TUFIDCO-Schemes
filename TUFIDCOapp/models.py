@@ -226,11 +226,7 @@ class MasterSanctionForm(models.Model):
         return self.Project_ID
 
 
-class Report(MasterSanctionForm):
-    class Meta:
-        proxy = True
-        verbose_name = 'GO Wise Report'
-        verbose_name_plural = 'GO Wise Reports'
+
 
 
 # Agency Form
@@ -239,29 +235,10 @@ class Report(MasterSanctionForm):
 
 
 
-class SectorMasterReport(MasterSanctionForm):
-    class Meta:
-        proxy = True
-        verbose_name = "Sector wise Report"
-        verbose_name_plural = "Sector wise Reports"
 
 
-class CTPDistrictWiseReport(MasterSanctionForm):
-    class Meta:
-        proxy = True
-        verbose_name = 'District Wise Report (CTP)'
-        verbose_name_plural = 'District Wise Report (CTP)'
 
 
-class FundReleaseDetails(models.Model):
-    date_of_release = models.DateField('Date of Release', null=True)
-    amount = models.CharField('Amount', max_length=20, null=True)
-    instruction_report_by_SQM = models.FileField(upload_to='SQMreport/', null=True)
-    masterSanctionForm = models.ForeignKey(MasterSanctionForm, on_delete=models.CASCADE, null=True)
-
-    class Meta:
-        verbose_name = "Fund Release Detail"
-        verbose_name_plural = "pytd Release Details"
 
 
 class ULBReleaseRequest(models.Model):
@@ -324,19 +301,7 @@ class SRPMasterSanctionForm(models.Model):
         verbose_name_plural = 'SRP Master Sanction Form'
 
 
-class ReceiptForm(models.Model):
-    Scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
-    go_ref = models.CharField('GO ref.', max_length=30, null=True)
-    go_date = models.DateField('GO Date', null=True)
-    purpose = models.TextField('Purpose', null=True, help_text='Scheme/Management Fee')
-    amount = models.DecimalField('Amount', max_digits=6, decimal_places=2, null=True)
 
-    def __str__(self):
-        return '{} - {} - {}'.format(self.Scheme, self.go_ref, self.go_ref, self.go_date)
-
-    class Meta:
-        verbose_name = 'Receipt Form'
-        verbose_name_plural = 'Receipt Form'
 
 class scrollModel(models.Model):
     message = models.TextField('Message', null=True)

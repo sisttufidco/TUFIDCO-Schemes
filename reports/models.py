@@ -5,32 +5,7 @@ from TUFIDCOapp.models import *
 
 # Create your models here.
 
-class ULBProgressIncompleted(AgencyProgressModel):
-    class Meta:
-        proxy = True
-        verbose_name = 'Portal Progress Detail'
-        verbose_name_plural = 'Portal Progress Details'
 
-
-class ULBSanctionReportError(AgencySanctionModel):
-    class Meta:
-        proxy = True
-        verbose_name = 'Portal Sanction Detail'
-        verbose_name_plural = 'Portal Sanction Details'
-
-
-class ProgressNotEntered(MasterSanctionForm):
-    class Meta:
-        proxy = True
-        verbose_name = 'Progress Detail Not Entered'
-        verbose_name_plural = 'Progress Details Not Entered'
-
-
-class SanctionNotEntered(MasterSanctionForm):
-    class Meta:
-        proxy = True
-        verbose_name = 'Sanction Detail Not Entered'
-        verbose_name_plural = 'Sanction Details Not Entered'
 
 
 class SRPAbstract(SRPMasterSanctionForm):
@@ -40,6 +15,17 @@ class SRPAbstract(SRPMasterSanctionForm):
         verbose_name_plural = 'SRP Abstract'
 
 
+class SectorMasterReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "Sector wise Report"
+        verbose_name_plural = "Sector wise Reports"
+
+class Report(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = 'GO Wise Report'
+        verbose_name_plural = 'GO Wise Reports'
 
 class PhysicalandFinancialReport(MasterSanctionForm):
     class Meta:

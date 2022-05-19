@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TUFIDCOapp.apps.TufidcoappConfig',
+    'Errorreports.apps.ErrorreportsConfig',
     'reports.apps.ReportsConfig',
     'DMA.apps.DmaConfig',
     'CTP.apps.CtpConfig',
