@@ -841,6 +841,8 @@ var agencyName = $("#id_AgencyName option:selected").html();
         }
         
     }
+    var dropdown = document.getElementById("id_Project_ID");
+    dropdown[dropdown.length] = new Option({% for i in p%}"{{i.project}}"{%endfor%}, {% for i in p%}"{{i.project}}"{%endfor%});
     
 </script>
 
