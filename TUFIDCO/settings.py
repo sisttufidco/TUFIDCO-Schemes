@@ -166,15 +166,15 @@ LOGIN_REDIRECT_URL = '/admin/Dashboard/dashboard/'
 LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = os.getenv('MAPBOX_KEY')
-''''''
+
 SECURE_HSTS_SECONDS = 12121212
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-
-
+'''
+'''
 CSRF_TRUSTED_ORIGINS = ['https://www.tufidcoschemes.co.in', 'https://tufidcoschemes.co.in', 'http://127.0.0.1']
 
 

@@ -40,9 +40,14 @@ class ReleaseRequestModel(models.Model):
     release5Date = models.DateField('Release Date 5', blank=True, null=True)
     release5Amount = models.CharField('Release Amount 5', blank=True, max_length=10, null=True)
     sqm_report5 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
+    project = models.CharField('P_ID', max_length=50, null=True)
 
     def __str__(self):
         return '{} - {}'.format(str(self.AgencyName ), str(self.Project_ID))
+
+    def save(self, **kwargs):
+        self.project = self.Project_ID
+        super(ReleaseRequestModel, self).save(**kwargs)
 
     class Meta:
         verbose_name = 'Ledger: Release to ULBs'
