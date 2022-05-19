@@ -745,8 +745,8 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         a = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST.get('AgencyType')).filter(AgencyName=request.POST.get('AgencyName')).filter(Sector=request.POST.get('Sector'))
 
         project_ids = MasterSanctionForm.objects.values('AgencyName', 'Sector', 'Project_ID').all()
-        p = ReleaseRequestModel.objects.all()
-
+        p = ReleaseRequestModel.objects.filter(id=obj_id)
+        print(p)
 
         extra_context = {
             'p':p,
