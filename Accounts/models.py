@@ -52,3 +52,18 @@ class ReleaseRequestModel(models.Model):
     class Meta:
         verbose_name = 'Ledger: Release to ULBs'
         verbose_name_plural = 'Ledger: Release to ULBs'
+
+
+class ReceiptForm(models.Model):
+    Scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE, null=True)
+    go_ref = models.CharField('GO ref.', max_length=30, null=True)
+    go_date = models.DateField('GO Date', null=True)
+    purpose = models.TextField('Purpose', null=True, help_text='Scheme/Management Fee')
+    amount = models.DecimalField('Amount', max_digits=6, decimal_places=2, null=True)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.Scheme, self.go_ref, self.go_ref, self.go_date)
+
+    class Meta:
+        verbose_name = 'Receipt Form'
+        verbose_name_plural = 'Receipt Form'

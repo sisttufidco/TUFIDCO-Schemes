@@ -5,6 +5,17 @@ from TUFIDCOapp.models import *
 # Register your models here.
 import time
 
+class ReceiptFormAdmin(admin.ModelAdmin):
+    list_display = [
+        'Scheme',
+        'go_ref',
+        'go_date',
+        'purpose',
+        'amount'
+    ]
+
+
+admin.site.register(ReceiptForm, ReceiptFormAdmin)
 
 @admin.register(ReleaseRequestModel)
 class ReleaseRequestAdmin(admin.ModelAdmin):
