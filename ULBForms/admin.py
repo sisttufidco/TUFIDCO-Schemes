@@ -26,7 +26,7 @@ class ProjectDetailsAdmin(admin.ModelAdmin):
             return response
 
         response.context_data['report'] = list(
-            qs.values('Sector', 'Project_ID', 'ProjectName').order_by('Sector').filter(
+            qs.values('Sector', 'Project_ID', 'ProjectName', 'ApprovedProjectCost').order_by('Sector').filter(
                 Scheme__Scheme='Singara Chennai 2.0'))
         return response
 
