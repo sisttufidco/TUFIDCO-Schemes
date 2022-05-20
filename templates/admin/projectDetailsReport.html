@@ -91,6 +91,11 @@
             <a href="#">Project Name</a>
           </div>
         </th>
+        <th>
+          <div class="text">
+            <a href="#">Approved Project Cost</a>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -100,6 +105,7 @@
         <td> {{ row.Sector }} </td>
         <td > {{ row.Project_ID}} </td>
         <td > {{ row.ProjectName }} </td>
+        <td > {{ row.ApprovedProjectCost }} </td>
       </tr>
       {% endfor %}
     </tbody>
