@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from TUFIDCOapp.models import *
 # Create your models here.
@@ -67,3 +68,16 @@ class ReceiptForm(models.Model):
     class Meta:
         verbose_name = 'Receipt Form'
         verbose_name_plural = 'Receipt Form'
+
+class MonthWiseReport(ReleaseRequestModel):
+    class Meta:
+        proxy=True
+        verbose_name = 'Month Wise Report'
+        verbose_name_plural = 'Month Wise Report'
+
+class SectorWiseReport(ReleaseRequestModel):
+    class Meta:
+        proxy=True
+        verbose_name = "Sector Wise Report"
+        verbose_name_plural = "Sector Wise Report"
+        
