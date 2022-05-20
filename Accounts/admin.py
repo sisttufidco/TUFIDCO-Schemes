@@ -21,6 +21,17 @@ admin.site.register(ReceiptForm, ReceiptFormAdmin)
 @admin.register(ReleaseRequestModel)
 class ReleaseRequestAdmin(admin.ModelAdmin):
     change_form_template = 'admin/releaseRequestForm.html'
+    list_display = [
+        'AgencyName',
+        'Scheme',
+        'Sector',
+        'Project_ID'
+    ]
+    list_filter= [
+        'AgencyType',
+        'Scheme',
+        'purpose',
+    ]
     readonly_fields = [
         'bank_name_ulb',
         'bank_branch_name',
