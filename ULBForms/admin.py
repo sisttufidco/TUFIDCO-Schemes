@@ -169,10 +169,10 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = AgencyProgressResource
     change_form_template = 'admin/ulbprogress.html'
     form = AgencyProgressForm
-    fields = (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'), ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
+    fields = (('total_release'),('ApprovedProjectCost', 'SchemeShare', 'ULBShare'), ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
               'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
               'upload2')
-    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare')
+    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare', 'total_release')
     list_filter = [
         'ULBType',
         'status',
@@ -217,6 +217,8 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         Form = super().get_form(request, obj=None, **kwargs)
         return functools.partial(Form, request)
+
+    
 
 
 admin.site.register(AgencyProgressModel, AgencyProgressAdmin)
