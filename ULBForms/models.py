@@ -1,3 +1,5 @@
+from operator import mod
+from re import A
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.datetime_safe import datetime
@@ -6,7 +8,7 @@ from TUFIDCOapp.models import Scheme, MasterSanctionForm, AgencyType, District
 from mapbox_location_field.models import LocationField
 from mapbox_location_field.admin import MapAdmin
 from django.contrib import admin
-
+from Accounts.models import ReleaseRequestModel
 
 # Create your models here.
 
@@ -128,6 +130,7 @@ class AgencyProgressModel(models.Model):
                                       null=True)
     ULBShare = models.DecimalField('ULB Share', blank=True, decimal_places=2, max_digits=10,
                                    null=True)
+    total_release = models.CharField('Total Release', max_length=30, blank=True, null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)
@@ -145,6 +148,30 @@ class AgencyProgressModel(models.Model):
             Project_ID=self.Project_ID)
         self.ULBShare = MasterSanctionForm.objects.values_list('ULBShare', flat=True).filter(
             Project_ID=self.Project_ID)
+        try:
+            amount1 = ReleaseRequestModel.objects.values_list('release1Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+        except IndexError:
+            amount1 = 0.0
+        
+        try:
+            amount2 = ReleaseRequestModel.objects.values_list('release2Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+        except IndexError:
+            amount2 = 0.0
+        try:
+            amount3 = ReleaseRequestModel.objects.values_list('release3Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+        except IndexError:
+            amount3=0.0
+        try:
+            amount4 = ReleaseRequestModel.objects.values_list('release4Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+        except IndexError:
+            amount4=0.0
+        try:
+            amount5 = ReleaseRequestModel.objects.values_list('release5Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+        except IndexError:
+            amount5=0.0
+
+        self.total_release = float(amount1)+float(amount2)+float(amount3)+float(amount4)+float(amount5)
+
 
         if self.valueofworkdone is not None:
             self.percentageofworkdone = (
