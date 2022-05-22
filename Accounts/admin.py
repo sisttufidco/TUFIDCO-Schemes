@@ -1449,6 +1449,7 @@ class MonthWiseReportAdmin(admin.ModelAdmin):
             return response
         form_month = 0
         m = None
+        s = None
         get_month = {
             "--------":0,
             "January":1,
@@ -1464,16 +1465,22 @@ class MonthWiseReportAdmin(admin.ModelAdmin):
             "November":11,
             "December":12
         }
+        get_Scheme = {
+            "--------":0,
+            "KNMT":1,
+            "Singara Chennai 2.0":2,
+        }
         if request.method=="POST":
             form = MonthForm(request.POST or None)
             if form.is_valid():
                 form_month = get_month[form.cleaned_data['month']]
                 m = form.cleaned_data['month']
-        data1 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release1Amount', 'release1Date').filter(release1Date__month=form_month)
-        data2 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release2Amount', 'release2Date').filter(release2Date__month=form_month)
-        data3 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release3Amount', 'release3Date').filter(release3Date__month=form_month)
-        data4 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release4Amount', 'release4Date').filter(release4Date__month=form_month)
-        data5 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release5Amount', 'release5Date').filter(release5Date__month=form_month)
+                s = get_Scheme[form.cleaned_data['Scheme']]
+        data1 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release1Amount', 'release1Date').filter(release1Date__month=form_month).filter(Scheme=s)
+        data2 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release2Amount', 'release2Date').filter(release2Date__month=form_month).filter(Scheme=s)
+        data3 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release3Amount', 'release3Date').filter(release3Date__month=form_month).filter(Scheme=s)
+        data4 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release4Amount', 'release4Date').filter(release4Date__month=form_month).filter(Scheme=s)
+        data5 = ReleaseRequestModel.objects.values('AgencyName__AgencyName', 'Sector', 'Project_ID', 'release5Amount', 'release5Date').filter(release5Date__month=form_month).filter(Scheme=s)
         extra_context = {
             'form_month': m,
             'data1':data1,
@@ -1490,7 +1497,9 @@ class MonthWiseReportAdmin(admin.ModelAdmin):
 class SectorWiseReportAdmin(admin.ModelAdmin):
     change_list_template = 'admin/accounts/sectorwisereport.html'
     list_filter = [
-        'Sector'
+        'Scheme',
+        'AgencyType',
+        'Sector',
     ]
   
     def changelist_view(self, request, extra_context=None):
