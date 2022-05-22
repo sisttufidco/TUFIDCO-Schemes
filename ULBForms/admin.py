@@ -169,10 +169,9 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = AgencyProgressResource
     change_form_template = 'admin/ulbprogress.html'
     form = AgencyProgressForm
-    fields = (('total_release'),('ApprovedProjectCost', 'SchemeShare', 'ULBShare'), ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
-              'PhysicalProgress', 'status', 'nc_status', 'upload1', 'Expenditure', 'FundRelease', 'valueofworkdone',
-              'upload2')
-    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare', 'total_release')
+    fields = (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'), ('total_release'),('Scheme', 'Sector', 'Project_ID'), 'ProjectName', ('Latitude', 'Longitude'), 'location',
+              'PhysicalProgress', 'status','nc_choices', 'nc_status', 'upload1',  'valueofworkdone','FundRelease','Expenditure', 'upload2')
+    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare', 'total_release','ProjectName')
     list_filter = [
         'ULBType',
         'status',
@@ -238,7 +237,7 @@ class AgencySanctionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     fields = (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'),
         ('Scheme', 'Sector', 'Project_ID'), 'ProjectName', 'ts_awarded', 'tsrefno', 'tsdate', 'tr_awarded', 'tawddate',
         'wd_awarded', 'wdawddate', 'work_awarded_amount2', 'work_awarded_amount1')
-    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare')
+    readonly_fields = ('ApprovedProjectCost', 'SchemeShare', 'ULBShare', 'ProjectName')
     list_display = [
         'Project_ID',
         'Sector',

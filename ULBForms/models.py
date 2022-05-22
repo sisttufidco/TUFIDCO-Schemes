@@ -80,6 +80,13 @@ def status_choices():
             ('Completed', 'Completed'),
             ('Not Commenced', 'Not Commenced')]
 
+def not_commenced_choices():
+    return [
+        ('TS to be obtained', 'TS to be obtained'),
+        ('Tender Stage', 'Tender Stage'),
+        ('Work Order to be Issued', 'Work Order to be Issued'),
+        ('Others', 'Others')
+    ]
 
 class AgencyProgressModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -104,11 +111,13 @@ class AgencyProgressModel(models.Model):
     ProjectName = models.TextField("Project Name", blank=True, null=True)
     PhysicalProgress = models.TextField("Physical Progress", blank=True, null=True)
     status = models.CharField(max_length=20, choices=status_choices(), default='Not Commenced', blank=False, null=True,
-                              help_text='Selecting anyone of the status field is mandatory.')
-    nc_status = models.TextField("Reason for non commencement", null=True, blank=True)
+                              help_text='Select/ Tick anyone of the above.')
+    
+    nc_status = models.TextField("If Others Specify", null=True, blank=True)
+    nc_choices  = models.CharField('If To be Commenced',max_length=30, choices=not_commenced_choices(), null=True, help_text="Select/Tick any one of the about if status is TO BE COMMENCED")
     Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True,
                                       help_text='Payment made to Contractor')
-    FundRelease = models.DecimalField("Fund Release (in lakhs) (Recieved from TUFIDCO)", max_digits=5, decimal_places=2,
+    FundRelease = models.DecimalField("Fund Release by TUFIDCO (in lakhs)", max_digits=5, decimal_places=2,
                                       blank=True, null=True,
                                       help_text="Agency has to send a hard copy of the release request along with "
                                                 "photos,etc in the prescribed format")
@@ -121,16 +130,16 @@ class AgencyProgressModel(models.Model):
                                blank=True)
     District = models.CharField('District', max_length=50, blank=True, null=True)
     ULBName = models.CharField('ULB Name', max_length=50, blank=True, null=True)
-    ApprovedProjectCost = models.DecimalField("Approved Project Cost", blank=True, decimal_places=2, max_digits=10,
+    ApprovedProjectCost = models.DecimalField("Approved Project Cost (in lakhs)", blank=True, decimal_places=2, max_digits=10,
                                               null=True)
     upload2 = models.FileField("upload", upload_to="agencysanction/", blank=True, null=True)
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=50, blank=True, null=True)
-    SchemeShare = models.DecimalField('Scheme Share', blank=True, decimal_places=2, max_digits=10,
+    SchemeShare = models.DecimalField('Scheme Share (in lakhs)', blank=True, decimal_places=2, max_digits=10,
                                       null=True)
-    ULBShare = models.DecimalField('ULB Share', blank=True, decimal_places=2, max_digits=10,
+    ULBShare = models.DecimalField('ULB Share (in lakhs)', blank=True, decimal_places=2, max_digits=10,
                                    null=True)
-    total_release = models.CharField('Total Release', max_length=30, blank=True, null=True)
+    total_release = models.CharField('Total Release (in lakhs)', max_length=30, blank=True, null=True)
 
     def save(self, **kwargs):
         self.location = "%s, %s" % (self.Longitude, self.Latitude)

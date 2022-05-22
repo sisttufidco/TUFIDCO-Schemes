@@ -10,6 +10,7 @@ class AgencyProgressForm(forms.ModelForm):
         fields = ('Sector', 'status')
         widgets = {
             'status': forms.RadioSelect(),
+            'nc_choices': forms.RadioSelect(),
         }
 
     def __init__(self, request, *args, **kwargs):
