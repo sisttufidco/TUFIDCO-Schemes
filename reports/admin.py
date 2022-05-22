@@ -3,6 +3,7 @@ from .models import *
 from TUFIDCOapp.models import *
 from django.db.models import Count, Sum, Avg, Func
 from django.db.models import Q
+from ULBForms.models import AgencyProgressModel
 
 
 # Register your models here.
@@ -47,6 +48,28 @@ class ReportAdmin(admin.ModelAdmin):
         )
         return response
 
+@admin.register(ProgressNotCommenced)
+class ProgressNotCommenced(admin.ModelAdmin):
+    change_list_template = "admin/reports/not_commenced.html"
+
+    list_filter = [
+        'Scheme',
+        'ULBType'
+    ]
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+        response.context_data['data'] = list(qs.values('ULBType', 'ULBName', 'Sector', 'Project_ID', 'nc_choices').filter(status="Not Commenced"))
+        response.context_data['heading'] = list(
+            qs.values('Scheme', 'ULBType').distinct()
+        )
+
+        return response
 
 @admin.register(SectorMasterReport)
 class SectorReportAdmin(admin.ModelAdmin):

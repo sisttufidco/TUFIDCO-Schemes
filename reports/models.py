@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from ULBForms.models import AgencyProgressModel, AgencySanctionModel
 from TUFIDCOapp.models import *
@@ -32,3 +33,9 @@ class PhysicalandFinancialReport(MasterSanctionForm):
         proxy = True
         verbose_name = "KNMT Physical & Financial Progress Report"
         verbose_name_plural = "KNMT Physical & Financial Progress Reports"
+
+class ProgressNotCommenced(AgencyProgressModel):
+    class Meta:
+        proxy = True
+        verbose_name = "Progress Not Commenced"
+        verbose_name_plural = "Progress Not Commenced"

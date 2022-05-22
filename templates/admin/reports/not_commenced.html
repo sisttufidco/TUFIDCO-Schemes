@@ -1,6 +1,6 @@
 {% extends 'admin/change_list.html' %}
 {% load i18n admin_urls static admin_list %}
-{% block content_title %}<h1>Sector Wise Report</h1>{% endblock %}
+{% block content_title %}<h1>Progress Not Commenced</h1>{% endblock %}
 {% block extrastyle %}
   {{ block.super }}
   {% load  static %}
@@ -59,17 +59,29 @@
 
 {% block result_list %}
 
-
-  <div class="results" id="results" style="margin-top:30px; ">
-
-
+  <div class="results" id="results">
+     
     <table>
-      <caption  class="report-h4" id="heading">Release Report - Sector Wise</caption> 
+   
+      <caption  class="report-h4" id="heading">
+        Progress Not Commenced
+      </caption>
+    
     <thead>
       <tr>
         <th>
           <div class="text">
-            <a href="#">ULB</a>
+            <a href="#">S. No</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">ULB Type</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">ULB Name</a>
           </div>
         </th>
         <th>
@@ -82,66 +94,26 @@
             <a href="#">Project ID</a>
           </div>
         </th>
-        <th style="text-align: right">
-          <div class="text">
-            <a href="#">Amount</a>
-          </div>
-        </th>
         <th>
-          <div class="text">
-            <a href="#">Date</a>
+          <div class="text">  
+            <a href="#"> Reason</a>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      {% for row in data1 %}
+      {% for row in data %}
       <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.AgencyName__AgencyName }} </td>
+        <td> {{ forloop.counter }} </td>
+        <td> {{ row.ULBType }} </td>
+        <td> {{ row.ULBName}} </td>
         <td> {{ row.Sector }} </td>
-        <td> {{ row.Project_ID}} </td>
-        <td style="text-align: right"> {{ row.release1Amount }} </td>
-        <td> {{ row.release1Date }} </td>
-      </tr>
-      {% endfor %}
-      {% for row in data2 %}
-      <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.AgencyName__AgencyName }} </td>
-        <td> {{ row.Sector }} </td>
-        <td > {{ row.Project_ID}} </td>
-        <td style="text-align: right"> {{ row.release2Amount }} </td>
-        <td > {{ row.release2Date }} </td>
-      </tr>
-      {% endfor %}
-      {% for row in data3 %}
-      <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.AgencyName__AgencyName }} </td>
-        <td> {{ row.Sector }} </td>
-        <td > {{ row.Project_ID}} </td>
-        <td style="text-align: right"> {{ row.release3Amount }} </td>
-        <td> {{ row.release3Date }} </td>
-      </tr>
-      {% endfor %}
-      {% for row in data4 %}
-      <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.AgencyName__AgencyName }} </td>
-        <td> {{ row.Sector }} </td>
-        <td> {{ row.Project_ID}} </td>
-        <td style="text-align: right"> {{ row.release4Amount }} </td>
-        <td > {{ row.release4Date }} </td>
-      </tr>
-      {% endfor %}
-      {% for row in data5 %}
-      <tr class="{% cycle 'row1' 'row2' %}">
-        <td> {{ row.AgencyName__AgencyName }} </td>
-        <td> {{ row.Sector }} </td>
-        <td > {{ row.Project_ID}} </td>
-        <td style="text-align: right"> {{ row.release5Amount }} </td>
-        <td > {{ row.release5Date }} </td>
+        <td> {{ row.Project_ID }} </td>
+        <td> {{ row.Reason }} </td>
       </tr>
       {% endfor %}
     </tbody>
-   
+
   </table>
 </div>
 <!-- ... -->
