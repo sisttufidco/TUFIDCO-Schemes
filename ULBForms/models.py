@@ -114,7 +114,7 @@ class AgencyProgressModel(models.Model):
                               help_text='Select/ Tick anyone of the above.')
     
     nc_status = models.TextField("If Others Specify", null=True, blank=True)
-    nc_choices  = models.CharField('If To be Commenced',max_length=30, choices=not_commenced_choices(), null=True, help_text="Select/Tick any one of the about if status is TO BE COMMENCED")
+    nc_choices  = models.CharField('If To be Commenced',max_length=30, blank=True, choices=not_commenced_choices(), null=True, help_text="Select/Tick any one of the about if status is TO BE COMMENCED")
     Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True,
                                       help_text='Payment made to Contractor')
     FundRelease = models.DecimalField("Fund Release by TUFIDCO (in lakhs)", max_digits=5, decimal_places=2,
