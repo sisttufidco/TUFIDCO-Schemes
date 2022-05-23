@@ -9,7 +9,7 @@ class DistrictWiseReport(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "District Wise Report"
-        verbose_name_plural = "District Wise Reports"
+        verbose_name_plural = "District Wise Report"
 
 
 class MunicipalityDetails(models.Model):

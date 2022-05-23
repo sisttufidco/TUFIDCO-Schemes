@@ -1,6 +1,6 @@
 {% extends 'admin/change_list.html' %}
 {% load i18n admin_urls static admin_list %}
-{% block content_title %}<h1>DMA District Wise Report</h1>{% endblock %}
+{% block content_title %}<h1>CTP District Wise Report</h1>{% endblock %}
 {% block extrastyle %}
   {{ block.super }}
   {% load  static %}
@@ -63,7 +63,7 @@
 
   <div class="results" id="results">
       <table>
-            <caption>KNMT- DMA District Wise Project Sanctioned Details</caption>
+            <caption>KNMT- CTP District Wise Project Sanctioned Details</caption>
           <thead>
             <col>
                 <colgroup span="2"></colgroup>
@@ -90,30 +90,40 @@
                 <tbody>
                     {% for row in final_data%}
                     <tr class="{% cycle 'row1' 'row2' %}">
-                    <td class="border-grey" style="text-align:right;" > {{forloop.counter}} </td>
-                    <td class="border-grey"> {{ row.district }} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.BTRoadNo }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.BTRoadCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.CCRoadNo }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.CCRoadCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.CrematoriumNo }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.CrematoriumCost.project_cost}}</td>
-                    <td class="border-grey" style="text-align: right"> {{ row.CulvertNo }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.CulvertCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.KC_No }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.KC_Cost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.MarketNo }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.MarketCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.ParksNo }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.ParksCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.PBno }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.PBCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.SWDno }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.SWDCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.WBno }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.WBCost.project_cost}} </td>
-                    <td class="border-grey" style="text-align: right"> {{ row.totalno }} </td>
-                    <td class="border-grey" style="text-align: right">&#8377; {{ row.totalcost.project_cost }} </td>
+                        <td class="border-grey" style="text-align:right;" > {{forloop.counter}} </td>
+                        <td class="border-grey"> {{ row.district }} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.BTRoadNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.BTRoadCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.BusStandNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.BusStandCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.CCRoadNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.CCRoadCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.ClNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.ClCost.project_cost}} </td>  
+                        <td class="border-grey" style="text-align: right"> {{ row.CrematoriumNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.CrematoriumCost.project_cost}}</td>
+                        <td class="border-grey" style="text-align: right"> {{ row.CulvertNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.CulvertCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.KC_No }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.KC_Cost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.MarketNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.MarketCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.mbcbNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.mbcbCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.ParksNo }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.ParksCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.PBno }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.PBCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.RWno }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.RWCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.SWMno }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.SWMCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.SWDno }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.SWDCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.WBno }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.WBCost.project_cost}} </td>
+                        <td class="border-grey" style="text-align: right"> {{ row.totalno }} </td>
+                        <td class="border-grey" style="text-align: right">&#8377; {{ row.totalcost.project_cost }} </td>
                 </tr>
                 {%endfor%}
               
@@ -122,8 +132,12 @@
     <td class="border-grey" style="text-align: right"> Total </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_BT_RoadDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_BT_RoadDMA_Cost.project_cost}} </td>
+    <td class="border-grey" style="text-align: right"> {{ DMABusStandNo }} </td>
+    <td class="border-grey" style="text-align: right">&#8377; {{ DMABusStandCost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_CC_RoadDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_CC_RoadDMA_Cost.project_cost}} </td>
+    <td class="border-grey" style="text-align: right"> {{ DMAClNo }} </td>
+    <td class="border-grey" style="text-align: right">&#8377; {{ DMAClCost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_CrematoriumDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_CrematoriumDMA_Cost.project_cost}}</td>
     <td class="border-grey" style="text-align: right"> {{ DMA_CulvertDMA_No }} </td>
@@ -132,10 +146,16 @@
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_KnowledgeDMA_Centre_Cost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_MarketDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_MarketDMA_Cost.project_cost}} </td>
+    <td class="border-grey" style="text-align: right"> {{ DMAmbcbNo }} </td>
+    <td class="border-grey" style="text-align: right">&#8377; {{ DMAmbcbCost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_ParksDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_ParksDMA_Cost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_PaverBlockDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_PaverBlockDMA_Cost.project_cost}} </td>
+    <td class="border-grey" style="text-align: right"> {{ DMARWno }} </td>
+    <td class="border-grey" style="text-align: right">&#8377; {{ DMARWCost.project_cost}} </td>
+    <td class="border-grey" style="text-align: right"> {{ DMASWMno }} </td>
+    <td class="border-grey" style="text-align: right">&#8377; {{ DMASWMCost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_SWDDMA_No }} </td>
     <td class="border-grey" style="text-align: right">&#8377; {{ DMA_SWDDMA_Cost.project_cost}} </td>
     <td class="border-grey" style="text-align: right"> {{ DMA_WBDMA_No }} </td>

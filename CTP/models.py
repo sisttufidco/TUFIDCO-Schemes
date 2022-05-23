@@ -30,3 +30,9 @@ class MasterReport(MasterSanctionForm):
         proxy = True
         verbose_name = "KNMT Physical & Financial Progress Report"
         verbose_name_plural = "KNMT Physical & Financial Progress Reports"
+
+class CTPDistrictWiseReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "District Wise Report"
+        verbose_name_plural = "District Wise Report"

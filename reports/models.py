@@ -39,3 +39,9 @@ class ProgressNotCommenced(AgencyProgressModel):
         proxy = True
         verbose_name = "Progress Not Commenced"
         verbose_name_plural = "Progress Not Commenced"
+
+class DistrictWiseReport(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "District Wise Report"
+        verbose_name_plural = "District Wise Report"
