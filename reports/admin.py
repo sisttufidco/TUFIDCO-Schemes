@@ -55,7 +55,8 @@ class ProgressNotCommenced(admin.ModelAdmin):
 
     list_filter = [
         'Scheme',
-        'ULBType'
+        'ULBType',
+        'nc_choices'
     ]
 
     def changelist_view(self, request, extra_context=None):
