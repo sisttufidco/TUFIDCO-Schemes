@@ -3,14 +3,14 @@ from TUFIDCOapp.models import *
 
 
 # Create your models here.
-class Dashboard(MasterSanctionForm):
+class KNMTDashboard(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "KNMT"
         verbose_name_plural = "KNMT"
 
 
-class DashboardSingara(MasterSanctionForm):
+class SingaraChennaiDashboard(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "Singara Chennai 2.0"

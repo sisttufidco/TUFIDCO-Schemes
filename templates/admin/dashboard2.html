@@ -123,7 +123,22 @@
         </tr>
         </thead>
        <tbody>
-       {% include 'includes/singaraChennaiProgress.html' %}
+         {% for row in progress_report %}
+        <tr class="border-grey {% cycle 'row1' 'row2'%}">
+          <td class="border-grey" style="text-align:center">{{ forloop.counter }}</td>
+           <td class="border-grey" style="text-align:left">{{ row.Sector }}</td>
+          <td class="border-grey" style="text-align:right">{{ row.total_project_sector }}</td>
+          <td class="border-grey" style="text-align:right">&#8377; {{ row.total_approved_project_cost_sector.project_cost }}</td>
+          <td class="border-grey" style="text-align:right">{{ row.completed_count }}</td>
+          <td class="border-grey" style="text-align:right">&#8377; {{ row.completed_approved_project_cost.project_cost }}</td>
+      
+           <td class="border-grey" style="text-align:right; color: #0a53be; font-weight: bold;"><a type="button" data-toggle="modal" data-target="#{{row.Sector|cut:" "}}">{{ row.inprogress_count }}</a></td>
+           <td class="border-grey" style="text-align:right">&#8377; {{ row.inprogress_approved_project_cost.project_cost }}</td>
+      
+          <td class="border-grey" style="text-align:right; color: #0a53be; font-weight: bold;"><a type="button" data-toggle="modal" data-target="#{{row.Sector|cut:" "}}1">{{ row.tobecommenced_count }}</a></td>
+          <td class="border-grey" style="text-align:right">&#8377; {{ row.tobecommenced_project_cost.project_cost }}</td>
+      </tr>
+      {% endfor %}
        </tbody>
            <tfoot style="font-weight:bold; border-top:2px solid #DDDDDD;">
           <tr class="border-grey {% cycle 'row1' 'row2'%}">
