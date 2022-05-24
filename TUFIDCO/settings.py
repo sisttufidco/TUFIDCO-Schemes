@@ -163,7 +163,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 USE_DJANGO_JQUERY = True
 
 LOGIN_URL = "/admin/login/"
-LOGIN_REDIRECT_URL = '/admin/Dashboard/dashboard/'
+LOGIN_REDIRECT_URL = '/admin/Dashboard/knmtdashboard/'
 LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = os.getenv('MAPBOX_KEY')
