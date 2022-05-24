@@ -1,4 +1,52 @@
 {%for row in progress_report %}
+<div class="modal fade" id="{{row.Sector|cut:" "}}1" tabindex="-1" role="dialog" aria-labelledby="{{row.Sector|cut:" "}}1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="crematorium1Label">Singara Chennai 2.0 - Zone Wise To Be Commenced - {{row.Sector}}</h5>
+        </div>
+        <div class="modal-body">
+          <table>
+              <thead>
+              <tr>
+                  <th>
+                      <div class="text">
+                        <a href="#">S. No</a>
+                      </div>
+                  </th>
+                  <th>
+                    <div class="text">
+                        <a href="#">zone</a>
+                    </div>
+                  </th>
+                   <th>
+                    <div class="text">
+                        <a href="#" style="text-align: center">Project ID</a>
+                    </div>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for i in row.modal_data %}
+
+              <tr class="{% cycle 'row1' 'row2' %}">
+                <td> {{ forloop.counter }} </td>
+                <td> {{ i.zone }} </td>
+                <td style="text-align: center"> {{ i.Project_ID }}</td>
+                   
+                </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endfor%}
+{%for row in progress_report %}
 <div class="modal fade" id="{{row.Sector|cut:" "}}" tabindex="-1" role="dialog" aria-labelledby="{{row.Sector|cut:" "}}" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
