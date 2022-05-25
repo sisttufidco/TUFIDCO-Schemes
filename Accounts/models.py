@@ -85,4 +85,15 @@ class SectorWiseReport(ReleaseRequestModel):
         proxy=True
         verbose_name = "Sector Wise Report"
         verbose_name_plural = "Sector Wise Report"
-        
+
+class DMAinstallmentReport(MasterSanctionForm):
+    class Meta:
+        proxy=True
+        verbose_name = "DMA Release-I Installment"
+        verbose_name_plural = "DMA Release-I Installment"
+
+class CTPinstallmentReport(MasterSanctionForm):
+    class Meta:
+        proxy=True
+        verbose_name = "CTP Release-I Installment"
+        verbose_name_plural = "CTP Release-I Installment"
