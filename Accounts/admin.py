@@ -293,7 +293,7 @@ class DMAinstallmentReportAdmin(admin.ModelAdmin):
             if form.is_valid():
                 form_sector = form.cleaned_data['sector']
                 
-        Project_ID_progress = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).filter(Sector=form_sector).filter(ULBType="Municipality"))
+        Project_ID_progress = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).order_by('ULBName').filter(Sector=form_sector).filter(ULBType="Municipality"))
         final_list = []
         for project_id in Project_ID_progress:
             Sector = AgencyProgressModel.objects.values_list('Sector', flat=True).filter(Project_ID=project_id)[0]
@@ -361,7 +361,7 @@ class CTPinstallmentReportAdmin(admin.ModelAdmin):
             if form.is_valid():
                 form_sector = form.cleaned_data['sector']
                 
-        Project_ID_progress = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).filter(Sector=form_sector).filter(ULBType="Town Panchayat"))
+        Project_ID_progress = list(AgencyProgressModel.objects.values_list('Project_ID', flat=True).order_by('ULBName').filter(Sector=form_sector).filter(ULBType="Town Panchayat"))
         final_list = []
         for project_id in Project_ID_progress:
             Sector = AgencyProgressModel.objects.values_list('Sector', flat=True).filter(Project_ID=project_id)[0]
