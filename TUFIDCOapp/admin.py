@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.db.models import Count, Sum, Avg, Func
+from django.db.models import Func
 from import_export.admin import ImportExportModelAdmin
 from .resources import *
 from .forms import *
-from ULBForms.models import AgencyBankDetails, AgencyProgressModel
 from .models import scrollModel
 
 admin.site.index_title = ""

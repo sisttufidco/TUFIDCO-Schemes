@@ -1,6 +1,6 @@
 from django.contrib import admin
 from CTP.models import *
-from django.db.models import Count, Sum, Avg, Func
+from django.db.models import Count, Sum
 from import_export.admin import ImportExportModelAdmin
 from django.db.models import Q
 

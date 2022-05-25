@@ -1,11 +1,12 @@
-from re import T
 from django.contrib import admin
 from .models import *
-from ULBForms.models import AgencyBankDetails, AgencyProgressModel
+from ULBForms.models import AgencyBankDetails
 from TUFIDCOapp.models import *
-# Register your models here.
-import time
+from TUFIDCO.settings import EMAIL_HOST_USER
+from django.core.mail import EmailMessage
 from .forms import MonthForm
+from CTP.models import TownPanchayatDetails
+from DMA.models import MunicipalityDetails
 
 class ReceiptFormAdmin(admin.ModelAdmin):
     list_display = [
@@ -38,11 +39,14 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         'bank_branch_name',
         'bank_branch',
         'account_number',
-        'ifsc_code'
+        'ifsc_code',
+        'ApprovedProjectCost',
+        'SchemeShare',
+        'ULBShare'
     ]
     fieldsets = (
         (None, {
-            'fields': (('Scheme', 'AgencyType', 'AgencyName'), ('Sector', 'purpose', 'Project_ID'))
+            'fields': (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'),('Scheme', 'AgencyType', 'AgencyName'), ('Sector', 'purpose', 'Project_ID'))
         }),
         (
             'Bank Details', {
@@ -85,6 +89,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         if not request.user.groups.filter(name__in=["Admin", ]).exists():
             return qs.filter(AgencyName__AgencyName=request.user.first_name)
         return qs
+    
     def save_model(self, request, obj, form, change):
         obj.account_number = AgencyBankDetails.objects.values_list('account_number', flat=True).filter(
             user__first_name=form.cleaned_data['AgencyName'])
@@ -96,6 +101,60 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
             user__first_name=form.cleaned_data['AgencyName'])
         obj.ifsc_code = AgencyBankDetails.objects.values_list('IFSC_code', flat=True).filter(
             user__first_name=form.cleaned_data['AgencyName'])
+        if (form.cleaned_data['purpose'] == 'Project'):
+            obj.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])
+            obj.SchemeShare = MasterSanctionForm.objects.values_list('SchemeShare', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])
+            obj.ULBShare = MasterSanctionForm.objects.values_list('ULBShare', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])
+        flag = 0
+        amount = ""
+        if (form.cleaned_data['purpose'] == 'Project') and (form.cleaned_data['release1Amount'] is not None) and (form.cleaned_data['release2Amount'] is None) and (form.cleaned_data['release3Amount'] is None) and (form.cleaned_data['release4Amount'] is None) and (form.cleaned_data['release5Amount'] is None): 
+            amount += str(form.cleaned_data['release1Amount'])
+            flag=1
+        if (form.cleaned_data['purpose'] == 'Project') and (form.cleaned_data['release2Amount'] is not None) and (form.cleaned_data['release3Amount'] is None) and (form.cleaned_data['release4Amount'] is None) and (form.cleaned_data['release5Amount'] is None): 
+            amount += str(form.cleaned_data['release2Amount'])
+            flag=1
+        if (form.cleaned_data['purpose'] == 'Project') and  (form.cleaned_data['release3Amount'] is not None) and (form.cleaned_data['release4Amount'] is None) and (form.cleaned_data['release5Amount'] is None): 
+            amount += str(form.cleaned_data['release3Amount'])
+            flag=1
+        if (form.cleaned_data['purpose'] == 'Project') and  (form.cleaned_data['release4Amount'] is not None) and (form.cleaned_data['release5Amount'] is None): 
+            amount += str(form.cleaned_data['release4Amount'])
+            flag=1
+        if (form.cleaned_data['purpose'] == 'Project')  and (form.cleaned_data['release5Amount'] is not None): 
+            amount += str(form.cleaned_data['release5Amount'])
+            flag=1
+        if flag==1:
+            district = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])[0]
+            subject = str(form.cleaned_data['Scheme'])+" - "+str(form.cleaned_data['Sector'])+" - "+str(form.cleaned_data['Project_ID']) + " - Release of Funds"
+            message = """
+                    To<br>The Commissioner / Executive officer,<br>
+                    %s %s<br>
+                    %s District<br>
+                    <br><br>
+                    Sir/Madam
+                    <br><br>
+                    We would like to inform you that an amount of Rs %s lakhs released to %s Sector, %s Project ID.
+                    <br><br>
+                    Please check the web page progress portal through your login and Bank account.
+                    <br><br>
+                    Please make necessary entries in your Progress portal and send stamped receipt.
+                    <br><br>
+                    Thanking you,<br>
+                    For TUFIDCO
+                    <br>
+                    <br>
+                    SD/-<br>
+                    For ACS / CMD
+                """%(form.cleaned_data['AgencyName'], form.cleaned_data['AgencyType'], district, amount, form.cleaned_data['Sector'], form.cleaned_data['Project_ID'])
+            email = []  
+            if form.cleaned_data['AgencyType'] == "Municipality":
+                email_detail = MunicipalityDetails.objects.values_list('email_id1', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
+                email.append(email_detail)
+            else:
+                email_detail = TownPanchayatDetails.objects.values_list('email', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
+                email.append(email_detail)
+            mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), email)  
+            mail.content_subtype = "html"
+            mail.send()      
         obj.save()
 
     

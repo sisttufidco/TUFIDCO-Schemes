@@ -1,131 +1,15 @@
+{% for i in swps_final_list %}
 <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">1</td>
-            <td class="border-grey" style="text-align:center">Bus Stand</td>
-            <td class="border-grey" style="text-align:right">{{ busstand_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ busstand.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ busstand_percentage }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ busstandDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ busstandDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAbusstand_percentage }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ busstandCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ busstandCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPbusstand_percentage }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ forloop.counter}}</td>
+            <td class="border-grey" style="text-align:center">{{ i.sector }}</td>
+            <td class="border-grey" style="text-align:right">{{ i.sector_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ i.sector_cost.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ i.sector_percentage }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ i.DMA_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ i.DMA_cost.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ i.DMA_percentage }} &percnt;</td>
+            <td class="border-grey" style="text-align:right">{{ i.CTP_total }}</td>
+            <td class="border-grey" style="text-align:right">&#8377; {{ i.CTP_cost.project_cost }}</td>
+            <td class="border-grey" style="text-align:right">{{ i.CTP_percentage }} &percnt;</td>
         </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">2</td>
-            <td class="border-grey" style="text-align:center">Community Hall</td>
-            <td class="border-grey" style="text-align:right">{{ ch_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ ch.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ ch_percent }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ chDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ chDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAch_percent }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ chCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ chCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPch_percent }} &percnt;</td>
-        </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">3</td>
-            <td class="border-grey" style="text-align:center">Crematorium</td>
-            <td class="border-grey" style="text-align:right">{{ crematorium_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ crematorium.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ crematorium_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ crematoriumDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ crematoriumDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAcrematorium_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ crematoriumCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ crematoriumCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPcrematorium_pt }} &percnt;</td>
-        </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">4</td>
-            <td class="border-grey" style="text-align:center">Knowledge Centre</td>
-            <td class="border-grey" style="text-align:right">{{ KC_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ KC.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ KC_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ KCDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ KCDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAKC_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ KCCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ KCCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPKC_pt }} &percnt;</td>
-        </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">5</td>
-            <td class="border-grey" style="text-align:center">Market</td>
-            <td class="border-grey" style="text-align:right">{{ market_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ market.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ market_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ marketDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ marketDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAmarket_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ marketCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ marketCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPmarket_pt }} &percnt;</td>
-        </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">6</td>
-            <td class="border-grey" style="text-align:center">Park</td>
-            <td class="border-grey" style="text-align:right">{{ park_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ park.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ park_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ parkDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ parkDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMApark_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ parkCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ parkCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPpark_pt }} &percnt;</td>
-        </tr>
-         <tr class="border-grey {% cycle 'row1' 'row2'%}">
-    <td class="border-grey" style="text-align:right">7</td>
-    <td class="border-grey" style="text-align:center">Retaining wall</td>
-    <td class="border-grey" style="text-align:right">{{ RW_total }}</td>
-    <td class="border-grey" style="text-align:right">&#8377; {{ RW.project_cost }}</td>
-    <td class="border-grey" style="text-align:right">{{ rw_pt }} &percnt;</td>
-    <td class="border-grey" style="text-align:right">{{ RWDMA_total }}</td>
-    <td class="border-grey" style="text-align:right">&#8377; {{ RWDMA.project_cost }}</td>
-    <td class="border-grey" style="text-align:right">{{ RWDMA_pt }} &percnt;</td>
-    <td class="border-grey" style="text-align:right">{{ RWCTP_total }}</td>
-    <td class="border-grey" style="text-align:right">&#8377; {{ RWCTP.project_cost }}</td>
-    <td class="border-grey" style="text-align:right">{{ CTPRW_pt }} &percnt;</td>
-</tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-          <td class="border-grey" style="text-align:right">8</td>
-          <td class="border-grey" style="text-align:center">Road Works</td>
-          <td class="border-grey" style="text-align:right">{{ road_total }}</td>
-          <td class="border-grey" style="text-align:right">&#8377; {{ road.project_cost }}</td>
-          <td class="border-grey" style="text-align:right">{{ road_pt }} &percnt;</td>
-          <td class="border-grey" style="text-align:right">{{ roadDMA_total }}</td>
-          <td class="border-grey" style="text-align:right">&#8377; {{ roadDMA.project_cost }}</td>
-          <td class="border-grey" style="text-align:right">{{ DMAroad_pt }} &percnt;</td>
-          <td class="border-grey" style="text-align:right">{{ roadCTP_total }}</td>
-          <td class="border-grey" style="text-align:right">&#8377; {{ roadCTP.project_cost }}</td>
-          <td class="border-grey" style="text-align:right">{{ CTProad_pt }} &percnt;</td>
-        </tr>
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">9</td>
-            <td class="border-grey" style="text-align:center">Solid Waste Mgt.</td>
-            <td class="border-grey" style="text-align:right">{{ SWM_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ SWM.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ SWM_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ SWMDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ SWMDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMASWM_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ SWMCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ SWMCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPSWM_pt }} &percnt;</td>
-        </tr>
-
-        <tr class="border-grey {% cycle 'row1' 'row2'%}">
-            <td class="border-grey" style="text-align:right">10</td>
-            <td class="border-grey" style="text-align:center">Water Bodies</td>
-            <td class="border-grey" style="text-align:right">{{ WB_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ WB.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ WB_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ WBDMA_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ WBDMA.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ DMAWB_pt }} &percnt;</td>
-            <td class="border-grey" style="text-align:right">{{ WBCTP_total }}</td>
-            <td class="border-grey" style="text-align:right">&#8377; {{ WBCTP.project_cost }}</td>
-            <td class="border-grey" style="text-align:right">{{ CTPWB_pt }} &percnt;</td>
-        </tr>
+{%endfor%}
