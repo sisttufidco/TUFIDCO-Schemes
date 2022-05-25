@@ -58,19 +58,22 @@
 {% endblock %}
 
 {% block result_list %}
-
-  <div class="results" id="results">
-    <form method="POST">
-      {% csrf_token %}
-      <div class="d-flex">
-          <div class="">
-            {{DMASector}}
-          </div>
-          <input class="btn" type="submit"  value="submit" style="margin-left:20px;padding-top:5px !important; padding-bottom:5px !important;">
+<form method="POST">
+  {% csrf_token %}
+  <div class="d-flex">
+      <div class="">
+        {{DMASector}}
       </div>
-    </form>
+      <input class="btn" type="submit"  value="submit" style="margin-left:20px;padding-top:5px !important; padding-bottom:5px !important;">
+  </div>
+</form>
+  <div class="results" id="results">
+    
 
     <table style="margin-top:20px;">
+      <caption  class="report-h4" id="heading">
+        KNMT - Calculation of eligiblity of Release-I - {{town}}
+      </caption>
     <thead>
       <tr>
         <th>
