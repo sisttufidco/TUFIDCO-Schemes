@@ -2,20 +2,12 @@ from django.contrib import admin
 from TUFIDCOapp.models import *
 from DMA.models import *
 from ULBForms.models import *
-# Register your models here.
-import functools
-from urllib import request
 from django.contrib import admin
-from django.contrib.admin import AdminSite
-import json
-from django.db.models import Count, Sum, Avg, Func
+from django.db.models import Count, Sum,  Func
 from import_export.admin import ImportExportModelAdmin
-from mapbox_location_field.admin import MapAdmin
-import pickle
 from django.db.models import Q
 from .models import DistrictWiseReport
 from .resources import MunicipalityDetailsResource
-from django.contrib.admin.sites import AdminSite
 
 
 class MunicipalityDetailsAdmin(ImportExportModelAdmin, admin.AdminSite):

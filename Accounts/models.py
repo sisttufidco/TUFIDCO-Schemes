@@ -1,3 +1,5 @@
+from pyexpat import model
+from statistics import mode
 from tabnanny import verbose
 from django.db import models
 from TUFIDCOapp.models import *
@@ -42,6 +44,9 @@ class ReleaseRequestModel(models.Model):
     release5Amount = models.CharField('Release Amount 5', blank=True, max_length=10, null=True)
     sqm_report5 = models.FileField('Instruction Report by SQM', upload_to='SQMreport/', blank=True, null=True)
     project = models.CharField('P_ID', max_length=50, null=True)
+    ApprovedProjectCost = models.CharField('Approved Project Cost (in lakhs)', blank=True, max_length=50, null=True)
+    SchemeShare = models.CharField('Scheme Share (in lakhs)', blank=True, max_length=50, null=True)
+    ULBShare = models.CharField('ULB Share (in lakhs)', blank=True, max_length=50, null=True)
 
     def __str__(self):
         return '{} - {}'.format(str(self.AgencyName ), str(self.Project_ID))

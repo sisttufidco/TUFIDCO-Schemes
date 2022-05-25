@@ -1,9 +1,7 @@
 import functools
 from django.contrib import admin
 from .models import *
-import pickle
 from .forms import *
-from django.db.models import Count, Sum, Avg, Func
 from import_export.admin import ImportExportModelAdmin
 from .resources import *
 
