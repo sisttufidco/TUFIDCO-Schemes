@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-body {
-    overflow-x: hidden; 
-}
+
 :root {
     --primary: #79aec8;
     --secondary: #417690;
