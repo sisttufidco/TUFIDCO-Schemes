@@ -908,6 +908,7 @@ a.scrollup i:hover {
     width: auto !important;
     height: auto !important;
   }
+  
 }
 @media screen and (max-width: 1200px) {
   .container-sign {
