@@ -46,10 +46,10 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         'ULBShare'
     ]
     search_fields = [
-        'AgencyName',
+        'AgencyName__AgencyName',
         'Project_ID',
         'Sector',
-        
+
     ]
     fieldsets = (
         (None, {
