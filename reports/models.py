@@ -34,14 +34,14 @@ class PhysicalandFinancialReport(MasterSanctionForm):
         verbose_name = "KNMT Physical & Financial Progress Report"
         verbose_name_plural = "KNMT Physical & Financial Progress Reports"
 
-class ProgressNotCommenced(AgencyProgressModel):
-    class Meta:
-        proxy = True
-        verbose_name = "Progress Not Commenced"
-        verbose_name_plural = "Progress Not Commenced"
-
 class DistrictWiseReport(MasterSanctionForm):
     class Meta:
         proxy = True
         verbose_name = "District Wise Report"
         verbose_name_plural = "District Wise Report"
+
+class SingaraChennaiPhysicalandFinancialReport(MasterSanctionForm):
+    class Meta:
+        proxy=True
+        verbose_name = "Singara Chennai 2.0 Physical & Financial Progress Report"
+        verbose_name_plural = "Singara Chennai 2.0 Physical & Financial Progress Report"

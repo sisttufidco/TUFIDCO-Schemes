@@ -1,0 +1,176 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}<h1>Singara Chennai 2.0 Physical and Financial Progress Report</h1>{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+    {% block object-tools %}
+<ul class="object-tools">
+  {% block object-tools-items %}
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  {% endblock %}
+</ul>
+{% endblock %}
+
+  <style>
+      .object-tools a.addlink{
+          display: none;
+      }
+      .border-grey {
+          border: 1px solid #babebe;
+      }
+  </style>
+  <style>
+    @media (max-width: 767px){
+      .object-tools{
+          display: none;
+      }
+  }
+  </style>
+{% endblock %}
+
+{% block result_list %}
+<div class="export-btn">
+  <ul class="d-flex">
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  </ul>
+</div>
+  <div class="results" id="results">
+
+    <table class="border-grey">
+        <caption  class="report-h4" id="heading">
+            Singara Chennai 2.0 - Physical And Financial Report - Overall (2021-22)
+        </caption>
+      <col>
+        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup>
+        <tr class="border-grey">
+          <th class="border-grey" style="text-align:right;" >S.No</th>
+          <th class="border-grey"> Name of the Sector</th>
+          <th class="border-grey" style="text-align:center;" colspan="5">Financial Progress (Rs.in Cr)</th>
+          <th class="border-grey" style="text-align:center;" colspan="8">Physical Progress</th>
+        </tr>
+      <tr class="border-grey">
+        <th class="border-grey">(C1)</th>
+        <th class="border-grey">(C2)</th>
+        <th class="border-grey" style="text-align:center;" colspan="3" scope="colgroup">Amount Sanctioned<br><br>(C3)</th>
+        <th class="border-grey" style="text-align:center;" scope="col">Work Order<br>Amount<br>(With Tax.)<br>(C4)</th>
+        <th class="border-grey" style="text-align:center;" scope="col">Amount Spend<br>(Value of<br>Work Done)<br>(C5)</th>
+        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>approved<br><br>(C6)</th>
+        <th class="border-grey" style="text-align:right;" scope="col">No. of <br>works<br>taken<br><br>(C7)=(C8)+(C9)</th>
+        <th class="border-grey" style="text-align:right;" colspan="2" scope="col">Completed<br><br>(C8)</th>
+        <th class="border-grey" style="text-align:right;" colspan="2" scope="col">In progress<br><br>(C9)</th>
+        <th class="border-grey" style="text-align:right;" colspan="3" scope="col">To be<br>Commenced<br>(C10)</th>
+      </tr>
+      <tr class="border-grey">
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey" style="text-align:right;" scope="col">Singara Chennai 2.0<br>Share</th>
+        <th class="border-grey" style="text-align:right;" scope="col">ULB Share</th>
+        <th class="border-grey" style="text-align:right;" scope="col">Total</th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey"></th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.<br>(C8.1)</th>
+        <th class="border-grey" style="text-align:right;">Value of<br>workdone<BR>(c8.2)</th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.<br>(C9.1)</th>
+        <th class="border-grey" style="text-align:right;">Value of<br>workdone<BR>(C9.2)</th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.<br>(C10.1)</th>
+        <th class="border-grey" style="text-align:right;"scope="col">No.of<br>TS Issued<br>(C10.2)</th>
+        <th class="border-grey" style="text-align:right;">No.of<br>work order<br>Issued<br>(C10.3)</th>
+      </tr>
+      {% for row in final_data%}
+      <tr class="border-grey {% cycle 'row1' 'row2'%}">
+        <td class="border-grey" style="text-align:right;">{{forloop.counter}}</td>
+        <td class="border-grey" >{{row.Sector}}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ row.SchemeShare.SchemeShare }} </td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ row.ULBShare.ULBShare }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ row.Total }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ row.workorder.sum }}</td>
+          <td class="border-grey" style="text-align:right;"> &#8377 {{ row.amountspend.sum }}</td>
+        <td class="border-grey" style="text-align:right;"> {{ row.Approved }}</td>
+        <td class="border-grey" style="text-align:right;"> {{ row.Taken }}</td>
+        <td class="border-grey" style="text-align:right;"> {{ row.Completed }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ row.value_work_done_completed.sum }}</td>
+        <td class="border-grey" style="text-align:right;"> {{ row.inprogress }}</td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ row.value_work_done_inprogress.sum }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.ToBeCommenced }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ row.WO_Awarded }}</td>
+      </tr>
+     {%endfor%}
+      <tr class="border-grey" style="font-weight:bold; border-top:2px solid #DDDDDD;">
+        <td class="border-grey" ></td>
+        <td class="border-grey" style="text-align:right;">Total </td>
+        <td class="border-grey" style="text-align:right;">&#8377 {{ SchemeShare.SchemeShare }} </td>
+        <td class="border-grey" style="text-align:right;">&#8377  {{ ULBShare.ULBShare }} </td>
+        <td class="border-grey" style="text-align:right;">&#8377 {{ ProjectCost.ProjectCost }} </td>
+        <td class="border-grey" style="text-align:right;">&#8377 {{ workorder_total.sum }} </td>
+        <td class="border-grey" style="text-align:right;">&#8377 {{ work_amountspend.sum }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ work_approved_total }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ works_taken_total }} </td>
+        <td class="border-grey" style="text-align:right;"> {{ works_completed_total }} </td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Overall_value_work_done_completed.sum }}</td>
+        <td class="border-grey" style="text-align:right;"> {{ works_inprogress_total}} </td>
+        <td class="border-grey" style="text-align:right;"> &#8377 {{ Overall_value_work_done_inprogress.sum }}</td>
+        <td class="border-grey" style="text-align:right;"> {{ works_ToBeCommenced }} </td>
+        <td class="border-grey" style="text-align:right;">{{ Overall_TS_Awarded }}</td>
+        <td class="border-grey" style="text-align:right;">{{ Overall_WO_Awarded }}</td>
+      </tr>
+    </table>
+  </div>
+    {% load static %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+    <script type="text/javascript">
+        function createPDF() {
+        var sTable = document.getElementById('results').innerHTML;
+
+        var style = "<style>";
+        style = style + ".report-h4 {text-align:center; text-transform: uppercase; display:none;}";
+        style = style + "title {text-align:center; text-transform: uppercase; font-weight:bold; font-size:large;}";
+        style = style + "table {width: 100%;font: 14px Calibri;}";
+        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;text-align: center;}";
+        style = style + ".text a{text-decoration: none; color:black}"
+        style = style + "</style>";
+
+        var win = window.open('', '', 'height=700,width=700');
+        win.document.write('<html><head>');
+        win.document.write(style);
+        win.document.write('<title>'+$(".report-h4").html().toUpperCase()+'</title>');
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);
+        win.document.write('</body></html>');
+        win.document.close();
+        win.print();
+    }
+    </script>
+     <script>
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('results');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                XLSX.writeFile(wb, fn || ('report.' + (type || 'xlsx')));
+        }
+    </script>
+{% endblock %}
+
+{% block pagination %}{% endblock  %}

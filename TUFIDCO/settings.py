@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'Dashboard.apps.DashboardConfig',
     'ULBForms.apps.UlbformsConfig',
     'Accounts.apps.AccountsConfig',
+    'ReviewReports.apps.ReviewreportsConfig',
     'smart_selects',
     'import_export',
     'nested_admin',
