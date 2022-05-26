@@ -45,6 +45,12 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         'SchemeShare',
         'ULBShare'
     ]
+    search_fields = [
+        'AgencyName',
+        'Project_ID',
+        'Sector',
+        
+    ]
     fieldsets = (
         (None, {
             'fields': (('ApprovedProjectCost', 'SchemeShare', 'ULBShare'),('Scheme', 'AgencyType', 'AgencyName'), ('Sector', 'purpose', 'Project_ID'))
