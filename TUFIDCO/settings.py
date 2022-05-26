@@ -176,8 +176,8 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-''''''
-
+'''
+'''
 CSRF_TRUSTED_ORIGINS = ['https://www.tufidcoschemes.co.in', 'https://tufidcoschemes.co.in', 'http://127.0.0.1']
 
 
