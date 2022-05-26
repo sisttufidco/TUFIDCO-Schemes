@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-
+body {
+    overflow-x: hidden; 
+}
 :root {
     --primary: #79aec8;
     --secondary: #417690;
@@ -211,6 +213,7 @@ caption {
 div.breadcrumbs{
     background-color: #145F8E;
     color: #fff;
+    margin-top: 10px;
 }
 div.breadcrumbs a{
     color: #fff;
@@ -434,6 +437,15 @@ max-width: 700px;
     }
     .navbar-toggler{
         margin-left: 20px;
+    }
+    .div.breadcrumbs{
+        margin-top: 10px;
+    }
+    .mb-5{
+        margin-bottom: 5px !important;
+    }
+    #apexcharts5a6z4zib{
+        height: 150px;
     }
 }
 ul > li  {

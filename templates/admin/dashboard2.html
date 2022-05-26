@@ -38,7 +38,7 @@
         <div class="carousel-item active">
           <div class="row row-card">
             <p class="p-details">Singara Chennai 2.0 - Project Details - Overall (2021-22)</p>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-blue">
                 <div class="inner">
                   <p class="card-title">Total Projects</p>
@@ -46,7 +46,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-green">
                 <div class="inner">
                   <p class="card-title">Total Cost</p>
@@ -54,7 +54,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-orange">
                 <div class="inner">
                   <p class="card-title">Singara Chennai 2.0 Share</p>
@@ -62,7 +62,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-red">
                 <div class="inner">
                   <p class="card-title">ULB Share</p>
@@ -91,7 +91,7 @@
             <div id="SectorProjectCost" ></div>
     </div>
 
-    <div class="row row-card2 table-sector">
+    <div class="row row-card2 table-sector table-responsive">
       <table class="border-grey" style="border-radius:5px;">
         <p class="p-details">Singara Chennai 2.0 <br>Sector Wise Progress Details - Cost in lakhs<br>(2021-22)</p>
         <thead>
@@ -243,10 +243,10 @@
                 },
                 labels: [{% for i in pie_chart_sector %} '{{ i.Sector }}', {% endfor %}],
                 responsive: [{
-                    breakpoint: 300,
+                    breakpoint: 1000,
                     options: {
                         chart: {
-                            width: '60%'
+                            width: 300
                         },
                         legend: {
                             position: 'bottom'
