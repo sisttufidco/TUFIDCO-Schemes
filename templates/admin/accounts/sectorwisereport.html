@@ -25,6 +25,13 @@
   {% endblock %}
 </ul>
 {% endblock %}
+<style>
+  @media (max-width: 767px){
+    .object-tools{
+        display: none;
+    }
+}
+</style>
   <style>
     .object-tools a.addlink{
         display: none;
@@ -58,7 +65,12 @@
 {% endblock %}
 
 {% block result_list %}
-
+<div class="export-btn">
+  <ul class="d-flex">
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  </ul>
+</div>
 
   <div class="results" id="results" style="margin-top:30px; ">
 
