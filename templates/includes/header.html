@@ -59,7 +59,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="fa fa-bars"></span> Menu
         </button>
-        <form action="#" class="searchform order-lg-last">
+        <form action="javascript:void(0)" class="searchform order-lg-last">
           <div class="form-group d-flex">
             <input type="text" class="form-control pl-3" placeholder="Search">
             <button type="submit" class="form-control search"><span class="fa fa-search"></span></button>
@@ -70,7 +70,7 @@
             <li class="nav-item {% if request.path == home_url %}active-nav{% endif %}"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
             <li class="nav-item {% if request.path == about_url %}active-nav{% endif %}"><a href="{% url 'about' %}" class="nav-link">ABOUT</a></li>
             <li class="nav-item dropdown">
-              <a class="nav-link  {% if request.path == SingaraChennai_url %}active-nav{% endif %} {% if request.path == SChennai_guidelines %}active-nav{% endif %} {% if request.path == SchennaiAS %}active-nav{% endif %} {% if request.path == KNMT_url %}active-nav{% endif %} {% if request.path == KNMTAS_url %}active-nav{% endif %} {% if request.path == KNMT_G_URL %}active-nav{% endif %} dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCHEME</a>
+              <a class="nav-link  {% if request.path == SingaraChennai_url %}active-nav{% endif %} {% if request.path == SChennai_guidelines %}active-nav{% endif %} {% if request.path == SchennaiAS %}active-nav{% endif %} {% if request.path == KNMT_url %}active-nav{% endif %} {% if request.path == KNMTAS_url %}active-nav{% endif %} {% if request.path == KNMT_G_URL %}active-nav{% endif %} dropdown-toggle" href="javascript:void(0)" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCHEME</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
                 <a class="dropdown-item {% if request.path == KNMT_url%}active-dropdown{% endif %} {% if request.path == KNMT_G_URL%}active-dropdown{% endif %} {% if request.path == KNMTAS_url%}active-dropdown{% endif %}"  href="{% url 'knmt' %}">KNMT</a>
                 <a class="dropdown-item {% if request.path == SingaraChennai_url %}active-dropdown{% endif %}" href="{% url 'SChennai2.0' %}">Singara Chennai 2.0</a>
@@ -79,10 +79,10 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> REPORT </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#">KNMT</a>
+                    <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="javascript:void(0)">KNMT</a>
                                 <ul class="dropdown-menu">
                       <li class="dropdown-submenu">
-                      <a class="dropdown-item" href="#">GO Wise Report</a>
+                      <a class="dropdown-item" href="javascript:void(0)">GO Wise Report</a>
                       <ul class="dropdown-menu">
                         <li class="dropdown-item">
                           <a class="dropdown-item" href="/admin/TUFIDCOapp/report/?Scheme__id__exact=1">Overall</a>
@@ -96,7 +96,7 @@
                       </ul>
                     </li>
                     <li class="dropdown-submenu">
-                      <a class="dropdown-item" href="#">Sector Wise Report</a>
+                      <a class="dropdown-item" href="javascript:void(0)">Sector Wise Report</a>
                       <ul class="dropdown-menu">
                         <li class="dropdown-item">
                           <a class="dropdown-item" href="/admin/TUFIDCOapp/sectormasterreport/?Scheme__id__exact=1">Overall</a>
@@ -111,7 +111,7 @@
                     </li>
                   </ul>
                             </li>
-                      <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#">Singara Chennai 2.0</a>
+                      <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="javascript:void(0)">Singara Chennai 2.0</a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="/admin/TUFIDCOapp/report/?Scheme__id__exact=2">Go Wise Report</a></li>
                                     <li><a class="dropdown-item" href="/admin/TUFIDCOapp/sectormasterreport/?Scheme__id__exact=2">Sector Wise Report</a></li>
@@ -120,9 +120,9 @@
                 </ul>
             </li>
               <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Downloads</a>
+              <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Downloads</a>
               <div class="dropdown-submenu dropdown-menu" aria-labelledby="dropdown04">
-                <a class="dropdown-item" tabindex="-1" href="#" >KNMT</a>
+                <a class="dropdown-item" tabindex="-1" href="javascript:void(0)" >KNMT</a>
                   <ul class="dropdown-menu" style="margin-top: 10px">
                       {% if user.is_authenticated %}
                           {% for i in ulb_release_requests %}

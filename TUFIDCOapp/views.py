@@ -99,8 +99,6 @@ def gallery(request):
         "gallery": gallery_img,
         "gallery_places": gallery_places,
     }
-    print(gallery_img)
-    print(gallery_places)
     return render(request, 'pages/gallery.html', context)
 
 
