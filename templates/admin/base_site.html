@@ -85,6 +85,7 @@
       <div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-light">
             <ul class="no-bullets">
+              <li> <a class="btn site-btn" type="submit" href="/admin">Home</a></li>
               {% for group_for in request.user.groups.all %}
              {% if group_for.name == 'contactform' %}
               <li > <a class="btn site-btn" type="submit" href="{% url 'emailattachment2' %}">Contact CTP</a></li>

@@ -22,7 +22,13 @@
         font-size: 12px;
     }
   </style>
- 
+  <style>
+    @media (max-width: 767px){
+      .object-tools{
+          display: none;
+      }
+  }
+  </style>
 {% endblock %}
 {% block object-tools %}
 <ul class="object-tools">
@@ -33,6 +39,12 @@
 </ul>
 {% endblock %}
 {% block result_list %}
+<div class="export-btn">
+  <ul class="d-flex">
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  </ul>
+</div>
   <div class="results" id="results">
     <table>
      {% regroup heading by Sector as Sector_list %}
