@@ -451,9 +451,41 @@ max-width: 700px;
     #btnExport2{
         margin-right: 5px;
     }
+    #id_month{
+        margin-left: 8px;
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+    #month-btn1{
+        margin-left: 0px !important;
+        padding-top:5px; 
+        padding-bottom:5px;
+        margin-top: 10px;
+    }
+    #month-btn{
+        margin-left: 0px !important;
+        padding-top:5px; 
+        padding-bottom:5px;
+        margin-top: 10px;
+    }
+    #mnt{
+        padding-top:50px;
+    }
+    #mnt1{
+        padding-top:50px;
+    }
+}
+#month-btn{
+    margin-left:20px;
+    padding-top:5px; 
+    padding-bottom:5px;
 }
 
-
+#month-btn1{
+    margin-left:20px;
+    padding-top:5px; 
+    padding-bottom:5px;
+}
 ul > li  {
     list-style-type: none;
 
