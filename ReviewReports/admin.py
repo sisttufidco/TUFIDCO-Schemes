@@ -93,7 +93,7 @@ class TownPanchayatInProgressProjectsAdmin(admin.ModelAdmin):
 
 @admin.register(MunicipalityNotCommencedProjects)
 class MunicipalityNotCommencedProjectsAdmin(admin.ModelAdmin):
-    change_list_template = "admin/inprogress.html"
+    change_list_template = "admin/reports/not_commenced.html"
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
@@ -103,9 +103,9 @@ class MunicipalityNotCommencedProjectsAdmin(admin.ModelAdmin):
         except (AttributeError, KeyError):
             return response
 
-        response.context_data['report'] = list(
-            qs.values('ULBName', 'Sector','Project_ID').order_by('ULBName').filter(Scheme='KNMT').filter(status="In Progress").filter(ULBType="Town Panchayat")
-        )
+    
+        response.context_data['data'] = list(qs.values('ULBType', 'ULBName', 'Sector', 'Project_ID', 'nc_choices').filter(status="Not Commenced").filter(ULBType="Municipality"))
+
         type = "Municipality"
         extra_context = {
             "type": type
