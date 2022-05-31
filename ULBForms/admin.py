@@ -54,8 +54,6 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'beneficiary_name',
         'bank_name',
         'branch',
-        'account_number',
-        'IFSC_code'
     ]
 
     def save_model(self, request, obj, form, change):
@@ -113,7 +111,6 @@ class ULBPANDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ]
     search_fields = [
         'user__first_name',
-        'PANno',
         'name',
     ]
     ordering = [
