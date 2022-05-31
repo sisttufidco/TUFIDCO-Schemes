@@ -9,6 +9,7 @@ from mapbox_location_field.models import LocationField
 from mapbox_location_field.admin import MapAdmin
 from django.contrib import admin
 from Accounts.models import ReleaseRequestModel
+from django_cryptography.fields import encrypt
 
 # Create your models here.
 
@@ -18,10 +19,10 @@ class AgencyBankDetails(models.Model):
     beneficiary_name = models.CharField("Name of the ULB", max_length=90, null=True)
     bank_name = models.CharField("Name of the Bank", max_length=90, null=True)
     branch = models.CharField("Branch", max_length=90, null=True)
-    account_number = models.CharField("Account Number", max_length=90, null=True)
-    IFSC_code = models.CharField("IFSC Code", max_length=20, null=True)
-    passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
-                                      help_text='Please attach a clear scanned copy front page of the Bank passbook')
+    account_number = encrypt(models.CharField("Account Number", max_length=90, null=True))
+    IFSC_code = encrypt(models.CharField("IFSC Code", max_length=20, null=True))
+    passbookupload = encrypt(models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
+                                      help_text='Please attach a clear scanned copy front page of the Bank passbook'))
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
 
@@ -41,10 +42,10 @@ class AgencyBankDetails(models.Model):
 
 class ULBPanCard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    PANno = models.CharField("PAN Number", max_length=60, null=True)
+    PANno = encrypt(models.CharField("PAN Number", max_length=60, null=True))
     name = models.CharField("Name", max_length=60, null=True)
-    panphoto = models.FileField("PAN Photo", upload_to='PAN/', null=True,
-                                help_text="Please Upload a Clear Scanned Copy of PAN")
+    panphoto = encrypt(models.FileField("PAN Photo", upload_to='PAN/', null=True,
+                                help_text="Please Upload a Clear Scanned Copy of PAN"))
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
 
