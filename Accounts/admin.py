@@ -206,7 +206,7 @@ class MonthWiseReportAdmin(admin.ModelAdmin):
   
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context=extra_context)
-
+    
         try:
             qs = response.context_data['cl'].queryset
         except (AttributeError, KeyError):
