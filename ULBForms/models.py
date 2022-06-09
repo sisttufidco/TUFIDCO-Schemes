@@ -221,10 +221,10 @@ class AgencySanctionModel(models.Model):
                                   null=True)
     tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
     wd_awarded = models.CharField("Work Order Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
-    work_awarded_amount1 = models.DecimalField("Work Order Amount", max_digits=6, decimal_places=2, blank=True,
+    work_awarded_amount1 = models.DecimalField("Work Order Amount", max_digits=10, decimal_places=2, blank=True,
                                                null=True,
                                                help_text="With Tax. (Add GST, LWF etc on the above basic cost)")
-    work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=6, decimal_places=2, blank=True,
+    work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=10, decimal_places=2, blank=True,
                                                null=True,
                                                help_text='Without Tax (Basic cost/agreed amount, without GST tax etc)')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
