@@ -23,6 +23,7 @@ class AgencyBankDetails(models.Model):
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
+    
 
     @property
     def passbook_preview(self):
