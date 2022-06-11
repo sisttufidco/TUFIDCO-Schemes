@@ -39,9 +39,9 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'beneficiary_name',
         'bank_name',
         'branch',
-        #'account_number',
-        #'IFSC_code',
-        'date_and_time'
+        'account_number',
+        'IFSC_code',
+        #'date_and_time'
     ]
     ordering = [
         'user__first_name',
