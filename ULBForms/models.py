@@ -21,7 +21,7 @@ class AgencyBankDetails(models.Model):
     IFSC_code = models.CharField("IFSC Code", max_length=20, null=True)
     passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
-    #date_and_time = models.DateTimeField(default=datetime.now, null=True)
+    date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
 
     @property
