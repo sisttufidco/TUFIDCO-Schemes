@@ -28,8 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['www.tufidcoschemes.co.in', 'tufidcoschemes.co.in', '127.0.0.1']
+DEBUG = True
+
+ALLOWED_HOSTS = [
+    'www.tufidcoschemes.co.in',
+    'tufidcoschemes.co.in',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -170,8 +175,6 @@ LOGOUT_REDIRECT_URL = 'home'
 
 MAPBOX_KEY = os.getenv('MAPBOX_KEY')
 
-
-'''
 '''
 SECURE_HSTS_SECONDS = 12121212
 SECURE_SSL_REDIRECT = True
@@ -179,7 +182,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-
+'''
 
 CSRF_TRUSTED_ORIGINS = ['https://www.tufidcoschemes.co.in', 'https://tufidcoschemes.co.in', 'http://127.0.0.1']
 
