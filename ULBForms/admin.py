@@ -63,11 +63,9 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         obj.date_and_time = datetime.now()
         if request.user.groups.filter(name__in=["Municipality", ]).exists():
             obj.ULBType = "Municipality"
-            obj.district = MunicipalityDetails.objects.values_list('district', flat=True).filter(user=obj.user)
 
         if request.user.groups.filter(name__in=["Town Panchayat", ]).exists():
             obj.ULBType = "Town Panchayat"
-            obj.district = TownPanchayatDetails.objects.values_list('district', flat=True).filter(user=obj.user)
 
         if request.user.groups.filter(name__in=["Corporation", ]).exists():
             obj.ULBType = "Corporation"
