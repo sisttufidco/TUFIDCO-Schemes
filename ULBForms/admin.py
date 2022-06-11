@@ -42,6 +42,7 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'branch',
         'account_number',
         'IFSC_code',
+        'district'
         #'date_and_time'
     ]
     ordering = [
