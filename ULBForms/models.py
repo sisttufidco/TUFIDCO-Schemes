@@ -1,3 +1,5 @@
+from re import T
+from statistics import mode
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.datetime_safe import datetime
@@ -21,9 +23,10 @@ class AgencyBankDetails(models.Model):
     IFSC_code = models.CharField("IFSC Code", max_length=20, null=True)
     passbookupload = models.FileField("Passbook Front Page Photo", upload_to='passbook/', null=True,
                                       help_text='Please attach a clear scanned copy front page of the Bank passbook')
-    date_and_time = models.DateTimeField(default=datetime.now, null=True)
+    #date_and_time = models.DateTimeField(default=datetime.now, null=True)
     ULBType = models.CharField('ULB Type', max_length=40, blank=True, null=True)
-    
+    district = models.CharField('District', max_length=40, blank=True, null=True)
+
 
     @property
     def passbook_preview(self):

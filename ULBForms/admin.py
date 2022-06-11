@@ -4,7 +4,8 @@ from .models import *
 from .forms import *
 from import_export.admin import ImportExportModelAdmin
 from .resources import *
-
+from CTP.models import TownPanchayatDetails
+from DMA.models import MunicipalityDetails
 
 # Register your models here.
 @admin.register(ProjectDetails)
@@ -41,7 +42,7 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'branch',
         'account_number',
         'IFSC_code',
-        'date_and_time'
+        #'date_and_time'
     ]
     ordering = [
         'user__first_name',
@@ -58,13 +59,18 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
-        obj.date_and_time = datetime.now()
+        #obj.date_and_time = datetime.now()
         if request.user.groups.filter(name__in=["Municipality", ]).exists():
             obj.ULBType = "Municipality"
+            obj.district = MunicipalityDetails.objects.values_list('district', flat=True).filter(user=obj.user)
+
         if request.user.groups.filter(name__in=["Town Panchayat", ]).exists():
             obj.ULBType = "Town Panchayat"
+            obj.district = TownPanchayatDetails.objects.values_list('district', flat=True).filter(user=obj.user)
+
         if request.user.groups.filter(name__in=["Corporation", ]).exists():
             obj.ULBType = "Corporation"
+        
         obj.save()
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
