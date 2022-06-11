@@ -10,7 +10,8 @@ from mapbox_location_field.admin import MapAdmin
 from django.contrib import admin
 from Accounts.models import ReleaseRequestModel
 from django_cryptography.fields import encrypt
-
+from CTP.models import TownPanchayatDetails
+from DMA.models import MunicipalityDetails
 # Create your models here.
 
 
@@ -36,6 +37,14 @@ class AgencyBankDetails(models.Model):
 
     def __str__(self):
         return str(self.user.first_name)
+
+    def save(self, **kwargs):
+        if self.user.groups.filter(name__in=["Municipality", ]).exists():
+            self.district = MunicipalityDetails.objects.values_list('district', flat=True).filter(user=self.user)
+        elif self.user.groups.filter(name__in=["Town Panchayat", ]).exists():
+            self.district  = TownPanchayatDetails.objects.values_list('district', flat=True).filter(user=self.user)
+        super(AgencyBankDetails, self).save(**kwargs)
+
 
     class Meta:
         verbose_name = "Bank Detail"
