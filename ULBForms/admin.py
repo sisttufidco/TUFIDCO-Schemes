@@ -42,8 +42,8 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'branch',
         'account_number',
         'IFSC_code',
-        'district'
-        #'date_and_time'
+        'district',
+        'date_and_time'
     ]
     ordering = [
         'user__first_name',
@@ -60,7 +60,7 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
-        #obj.date_and_time = datetime.now()
+        obj.date_and_time = datetime.now()
         if request.user.groups.filter(name__in=["Municipality", ]).exists():
             obj.ULBType = "Municipality"
             obj.district = MunicipalityDetails.objects.values_list('district', flat=True).filter(user=obj.user)
