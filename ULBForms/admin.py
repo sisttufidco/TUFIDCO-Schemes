@@ -30,7 +30,7 @@ class ProjectDetailsAdmin(admin.ModelAdmin):
 
 
 class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    #resource_class = AgencyBankDetailsResources
+    resource_class = AgencyBankDetailsResources
     change_form_template = 'admin/bankdetails.html'
     exclude = ['user', 'date_and_time', 'ULBType']
     readonly_fields = ['passbook_preview']
@@ -41,7 +41,7 @@ class AgencyBankDetailsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'branch',
         'account_number',
         'IFSC_code',
-        #'date_and_time'
+        'date_and_time'
     ]
     ordering = [
         'user__first_name',

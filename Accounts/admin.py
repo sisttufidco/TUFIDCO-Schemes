@@ -159,7 +159,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
             else:
                 email_detail = TownPanchayatDetails.objects.values_list('email', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
                 email.append(email_detail)
-            mail = EmailMessage(subject, message, str(EMAIL_HOST_USER),['aryanbhatt1002@gmail.com'])  
+            mail = EmailMessage(subject, message, str(EMAIL_HOST_USER),email)  
             mail.content_subtype = "html"
             mail.send()      
         obj.save()
