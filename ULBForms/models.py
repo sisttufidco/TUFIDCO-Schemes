@@ -116,11 +116,11 @@ class AgencyProgressModel(models.Model):
     nc_choices  = models.CharField('If To be Commenced',max_length=30, blank=True, choices=not_commenced_choices(), null=True, help_text="Select/Tick any one of the about if status is TO BE COMMENCED")
     Expenditure = models.DecimalField("Expenditure (in lakhs)", max_digits=5, decimal_places=2, blank=True, null=True,
                                       help_text='Payment made to Contractor')
-    FundRelease = models.DecimalField("Fund Release by TUFIDCO (in lakhs)", max_digits=5, decimal_places=2,
+    FundRelease = models.DecimalField("Fund Release by TUFIDCO (in lakhs)", max_digits=10, decimal_places=2,
                                       blank=True, null=True,
                                       help_text="Agency has to send a hard copy of the release request along with "
                                                 "photos,etc in the prescribed format")
-    valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=6, blank=True,
+    valueofworkdone = models.DecimalField("Value of Work done (in lakhs)", decimal_places=2, max_digits=10, blank=True,
                                           default=0.0, null=True)
     percentageofworkdone = models.DecimalField("Percentage of work done", decimal_places=2, max_digits=12, blank=True,
                                                default=0.0, null=True)
@@ -221,10 +221,10 @@ class AgencySanctionModel(models.Model):
                                   null=True)
     tr_awarded = models.CharField("Tender Sanction Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
     wd_awarded = models.CharField("Work Order Awarded", max_length=20, blank=True, choices=YN_CHOICES, null=True)
-    work_awarded_amount1 = models.DecimalField("Work Order Amount", max_digits=6, decimal_places=2, blank=True,
+    work_awarded_amount1 = models.DecimalField("Work Order Amount", max_digits=10, decimal_places=2, blank=True,
                                                null=True,
                                                help_text="With Tax. (Add GST, LWF etc on the above basic cost)")
-    work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=6, decimal_places=2, blank=True,
+    work_awarded_amount2 = models.DecimalField("Work Order Amount", max_digits=10, decimal_places=2, blank=True,
                                                null=True,
                                                help_text='Without Tax (Basic cost/agreed amount, without GST tax etc)')
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
