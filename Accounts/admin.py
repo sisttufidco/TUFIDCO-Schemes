@@ -164,7 +164,7 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
                 subject=str(form.cleaned_data['AgencyType'])+" Details Not Filled - "+str(form.cleaned_data['AgencyName'])
                 message = "Agency did not filled Agency details Form"
                 email.append('tufidcoschemes@gmail.com')
-            mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), email)  
+            mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), ['aryanbhatt1002@gmail.com'])  
             mail.content_subtype = "html"
             mail.send()      
         obj.save()
