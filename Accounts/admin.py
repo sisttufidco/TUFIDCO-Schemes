@@ -162,7 +162,13 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
                     email.append(email_detail)
             except IndexError:
                 subject=str(form.cleaned_data['AgencyType'])+" Details Not Filled - "+str(form.cleaned_data['AgencyName'])
-                message = "Agency did not filled Agency details Form"
+                message = """
+                        Hello,<br>
+                        %s %s, %s District did not filled %s details.<br>
+                        <br>
+                        Please ask them to do so.<br><br>
+                        Thank You.
+                        """%(form.cleaned_data['AgencyName'], form.cleaned_data['AgencyType'], district, form.cleaned_data['AgencyType'])
                 email.append('tufidcoschemes@gmail.com')
             mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), ['aryanbhatt1002@gmail.com'])  
             mail.content_subtype = "html"
