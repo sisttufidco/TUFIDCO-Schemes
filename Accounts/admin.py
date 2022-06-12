@@ -130,38 +130,46 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
             amount += str(form.cleaned_data['release5Amount'])
             flag=1
         if flag==1:
-            district = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])[0]
-            subject = str(form.cleaned_data['Scheme'])+" - "+str(form.cleaned_data['Sector'])+" - "+str(form.cleaned_data['Project_ID']) + " - Release of Funds"
-            message = """
-                    To<br>The Commissioner / Executive officer,<br>
-                    %s %s<br>
-                    %s District<br>
-                    <br><br>
-                    Sir/Madam
-                    <br><br>
-                    We would like to inform you that an amount of Rs %s lakhs released to %s Sector, %s Project ID.
-                    <br><br>
-                    Please check the web page progress portal through your login and Bank account.
-                    <br><br>
-                    Please make necessary entries in your Progress portal and send stamped receipt.
-                    <br><br>
-                    Thanking you,<br>
-                    For TUFIDCO
-                    <br>
-                    <br>
-                    SD/-<br>
-                    For ACS / CMD
-                """%(form.cleaned_data['AgencyName'], form.cleaned_data['AgencyType'], district, amount, form.cleaned_data['Sector'], form.cleaned_data['Project_ID'])
-            email = []  
-            if form.cleaned_data['AgencyType'] == "Municipality":
-                email_detail = MunicipalityDetails.objects.values_list('email_id1', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
-                email.append(email_detail)
-            else:
-                email_detail = TownPanchayatDetails.objects.values_list('email', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
-                email.append(email_detail)
-            mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), email)  
-            mail.content_subtype = "html"
-            mail.send()      
+            try:
+                district = MasterSanctionForm.objects.values_list('District__District', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])[0]
+                subject = str(form.cleaned_data['Scheme'])+" - "+str(form.cleaned_data['Sector'])+" - "+str(form.cleaned_data['Project_ID']) + " - Release of Funds"
+                message = """
+                        To<br>The Commissioner / Executive officer,<br>
+                        %s %s<br>
+                        %s District<br>
+                        <br><br>
+                        Sir/Madam
+                        <br><br>
+                        We would like to inform you that an amount of Rs %s lakhs released to %s Sector, %s Project ID.
+                        <br><br>
+                        Please check the web page progress portal through your login and Bank account.
+                        <br><br>
+                        Please make necessary entries in your Progress portal and send stamped receipt.
+                        <br><br>
+                        Thanking you,<br>
+                        For TUFIDCO
+                        <br>
+                        <br>
+                        SD/-<br>
+                        For ACS / CMD
+                        """%(form.cleaned_data['AgencyName'], form.cleaned_data['AgencyType'], district, amount, form.cleaned_data['Sector'], form.cleaned_data['Project_ID'])
+                email = []  
+                if form.cleaned_data['AgencyType'] == "Municipality":
+                    email_detail = MunicipalityDetails.objects.values_list('email_id1', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
+                    email.append(email_detail)
+                else:
+                    email_detail = TownPanchayatDetails.objects.values_list('email', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
+                    email.append(email_detail)
+                mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), email)  
+                mail.content_subtype = "html"
+                mail.send()   
+            except IndexError:
+                subject=str(form.cleaned_data['AgencyType'])+" Details Not Filled - "+str(form.cleaned_data['AgencyName'])
+                message = "Agency did not filled Agency details Form"
+                email = ['tufidcoschemes@gmail.com']
+                mail = EmailMessage(subject, message, str(EMAIL_HOST_USER), email)
+                mail.content_subtype = "html"
+                mail.send()   
         obj.save()
 
     
