@@ -169,31 +169,15 @@ class AgencyProgressModel(models.Model):
             Project_ID=self.Project_ID)
         self.ULBShare = MasterSanctionForm.objects.values_list('ULBShare', flat=True).filter(
             Project_ID=self.Project_ID)
-        try:
-            amount1 = ReleaseRequestModel.objects.values_list('release1Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
-        except IndexError:
-            amount1 = 0.0
+        amount_list = [
+            ReleaseRequestModel.objects.values_list('release1Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+            ReleaseRequestModel.objects.values_list('release2Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+            ReleaseRequestModel.objects.values_list('release3Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+            ReleaseRequestModel.objects.values_list('release4Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+            ReleaseRequestModel.objects.values_list('release5Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+        ]
+        self.total_release = sum(list(filter(None, amount_list)))
         
-        try:
-            amount2 = ReleaseRequestModel.objects.values_list('release2Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
-        except IndexError:
-            amount2 = 0.0
-        try:
-            amount3 = ReleaseRequestModel.objects.values_list('release3Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
-        except IndexError:
-            amount3=0.0
-        try:
-            amount4 = ReleaseRequestModel.objects.values_list('release4Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
-        except IndexError:
-            amount4=0.0
-        try:
-            amount5 = ReleaseRequestModel.objects.values_list('release5Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
-        except IndexError:
-            amount5=0.0
-
-        self.total_release = float(amount1)+float(amount2)+float(amount3)+float(amount4)+float(amount5)
-
-
         if self.valueofworkdone is not None:
             self.percentageofworkdone = (
                 round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
