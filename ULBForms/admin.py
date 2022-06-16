@@ -217,7 +217,8 @@ class AgencyProgressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         Form = super().get_form(request, obj=None, **kwargs)
         return functools.partial(Form, request)
-
+    def has_add_permission(self, request, *args, **kwargs):
+        return request.user.groups.filter(name__in=["Agency"]).exists()
     
 
 
@@ -262,6 +263,9 @@ class AgencySanctionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             obj.ProjectName = MasterSanctionForm.objects.values_list('ProjectName', flat=True).filter(
                 Project_ID=form.cleaned_data['Project_ID'])
             obj.save()
+
+    def has_add_permission(self, request, *args, **kwargs):
+        return request.user.groups.filter(name__in=["Agency"]).exists()
 
     def get_queryset(self, request):
         qs = super(AgencySanctionAdmin, self).get_queryset(request)
