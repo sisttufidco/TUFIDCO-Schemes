@@ -99,15 +99,15 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
     
     def save_model(self, request, obj, form, change):
         obj.account_number = AgencyBankDetails.objects.values_list('account_number', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
+            user__first_name=form.cleaned_data['AgencyName']).filter(ULBType=form.cleaned_data['AgencyType'])
         obj.bank_name_ulb = AgencyBankDetails.objects.values_list('beneficiary_name', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
+            user__first_name=form.cleaned_data['AgencyName']).filter(ULBType=form.cleaned_data['AgencyType'])
         obj.bank_branch_name = AgencyBankDetails.objects.values_list('bank_name', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
+            user__first_name=form.cleaned_data['AgencyName']).filter(ULBType=form.cleaned_data['AgencyType'])
         obj.bank_branch = AgencyBankDetails.objects.values_list('branch', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
+            user__first_name=form.cleaned_data['AgencyName']).filter(ULBType=form.cleaned_data['AgencyType'])
         obj.ifsc_code = AgencyBankDetails.objects.values_list('IFSC_code', flat=True).filter(
-            user__first_name=form.cleaned_data['AgencyName'])
+            user__first_name=form.cleaned_data['AgencyName']).filter(ULBType=form.cleaned_data['AgencyType'])
         if (form.cleaned_data['purpose'] == 'Project'):
             obj.ApprovedProjectCost = MasterSanctionForm.objects.values_list('ApprovedProjectCost', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])
             obj.SchemeShare = MasterSanctionForm.objects.values_list('SchemeShare', flat=True).filter(Project_ID = form.cleaned_data['Project_ID'])
@@ -197,7 +197,8 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
         a = MasterSanctionForm.objects.values_list('Project_ID', flat=True).order_by('Project_ID').filter(AgencyType=request.POST.get('AgencyType')).filter(AgencyName=request.POST.get('AgencyName')).filter(Sector=request.POST.get('Sector'))
         project_ids = MasterSanctionForm.objects.values('AgencyName', 'Sector', 'Project_ID').all()
         p = ReleaseRequestModel.objects.filter(id=obj_id)
-
+       
+        
         extra_context = {
             'p':p,
             'project_ids':project_ids,
@@ -205,7 +206,6 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
             'corporation': corporation,
             'townPanchayat':townPanchayat,
             'municipality': municipality,
-
             'achanpudur_project':a,
         }
 
