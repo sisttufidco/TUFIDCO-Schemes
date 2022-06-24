@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'reports.apps.ReportsConfig',
     'DMA.apps.DmaConfig',
     'CTP.apps.CtpConfig',
+    'GCC.apps.GccConfig',
     'Dashboard.apps.DashboardConfig',
     'ULBForms.apps.UlbformsConfig',
     'Accounts.apps.AccountsConfig',
@@ -183,8 +184,9 @@ CSRF_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 '''
+<<<<<<< HEAD
 
+=======
+>>>>>>> 51ede43ae145452f7d54fb70853dd400aad5c6a1
 
 CSRF_TRUSTED_ORIGINS = ['https://www.tufidcoschemes.co.in', 'https://tufidcoschemes.co.in', 'http://127.0.0.1']
-
-
