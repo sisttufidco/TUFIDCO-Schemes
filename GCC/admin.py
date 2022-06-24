@@ -19,6 +19,7 @@ class GCCDetailsAdmin(ImportExportModelAdmin, admin.AdminSite):
         'district',
         'region'
     ]
+    
     list_display = [
         'corporation_name',
         'district',

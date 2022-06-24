@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from .models import *
 from ULBForms.models import AgencyBankDetails, AgencyProgressModel, AgencySanctionModel
@@ -7,6 +8,7 @@ from django.core.mail import EmailMessage
 from .forms import MonthForm, DMASector, CTPSector
 from CTP.models import TownPanchayatDetails
 from DMA.models import MunicipalityDetails
+from GCC.models import GCCDetails
 from django.db.models import Sum
 
 class ReceiptFormAdmin(admin.ModelAdmin):
@@ -162,6 +164,11 @@ class ReleaseRequestAdmin(admin.ModelAdmin):
                 if str(form.cleaned_data['AgencyType']) == "Town Panchayat":
                     email_detail = TownPanchayatDetails.objects.values_list('email', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
                     email.append(email_detail)
+               
+                if str(form.cleaned_data['AgencyType']) == "Corporation":
+                    email_detail = GCCDetails.objects.values_list('email_id1', flat=True).filter(user__first_name=form.cleaned_data['AgencyName'])[0]
+                    email.append(email_detail)
+
             except IndexError:
                 subject=str(form.cleaned_data['AgencyType'])+" Details Not Filled - "+str(form.cleaned_data['AgencyName'])
                 message = """

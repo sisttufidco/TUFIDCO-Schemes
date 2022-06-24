@@ -13,6 +13,7 @@ class GCCDetails(models.Model):
     mc = models.CharField('GCC Commissioner Phone Number', max_length=20, null=True)
     me = models.CharField('GCC Engineer Phone Number', max_length=20, null=True)
     date_and_time = models.DateTimeField(default=datetime.now, null=True)
+    
     def __str__(self):
         return self.corporation_name
 
