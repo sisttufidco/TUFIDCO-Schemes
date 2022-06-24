@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 from .models import *
-from .forms import EmailForm, EmailForm2
+from .forms import EmailForm, EmailForm2, EmailForm3
 from TUFIDCO.settings import EMAIL_HOST_USER
 from datetime import date, timedelta
 from ULBForms.models import AgencyProgressModel
@@ -241,6 +241,43 @@ class EmailAttachementView(View):
 class EmailAttachementView2(View):
     form_class = EmailForm2
     template_name = 'admin/contactULB2.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'email_form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+
+        if form.is_valid():
+            ULB2 = form.cleaned_data['ULB2']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            user = User.objects.all()
+            email = []
+            for u in ULB2:
+                query = user.values_list('email', flat=True).filter(first_name=u)
+                email.append(query[0])
+            files = request.FILES.getlist('attach')
+            try:
+                mail = EmailMessage(subject, message, EMAIL_HOST_USER, email)
+                for f in files:
+                    mail.attach(f.name, f.read(), f.content_type)
+                mail.send()
+                return render(request, self.template_name,
+                              {'email_form': form, 'error_message': 'Email Sent Successfully'})
+            except:
+                return render(request, self.template_name,
+                              {'email_form': form, 'error_message': 'Either the attachment is too big or corrupt'})
+
+        return render(request, self.template_name,
+                      {'email_form': form, 'error_message': 'Unable to send email. Please try again later'})
+
+
+@method_decorator(login_required, name='dispatch')
+class EmailAttachementView3(View):
+    form_class = EmailForm3
+    template_name = 'admin/contactULB3.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
