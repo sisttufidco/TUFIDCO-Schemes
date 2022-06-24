@@ -12,7 +12,7 @@ django-mapbox-location-field==1.7.4
 django-nested-admin==3.4.0
 django-smart-selects==1.5.9
 et-xmlfile==1.1.0
-gunicorn==20.1.0
+#gunicorn==20.1.0
 MarkupPy==1.14
 numpy==1.22.3
 odfpy==1.4.1
