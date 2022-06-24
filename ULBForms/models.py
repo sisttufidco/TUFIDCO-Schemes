@@ -169,15 +169,18 @@ class AgencyProgressModel(models.Model):
             Project_ID=self.Project_ID)
         self.ULBShare = MasterSanctionForm.objects.values_list('ULBShare', flat=True).filter(
             Project_ID=self.Project_ID)
-        amount_list = [
-            ReleaseRequestModel.objects.values_list('release1Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
-            ReleaseRequestModel.objects.values_list('release2Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
-            ReleaseRequestModel.objects.values_list('release3Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
-            ReleaseRequestModel.objects.values_list('release4Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
-            ReleaseRequestModel.objects.values_list('release5Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
-        ]
-        self.total_release = sum(list(filter(None, amount_list)))
-        
+        try:
+            amount_list = [
+                ReleaseRequestModel.objects.values_list('release1Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+                ReleaseRequestModel.objects.values_list('release2Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+                ReleaseRequestModel.objects.values_list('release3Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+                ReleaseRequestModel.objects.values_list('release4Amount', flat=True).filter(Project_ID=self.Project_ID)[0],
+                ReleaseRequestModel.objects.values_list('release5Amount', flat=True).filter(Project_ID=self.Project_ID)[0]
+            ]
+            self.total_release = sum(list(filter(None, amount_list)))
+        except IndexError:
+            self.total_release = 0.00
+       
         if self.valueofworkdone is not None:
             self.percentageofworkdone = (
                 round(float(self.valueofworkdone) / float(self.ApprovedProjectCost[0]) * 100, 2))
