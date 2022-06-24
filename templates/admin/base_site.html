@@ -50,6 +50,8 @@
         {% if group_for.name == 'contactform' %}
         <a class="btn site-btn" type="submit" href="{% url 'emailattachment2' %}">Contact CTP</a>
         <a class="btn site-btn" type="submit" href="{% url 'emailattachment' %}">Contact DMA</a>
+		<a class="btn site-btn" type="submit" href="{% url 'emailattachment3' %}">Contact GCC</a>
+		
         {% endif %}
         {% endfor %}
 
@@ -88,6 +90,7 @@
               <li> <a class="btn site-btn" type="submit" href="/admin">Home</a></li>
               {% for group_for in request.user.groups.all %}
              {% if group_for.name == 'contactform' %}
+             <li > <a class="btn site-btn" type="submit" href="{% url 'emailattachment3' %}">Contact GCC</a></li>
               <li > <a class="btn site-btn" type="submit" href="{% url 'emailattachment2' %}">Contact CTP</a></li>
               <li><a class="btn site-btn" type="submit" href="{% url 'emailattachment' %}">Contact DMA</a></li>
               {% endif %}
