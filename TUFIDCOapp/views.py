@@ -9,6 +9,9 @@ from .forms import EmailForm, EmailForm2, EmailForm3
 from TUFIDCO.settings import EMAIL_HOST_USER
 from datetime import date, timedelta
 from ULBForms.models import AgencyProgressModel
+from DMA.models import MunicipalityDetails
+from CTP.models import TownPanchayatDetails
+from GCC.models import GCCDetails
 
 two_week_d = date.today() - timedelta(days=14)
 
@@ -219,7 +222,7 @@ class EmailAttachementView(View):
             user = User.objects.all()
             email = []
             for u in ULB:
-                query = user.values_list('email', flat=True).filter(first_name=u)
+                query = MunicipalityDetails.objects.values_list('email_id1', flat=True).filter(user__first_name=u)
                 email.append(query[0])
             files = request.FILES.getlist('attach')
             try:
@@ -256,7 +259,7 @@ class EmailAttachementView2(View):
             user = User.objects.all()
             email = []
             for u in ULB2:
-                query = user.values_list('email', flat=True).filter(first_name=u)
+                query = TownPanchayatDetails.objects.values_list('email', flat=True).filter(user__first_name=u)
                 email.append(query[0])
             files = request.FILES.getlist('attach')
             try:
@@ -293,7 +296,7 @@ class EmailAttachementView3(View):
             user = User.objects.all()
             email = []
             for u in ULB2:
-                query = user.values_list('email', flat=True).filter(first_name=u)
+                query = GCCDetails.objects.values_list('email_id1', flat=True).filter(user__first_name=u)
                 email.append(query[0])
             files = request.FILES.getlist('attach')
             try:
