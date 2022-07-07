@@ -38,8 +38,8 @@
     <div id="carousel" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner carousel-t">
         <div class="carousel-item active">
-          <div class="row row-card">
-            <p class="p-details">KNMT Project Details - Overall (2021-22)</p>
+          <div class="row row-card">            
+            <p class="p-details">KNMT Project Details - Overall {{ reportyear }}</p>
             <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-blue">
                 <div class="inner">
@@ -76,7 +76,7 @@
         </div>
         <div class="carousel-item">
           <div class="row row-card">
-            <p class="p-details">KNMT Project Details - Directorate of Municipalities (2021-22)</p>
+            <p class="p-details">KNMT Project Details - Directorate of Municipalities {{ reportyear }}</p>
             <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-blue">
                 <div class="inner">
@@ -113,7 +113,7 @@
         </div>
         <div class="carousel-item">
           <div class="row row-card">
-            <h3 class="p-details">KNMT Project Details - Commissionerate of Town Panchayats (2021-22)</h3>
+            <h3 class="p-details">KNMT Project Details - Commissionerate of Town Panchayats {{ reportyear }}</h3>
             <div class="col-lg-3 col-sm-6 mb-5">
               <div class="card-box bg-blue">
                 <div class="inner">
@@ -154,11 +154,11 @@
     <div class="charts">
         <div class="row">
             <div class="col piechart pl-150" style="margin-left:13px;">
-                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall<br>(2021-22)</p>
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall<br>{{ reportyear }}</p>
                 <div id="pieSector" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
             <div class="col piechart pl-150" style="margin-right:13px;">
-                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall <br>(2021-22)</p>
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Overall <br>{{ reportyear }}</p>
                 <div id="donutSector" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
         </div>
@@ -167,11 +167,11 @@
     <div class="charts">
         <div class="row">
             <div class="col piechart pl-150" style="margin-left:13px;">
-                <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Directorate of Municipalities<br>(2021-22)</p>
+                <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Directorate of Municipalities<br>{{ reportyear }}</p>
                 <div id="pieSectorDMA" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
             <div class="col piechart pl-150" style="margin-right:13px;">
-                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Directorate of Municipalities<br>(2021-22)</p>
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Directorate of Municipalities<br>{{ reportyear }}</p>
                 <div id="donutSectoDMA" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
         </div>
@@ -179,34 +179,34 @@
     <div class="charts">
         <div class="row">
             <div class="col piechart pl-150" style="margin-left:13px;">
-                <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats<br>(2021-22)</p>
+                <p class="p-details">KNMT - Sector Wise Projects Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats<br>{{ reportyear }}</p>
                 <div id="pieSectorCTP" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
             <div class="col piechart pl-150" style="margin-right:13px;">
-                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Commissionerate of Town Panchayats<br>(2021-22)</p>
+                <p class="p-details">KNMT - Sector Wise Number of Works Sanctioned<br>Commissionerate of Town Panchayats<br>{{ reportyear }}</p>
                 <div id="donutSectorCTP" style="max-width: 520px; margin: 35px auto;"></div>
             </div>
         </div>
     </div>
     <div class="row charts piechart">
-            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Overall<br>(2021-22)</p>
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Overall<br>{{ reportyear }}</p>
             <div id="SectorProjectCost" ></div>
             <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
     </div>
       <div class="row charts piechart">
-            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Directorate of Municipal Administration<br>(2021-22)</p>
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Directorate of Municipal Administration<br>{{ reportyear }}</p>
             <div id="SectorProjectCostDMA"></div>
             <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
       </div>
       <div class="row charts piechart">
-            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats<br>(2021-22)</p>
+            <p class="p-details" style="margin-top:40px">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Project Sanctioned - Cost in lakhs<br>Commissionerate of Town Panchayats<br>{{ reportyear }}</p>
             <div id="SectorProjectCostCTP"></div>
             <p class="footnote">* Note: Road works include BT road, CC road, Retaining wall, Paver Block, SWD, Culvert, Metal Beam.</p>
       </div>
 
        <div class="row row-card2 table-sector table-responsive">
       <table class="border-grey" style="border-radius:5px;">
-        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Projects Sanctioned - Cost in lakhs<br>(2021-22)</p>
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Projects Sanctioned - Cost in lakhs<br>{{ reportyear }}</p>
         <thead>
         <col>
           <colgroup span="2"></colgroup>
@@ -267,7 +267,7 @@
       
     <div class="row row-card2 table-sector table-responsive">
       <table class="border-grey" style="border-radius:5px;">
-        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Overall (2021-22)</p>
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Overall {{ reportyear }}</p>
         <thead>
         <col>
           <colgroup span="2"></colgroup>
@@ -326,7 +326,7 @@
 
       <div class="row row-card2 table-sector table-responsive">
       <table class="border-grey" style="border-radius:5px;">
-        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Directorate of Municipalities (2021-22)</p>
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Directorate of Municipalities {{ reportyear }}</p>
         <thead>
         <col>
           <colgroup span="2"></colgroup>
@@ -384,7 +384,7 @@
        {% include 'includes/DMA_sector_progress_modal.html' %}
      <div class="row row-card2 table-sector table-responsive">
       <table class="border-grey" style="border-radius:5px;">
-        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Commissionerate of Town Panchayats (2021-22)</p>
+        <p class="p-details">Kalaignar Nagarpura Mempattu Thittam (KNMT)<br>Sector Wise Progress Details - Cost in lakhs<br>Commissionerate of Town Panchayats {{ reportyear }}</p>
         <thead>
         <col>
           <colgroup span="2"></colgroup>
@@ -477,7 +477,7 @@
                 {
                     'type': 'Feature',
                     'properties': {
-                        'description':'<p><strong>{{i.district}}</strong><br><br><strong>KNMT</strong><br><br><strong>Overall<br>Project Cost : </strong>&#8377; {{ i.project_cost.project_cost }} ( in lakhs )<br><strong>Total No of Works : </strong> {{ i.total_projects }}<br><br><strong>Corporation/Municipalities</strong><br><strong>Project Cost : </strong>&#8377; {{ i.DMA_project_cost.project_cost }} ( in lakhs )<br><strong>Total No of Works : </strong> {{ i.DMA_total_projects }}<br><br><strong>Town Panchayats</strong><br><strong>Project Cost : </strong>&#8377;  {{ i.CTP_project_cost.project_cost }} ( in lakhs )<br><strong>Total No of Works : </strong> {{ i.CTP_total_projects }}<br></p>'
+                        'description':'<p><strong>{{i.district}}</strong><br><br><strong>KNMT</strong><br><br><strong>Overall<br>Project Cost : </strong>&#8377; {{ i.District_project_cost.project_cost }} ( in lakhs )<br><strong>Total No of Works : </strong> {{ i.District_total_projects }}<br><br><strong>Corporation/Municipalities</strong><br><strong>Project Cost : </strong>&#8377; {{ i.DMA_project_cost.project_cost }} ( in lakhs )<br><strong>Total No of Works : </strong> {{ i.DMA_total_projects }}<br><br><strong>Town Panchayats</strong><br><strong>Project Cost : </strong>&#8377;  {{ i.CTP_project_cost.project_cost }} ( in lakhs )<br><strong>Total No of Works : </strong> {{ i.CTP_total_projects }}<br></p>'
                     },
                     'geometry': {
                         'type': 'Point',
