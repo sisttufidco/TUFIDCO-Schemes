@@ -1,0 +1,154 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}<h1>Error Type: Bank Detail Not Filled in</h1>{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+    {% block object-tools %}
+<ul class="object-tools">
+  {% block object-tools-items %}
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  {% endblock %}
+</ul>
+{% endblock %}
+  <style>
+    .object-tools a.addlink{
+        display: none;
+    }
+
+   .btn-export{
+        display: flex;
+        margin-left:530px;
+    }
+    #btnExport2{
+        float: right !important;
+        height: 45px;
+    }
+    #btnExport{
+        float: right !important;
+        height: 45px;
+        margin-left: 5px;
+
+    }
+    .report-pdf{
+      display: inline-flex;
+    }
+    .report-h4{
+        text-align: center;
+        color:#666;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
+  </style>
+  <style>
+    @media (max-width: 767px){
+      .object-tools{
+          display: none;
+      }
+  }
+  </style>
+{% endblock %}
+
+{% block result_list %}
+<div class="export-btn">
+  <ul class="d-flex">
+    <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li>
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  </ul>
+</div>
+  <div class="results" id="results">
+  <table>
+  <caption>
+      <h6 style="text-align: center">Error Report : Agency Bank Details not filled in.</h6>
+  </caption>
+    <thead>
+      <tr>
+        <th>
+          <div class="text">
+            <a href="#">S. No</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">ULB Name</a>
+          </div>
+        </th>
+           <th>
+          <div class="text">
+            <a href="#">Name</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Email Id</a>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in report %}
+      <tr class="{% cycle 'row1' 'row2' %}">
+        <td> {{ forloop.counter }} </td>
+        <td> {{ row.username }} </td>
+          <td> {{ row.first_name }} &nbsp; {{ row.last_name}}</td>
+        <td> {{ row.email }} </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<!-- ... -->
+    {% load static %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+    <script type="text/javascript">
+        function createPDF() {
+        var sTable = document.getElementById('results').innerHTML;
+
+        var style = "<style>";
+        style = style + ".report-h4 {text-align:center; text-transform: uppercase; display:none;}";
+        style = style + "title {text-align:center; text-transform: uppercase; font-weight:bold; font-size:large;}";
+        style = style + "table {width: 100%;font: 17px Calibri;}";
+        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;text-align: center;}";
+        style = style + ".text a{text-decoration: none; color:black}";
+        style = style + "h6{font: 17px Calibri; font-weight: bold;}"
+        style = style + "</style>";
+
+        var win = window.open('', '', 'height=700,width=700');
+        win.document.write('<html><head>');
+        win.document.write(style);
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);
+        win.document.write('</body></html>');
+        win.document.close();
+        win.print();
+    }
+    </script>
+     <script>
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('results');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1", raw:true });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                XLSX.writeFile(wb, fn || ('error_report1.' + (type || 'xlsx')));
+        }
+    </script>
+{% endblock %}
+
+{% block pagination %}{% endblock  %}
