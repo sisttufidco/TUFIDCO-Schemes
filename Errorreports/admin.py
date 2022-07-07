@@ -115,3 +115,44 @@ class ProgressNotEnteredAdmin(admin.ModelAdmin):
                 ~Q(Project_ID__in=agencySanctionlist)).filter(Scheme__Scheme='KNMT')
         )
         return response
+
+@admin.register(BankDetailsNotEntered)
+class BankDetailsNotEnteredAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/bankdetailsnotentered.html'
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+        
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+        
+        results = AgencyBankDetails.objects.values('user_id').all()
+        inner_qs = User.objects.values('username', 'email').exclude(is_superuser = True).exclude(id__in = results)
+        
+        response.context_data['report'] = list(
+            inner_qs.values('username', 'first_name', 'last_name', 'email').order_by('id'))
+        
+        return response
+
+@admin.register(PanDetailsNotEntered)
+class PanDetailsNotEnteredAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/pandetailsnotentered.html'
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+        
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+        
+        results = ULBPanCard.objects.values('user_id').all()
+        inner_qs = User.objects.values('username', 'email').exclude(is_superuser = True).exclude(id__in = results)
+        
+        response.context_data['report'] = list(
+            inner_qs.values('username', 'first_name', 'last_name', 'email').order_by('id'))
+        
+        return response
+
