@@ -9,6 +9,18 @@ class KNMTDashboard(MasterSanctionForm):
         verbose_name = "KNMT"
         verbose_name_plural = "KNMT"
 
+class KNMTDashboardR2122(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "KNMT (2021-2022)"
+        verbose_name_plural = "KNMT (2021-2022)"
+
+class KNMTDashboardR2223(MasterSanctionForm):
+    class Meta:
+        proxy = True
+        verbose_name = "KNMT (2022-2023)"
+        verbose_name_plural = "KNMT (2022-2023)"
+
 
 class SingaraChennaiDashboard(MasterSanctionForm):
     class Meta:
