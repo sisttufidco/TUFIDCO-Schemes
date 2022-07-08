@@ -1,5 +1,5 @@
 from django.db import models
-from ULBForms.models import AgencyProgressModel, AgencySanctionModel
+from ULBForms.models import *
 from TUFIDCOapp.models import *
 
 class ULBProgressIncompleted(AgencyProgressModel):
