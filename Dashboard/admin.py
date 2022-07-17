@@ -120,7 +120,7 @@ class DashboardAdmin(admin.ModelAdmin):
         except (AttributeError, KeyError):
             return response
         
-        reportyear = '(2021-2023)'
+        reportyear = 'Report'
         total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').count()
         project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(project_cost=Sum('ApprovedProjectCost'))
         dmp_project_cost = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').aggregate(dmp_project_cost=Sum('ApprovedProjectCost'))
