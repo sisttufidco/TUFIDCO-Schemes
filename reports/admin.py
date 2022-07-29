@@ -4,8 +4,10 @@ from TUFIDCOapp.models import *
 from django.db.models import Count, Sum
 from django.db.models import Q
 from ULBForms.models import AgencyProgressModel
-
-
+from Accounts.models import ReleaseRequestModel
+from datetime import date
+from .forms import *
+today = date.today()
 # Register your models here.
 
 @admin.register(Report)
@@ -465,3 +467,140 @@ class DistrictWiseReportAdmin(admin.ModelAdmin):
         response.context_data.update(extra_context)
         response.context_data['KNMT_Sector'] = list(qs.values('Sector').filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType='Town Panchayat').annotate(**metrics).order_by('Sector'))
         return response
+
+@admin.register(ULBReleaseLedger)
+class ULBReleaseLedgerAdmin(admin.ModelAdmin):
+    change_list_template = "admin/ulbreleaseledgerreport.html"
+
+    def changelist_view(self, request, extra_context=None):
+        
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+        
+        todays_date = date.today()
+        currYear = todays_date.year
+        fyear = str(currYear) + "-" + str(currYear+1)
+        selagencyname = None
+
+        if request.method=="POST":
+            form = FinancialYearForm(request.POST or None)
+            if form.is_valid():
+                fyear = form.cleaned_data['year']
+                selagencyname = form.cleaned_data['agencyname']               
+
+
+        fromDate = date(int(fyear[0:4]), 4, 1)
+        toDate = date(int(fyear[5:9]), 3, 31)
+        
+        final_data = []
+
+        if selagencyname:
+            print(selagencyname)
+            selagency = AgencyName.objects.filter(AgencyName=selagencyname).values().distinct()
+            print(selagency)
+            if selagency:
+                selagencyid = selagency[0]['id']
+                print(selagencyid)
+                projects = list(MasterSanctionForm.objects.filter(Date_AS__range=[fromDate, toDate]).filter(AgencyName_id=selagencyid).values())
+        else:
+            projects = list(MasterSanctionForm.objects.filter(Date_AS__range=[fromDate, toDate]).values())
+        
+        for project in projects:            
+            schemeName = Scheme.objects.filter(id=project['Scheme_id'])
+            agencyName = AgencyName.objects.filter(id=project['AgencyName_id'])
+            districtName = District.objects.filter(id=project['District_id'])
+            reportDate = today.strftime("%d/%m/%Y")
+            ApprovedProjectCost = project['ApprovedProjectCost']
+            ProjectName = project['ProjectName']
+            Project_ID = project['Project_ID']
+            Sector = project['Sector']
+            SchemeShare = project['SchemeShare']
+                        
+            WorkAwardedAmount1 = AgencySanctionModel.objects.filter(Project_ID=project['Project_ID']).values_list('work_awarded_amount1', flat=True)
+            if WorkAwardedAmount1:
+                WorkAwardedAmount1 = WorkAwardedAmount1[0]
+            else:
+                WorkAwardedAmount1 = "Data Not Available"
+                        
+            APModel = AgencyProgressModel.objects.filter(Project_ID=project['Project_ID']).values()
+            if APModel:
+                Status = APModel[0]['status']
+                Valueofworkdone = APModel[0]['valueofworkdone']
+                Expenditure = APModel[0]['Expenditure']
+            else:
+                Status = "Progress Report not available"
+                Valueofworkdone = 0
+                Expenditure = 0
+
+            RRModel = ReleaseRequestModel.objects.filter(Project_ID=project['Project_ID']).values()
+            if RRModel:
+                RRModel = RRModel[0]
+                gta = 0
+                ReleaseDate1 = RRModel['release1Date']
+                ReleaseDate2 = RRModel['release2Date']
+                ReleaseDate3 = RRModel['release3Date']
+                ReleaseDate4 = RRModel['release4Date']
+                ReleaseAmount1 = RRModel['release1Amount']                
+                ReleaseAmount2 = RRModel['release2Amount']
+                ReleaseAmount3 = RRModel['release3Amount']
+                ReleaseAmount4 = RRModel['release4Amount']
+                if ReleaseAmount1:
+                    gta += ReleaseAmount1
+                if ReleaseAmount2:
+                    gta += ReleaseAmount2
+                if ReleaseAmount3:
+                    gta += ReleaseAmount3
+                if ReleaseAmount4:
+                    gta += ReleaseAmount4
+
+            else:
+                ReleaseDate1 = ''
+                ReleaseDate2 = ''
+                ReleaseDate3 = ''
+                ReleaseDate4 = ''
+                ReleaseAmount1 = 0
+                ReleaseAmount2 = 0
+                ReleaseAmount3 = 0
+                ReleaseAmount4 = 0
+                gta = 0
+            
+            redirectDict = {
+                "SchemeName" : schemeName[0],
+                "AgencyName" : agencyName[0],
+                "DistrictName" : districtName[0],
+                "ReportDate" : reportDate,
+                "ApprovedProjectCost": ApprovedProjectCost,
+                "ProjectName": ProjectName,
+                "Project_ID": Project_ID,
+                "Sector": Sector,
+                "SchemeShare": SchemeShare,
+                "Status": Status,
+                "WorkAwardedAmount1": WorkAwardedAmount1,
+                "Valueofworkdone": Valueofworkdone,
+                "ReleaseDate1": ReleaseDate1,
+                "ReleaseDate2": ReleaseDate2,
+                "ReleaseDate3": ReleaseDate3,
+                "ReleaseDate4": ReleaseDate4,
+                "ReleaseAmount1": ReleaseAmount1,
+                "ReleaseAmount2": ReleaseAmount2,
+                "ReleaseAmount3": ReleaseAmount3,
+                "ReleaseAmount4": ReleaseAmount4,
+                "GrandTotalAmount": gta,
+                "Expenditure": Expenditure,
+            }
+            final_data.append(redirectDict)
+
+        extra_context = {
+            'form_year': fyear,
+            'form': FinancialYearForm,
+            'final_data':final_data,
+        }
+        response.context_data.update(extra_context)
+        return response
+
+
+
