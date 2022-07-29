@@ -997,10 +997,22 @@ class DashboardAdmin(admin.ModelAdmin):
 
         road = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(project_cost=Sum('ApprovedProjectCost'))
         road_total = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).count()
-        road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) * 100)
+        road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) or 0 * 100)
+        '''
+        if road['project_cost'] == None:
+            road_pt = 0
+        else:
+            road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) * 100)
+        '''
+
+        
         roadDMA = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType="Municipality").filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(project_cost=Sum('ApprovedProjectCost'))
         roadDMA_total = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(AgencyType__AgencyType="Municipality").filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).count()
-        DMAroad_percentage = "{:.2f}".format((roadDMA['project_cost']) / (dmp_project_cost['dmp_project_cost']) * 100)
+        if roadDMA['project_cost'] == None:
+            DMAroad_percentage = 0
+        else:
+            DMAroad_percentage = "{:.2f}".format((roadDMA['project_cost']) / (dmp_project_cost['dmp_project_cost']) * 100)
+
         roadCTP = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert', 'Metal Beam Crash Barriers']).filter(AgencyType__AgencyType="Town Panchayat").filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(project_cost=Sum('ApprovedProjectCost'))
 
         if roadCTP['project_cost'] == None:
