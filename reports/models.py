@@ -7,8 +7,6 @@ from TUFIDCOapp.models import *
 # Create your models here.
 
 
-
-
 class SRPAbstract(SRPMasterSanctionForm):
     class Meta:
         proxy = True
