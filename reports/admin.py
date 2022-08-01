@@ -490,24 +490,26 @@ class ULBReleaseLedgerAdmin(admin.ModelAdmin):
             form = FinancialYearForm(request.POST or None)
             if form.is_valid():
                 fyear = form.cleaned_data['year']
-                selagencyname = form.cleaned_data['agencyname']               
-
-
-        fromDate = date(int(fyear[0:4]), 4, 1)
-        toDate = date(int(fyear[5:9]), 3, 31)
+                selagencyname = form.cleaned_data['agencyname']
+                if selagencyname == '---':
+                    selagencyname = None
         
-        final_data = []
 
-        if selagencyname:
-            print(selagencyname)
+        fromYear = int(fyear[0:4])
+        if fromYear == 2021:
+            fromYear = 2020
+        
+        fromDate = date(fromYear, 4, 1)
+        toDate = date(int(fyear[5:9]), 3, 31)
+        final_data = []
+        
+        if selagencyname:            
             selagency = AgencyName.objects.filter(AgencyName=selagencyname).values().distinct()
-            print(selagency)
             if selagency:
                 selagencyid = selagency[0]['id']
-                print(selagencyid)
-                projects = list(MasterSanctionForm.objects.filter(Date_AS__range=[fromDate, toDate]).filter(AgencyName_id=selagencyid).values())
+                projects = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).filter(AgencyName_id=selagencyid).values())
         else:
-            projects = list(MasterSanctionForm.objects.filter(Date_AS__range=[fromDate, toDate]).values())
+            projects = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).values())
         
         for project in projects:            
             schemeName = Scheme.objects.filter(id=project['Scheme_id'])
@@ -521,6 +523,7 @@ class ULBReleaseLedgerAdmin(admin.ModelAdmin):
             SchemeShare = project['SchemeShare']
                         
             WorkAwardedAmount1 = AgencySanctionModel.objects.filter(Project_ID=project['Project_ID']).values_list('work_awarded_amount1', flat=True)
+            print(WorkAwardedAmount1)
             if WorkAwardedAmount1:
                 WorkAwardedAmount1 = WorkAwardedAmount1[0]
             else:
@@ -602,5 +605,144 @@ class ULBReleaseLedgerAdmin(admin.ModelAdmin):
         response.context_data.update(extra_context)
         return response
 
+
+
+@admin.register(ULBReleaseLedgerConsolidatedReport)
+class ULBReleaseLedgerConsolidatedReportAdmin(admin.ModelAdmin):
+    change_list_template = "admin/ulbreleaseledgersconsolidatedreport.html"
+
+    def changelist_view(self, request, extra_context=None):
+        
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data['cl'].queryset
+        except (AttributeError, KeyError):
+            return response
+                
+        todays_date = date.today()        
+        
+        currYear = todays_date.year
+        fyear = str(currYear) + "-" + str(currYear+1)
+        selagencyname = None
+
+        if request.method=="POST":
+            form = FinancialYearForm(request.POST or None)
+            if form.is_valid():                
+                fyear = form.cleaned_data['year']
+                selagencyname = form.cleaned_data['agencyname']
+                if selagencyname == '---':
+                    selagencyname = None
+                
+        fromYear = int(fyear[0:4])
+        if fromYear == 2021:
+            fromYear = 2020
+        
+        fromDate = date(fromYear, 4, 1)
+        toDate = date(int(fyear[5:9]), 3, 31)
+
+        if selagencyname:            
+            selagency = AgencyName.objects.filter(AgencyName=selagencyname).values().distinct()
+            if selagency:
+                selagencyid = selagency[0]['id']
+                agencyList = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).filter(AgencyName_id=selagencyid).values_list('AgencyName_id', flat=True).distinct())
+        else:
+            agencyList = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).values_list('AgencyName_id', flat=True).order_by('AgencyName_id').distinct())
+        
+        final_data = []
+        for project in agencyList:
+            ulb_data = []
+            ulbprojectlist = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).values().filter(AgencyName_id=project).order_by('AgencyName_id'))
+            totalSchemeShare = 0
+            totalWorkOrder = 0
+            totalRelease = 0
+            totalWorkDone = 0
+            totalEligible = 0
+            for upl in ulbprojectlist:
+                schemeName = Scheme.objects.filter(id=upl['Scheme_id'])
+                agencyName = AgencyName.objects.filter(id=upl['AgencyName_id'])
+                districtName =District.objects.filter(id=upl['District_id'])            
+                reportDate = today.strftime("%d/%m/%Y")
+                ProjectName = upl['ProjectName']
+                Project_ID = upl['Project_ID']
+                Sector = upl['Sector']
+                schemeShare = upl['SchemeShare']
+                
+                WorkAwardedAmount = AgencySanctionModel.objects.filter(Project_ID=upl['Project_ID']).values_list('work_awarded_amount2', flat=True)
+                
+                WorkAwardedAmount2 = 0
+                if WorkAwardedAmount:                    
+                    WorkAwardedAmount2 = WorkAwardedAmount[0]
+                    if WorkAwardedAmount2 == None:
+                        WorkAwardedAmount2 = 0       
+                
+                RRModel = ReleaseRequestModel.objects.filter(Project_ID=upl['Project_ID']).values()
+                if RRModel:
+                    RRModel = RRModel[0]
+                    gta = 0
+                    ReleaseAmount1 = RRModel['release1Amount']                
+                    ReleaseAmount2 = RRModel['release2Amount']
+                    ReleaseAmount3 = RRModel['release3Amount']
+                    ReleaseAmount4 = RRModel['release4Amount']
+                    if ReleaseAmount1:
+                        gta += ReleaseAmount1
+                    if ReleaseAmount2:
+                        gta += ReleaseAmount2
+                    if ReleaseAmount3:
+                        gta += ReleaseAmount3
+                    if ReleaseAmount4:
+                        gta += ReleaseAmount4
+                else:
+                    gta = 0
+
+                APModel = AgencyProgressModel.objects.filter(Project_ID=upl['Project_ID']).values()
+                Valueofworkdone = 0
+                if APModel:
+                    Valueofworkdone = APModel[0]['valueofworkdone']
+                    if Valueofworkdone == None:
+                        Valueofworkdone = 0
+        
+                balanceEligible = schemeShare - gta
+
+                totalSchemeShare = totalSchemeShare + schemeShare
+                totalWorkOrder = totalWorkOrder + WorkAwardedAmount2
+                totalRelease = totalRelease + gta
+                totalWorkDone = totalWorkDone + Valueofworkdone
+                totalEligible = totalEligible + balanceEligible
+
+                redirectDict = {
+                    "DateofReport": reportDate,
+                    "SchemeName" : schemeName[0],
+                    "AgencyName" : agencyName[0],
+                    "DistrictName" : districtName[0],
+                    "ReportDate" : reportDate,
+                    "ProjectName": ProjectName,
+                    "Project_ID": Project_ID,
+                    "Sector": Sector,
+                    "SchemeShare": schemeShare,
+                    "WorkAwardedAmount2": WorkAwardedAmount2,
+                    "ReleasebyTUFIDCO": gta,
+                    "Valueofworkdone": Valueofworkdone,
+                    "balanceEligible": balanceEligible
+                 }
+                ulb_data.append(redirectDict)
+            
+            summary = {
+                "totalSchemeShare": totalSchemeShare,
+                "totalWorkOrder": totalWorkOrder, 
+                "totalRelease": totalRelease, 
+                "totalWorkDone": totalWorkDone,
+                "totalEligible": totalEligible
+            }
+            ulb_data.append(summary)            
+            final_data.append(ulb_data)
+
+        extra_context = {
+            'form_year': fyear,
+            'form': FinancialYearForm,
+            'final_data':final_data,
+        }
+        response.context_data.update(extra_context)
+        return response
 
 
