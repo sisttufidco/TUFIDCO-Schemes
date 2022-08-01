@@ -55,10 +55,6 @@ class ULBReleaseLedger(MasterSanctionForm):
 class ULBReleaseLedgerConsolidatedReport(MasterSanctionForm):
     class Meta:
         proxy=True
-<<<<<<< HEAD
-        verbose_name = "ULB Release Ledger - Consolidated Report"
-        verbose_name_plural = "ULB Release Ledgers - Consolidated Reports"
-=======
         verbose_name = "ULB Release Ledger Consolidated Report"
         verbose_name_plural = "Ulb Release Ledger Consolidated Report"
->>>>>>> b408457a3abe2cac0568ee6ae2f7a1391f21a994
+
