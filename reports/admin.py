@@ -493,27 +493,21 @@ class ULBReleaseLedgerAdmin(admin.ModelAdmin):
                 selagencyname = form.cleaned_data['agencyname']
                 if selagencyname == '---':
                     selagencyname = None
+        
 
         fromYear = int(fyear[0:4])
         if fromYear == 2021:
             fromYear = 2020
         
         fromDate = date(fromYear, 4, 1)
-        #fromDate = date(int(fyear[0:4]), 4, 1)
-        toDate = date(int(fyear[5:9]), 3, 31)
-        
-        fromDate = date(fromYear, 4, 1)
         toDate = date(int(fyear[5:9]), 3, 31)
         final_data = []
-
-        if selagencyname:
-            #print(selagencyname)
+        
+        if selagencyname:            
             selagency = AgencyName.objects.filter(AgencyName=selagencyname).values().distinct()
-            #print(selagency)
             if selagency:
                 selagencyid = selagency[0]['id']
-                #print(selagencyid)
-                projects = list(MasterSanctionForm.objects.filter(Date_AS__range=[fromDate, toDate]).filter(AgencyName_id=selagencyid).values())
+                projects = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).filter(AgencyName_id=selagencyid).values())
         else:
             projects = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).values())
         
