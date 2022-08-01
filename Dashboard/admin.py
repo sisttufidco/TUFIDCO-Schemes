@@ -120,7 +120,7 @@ class DashboardAdmin(admin.ModelAdmin):
         except (AttributeError, KeyError):
             return response
         
-        reportyear = '(2021-2023)'
+        reportyear = 'Report'
         total_projects = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').count()
         project_cost = MasterSanctionForm.objects.filter(Scheme__Scheme='KNMT').aggregate(project_cost=Sum('ApprovedProjectCost'))
         dmp_project_cost = MasterSanctionForm.objects.filter(AgencyType__AgencyType='Municipality').filter(Scheme__Scheme='KNMT').aggregate(dmp_project_cost=Sum('ApprovedProjectCost'))
@@ -997,10 +997,26 @@ class DashboardAdmin(admin.ModelAdmin):
 
         road = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(project_cost=Sum('ApprovedProjectCost'))
         road_total = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).count()
-        road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) * 100)
+        road_pt=0
+        if project_cost['project_cost'] == None or road['project_cost']==None:
+            road_pt=0
+        else:
+            road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) or 0 * 100)
+        '''
+        if road['project_cost'] == None:
+            road_pt = 0
+        else:
+            road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) * 100)
+        '''
+
+        
         roadDMA = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(Scheme__Scheme='KNMT').filter(AgencyType__AgencyType="Municipality").filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(project_cost=Sum('ApprovedProjectCost'))
         roadDMA_total = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert','Metal Beam Crash Barriers']).filter(AgencyType__AgencyType="Municipality").filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).count()
-        DMAroad_percentage = "{:.2f}".format((roadDMA['project_cost']) / (dmp_project_cost['dmp_project_cost']) * 100)
+        if roadDMA['project_cost'] == None:
+            DMAroad_percentage = 0
+        else:
+            DMAroad_percentage = "{:.2f}".format((roadDMA['project_cost']) / (dmp_project_cost['dmp_project_cost']) * 100)
+
         roadCTP = MasterSanctionForm.objects.filter(Sector__in=['BT Road', 'CC Road', 'Retaining wall', 'Paver Block', 'SWD', 'Culvert', 'Metal Beam Crash Barriers']).filter(AgencyType__AgencyType="Town Panchayat").filter(Scheme__Scheme='KNMT').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(project_cost=Sum('ApprovedProjectCost'))
 
         if roadCTP['project_cost'] == None:
@@ -1417,7 +1433,12 @@ class DashboardAdmin(admin.ModelAdmin):
         park_pt = "{:.2f}".format((park['project_cost']) / (project_cost['project_cost']) * 100)
         SWM_pt = "{:.2f}".format((SWM['project_cost']) / (project_cost['project_cost']) * 100)
         WB_pt = "{:.2f}".format((WB['project_cost']) / (project_cost['project_cost']) * 100)
-        road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) * 100)
+        road_pt = 0
+        road_pt=0
+        if project_cost['project_cost'] == None or road['project_cost']==None:
+            road_pt=0
+        else:
+            road_pt = "{:.2f}".format((road['project_cost']) / (project_cost['project_cost']) * 100)
         rw_pt = "{:.2f}".format((RW['project_cost']) / (project_cost['project_cost']) * 100)
 
         def rw_dma_percent():
@@ -1469,7 +1490,12 @@ class DashboardAdmin(admin.ModelAdmin):
         DMAKC_pt = "{:.2f}".format((KCDMA['project_cost']) / (project_cost['project_cost']) * 100)
         DMAmarket_pt = "{:.2f}".format((marketDMA['project_cost']) / (project_cost['project_cost']) * 100)
         DMApark_pt = "{:.2f}".format((parkDMA['project_cost']) / (project_cost['project_cost']) * 100)
-        DMAroad_pt = "{:.2f}".format((roadDMA['project_cost']) / (project_cost['project_cost']) * 100)
+        DMAroad_pt=0
+        if project_cost['project_cost'] == None or roadDMA['project_cost']==None:
+            DMAroad_pt=0
+        else:
+            DMAroad_pt = "{:.2f}".format((roadDMA['project_cost']) / (project_cost['project_cost']) * 100)
+       
         DMASWM_pt = "{:.2f}".format(SWM_dma_percent() / (project_cost['project_cost']) * 100)
         DMAWB_pt = "{:.2f}".format((WBDMA['project_cost']) / (project_cost['project_cost']) * 100)
         RWDMA_pt = "{:.2f}".format(rw_dma_percent() / (project_cost['project_cost']) * 100)
@@ -1540,7 +1566,11 @@ class DashboardAdmin(admin.ModelAdmin):
         ulb_share_ulb_singara = MasterSanctionForm.objects.filter(
             AgencyName__AgencyName=request.user.first_name).filter(
             Scheme__Scheme='Singara Chennai 2.0').filter(Date_AS__range=["2022-04-01", "2023-03-31"]).aggregate(ulb_share=Sum('ULBShare'))
-
+        road_value_temp = road['project_cost']
+        if road_value_temp == None:
+            road_value_temp = 0
+        else: 
+            road_value_temp = float(road['project_cost'])
         pie_chart2 = {
             "Bus Stand": float(busstand['project_cost']),
             "Community Hall": float(ch['project_cost']),
@@ -1548,7 +1578,7 @@ class DashboardAdmin(admin.ModelAdmin):
             "Knowledge Centre": float(KC['project_cost']),
             "Market": float(market['project_cost']),
             "Park": float(park['project_cost']),
-            "Road Works": float(road['project_cost']),
+            "Road Works": road_value_temp,
             "Solid Waste Mgt.": float(SWM['project_cost']),
             "Water Bodies": float(WB['project_cost'])
         }
@@ -1563,13 +1593,17 @@ class DashboardAdmin(admin.ModelAdmin):
             "Solid Waste Mgt.": int(SWM_total),
             "Water Bodies": int(WB_total)
         }
-
+        roadDMA_temp = roadDMA['project_cost']
+        if roadDMA_temp == None:
+            roadDMA_temp = 0.0
+        else: 
+            roadDMA_temp = float(roadDMA['project_cost'])
         pie_chart_DMA = {
             "Crematorium": float(crematoriumDMA['project_cost']),
             "Knowledge Centre": float(KCDMA['project_cost']),
             "Market": float(marketDMA['project_cost']),
             "Park": float(parkDMA['project_cost']),
-            "Road Works": float(roadDMA['project_cost']),
+            "Road Works": roadDMA_temp,
             "Water Bodies": float(WBDMA['project_cost'])
         }
 

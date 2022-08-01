@@ -1,0 +1,207 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_urls static admin_list %}
+{% block content_title %}<h1>ULB Release Ledger Reports - {{form_year}}</h1>{% endblock %}
+{% block extrastyle %}
+  {{ block.super }}
+  {% load  static %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+  {% if cl.formset %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+  {% endif %}
+  {% if cl.formset or action_form %}
+    <script src="{% url 'admin:jsi18n' %}"></script>
+  {% endif %}
+  {{ media.css }}
+  {% if not actions_on_top and not actions_on_bottom %}
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+  {% endif %}
+      {% block object-tools %}
+<ul class="object-tools">
+  {% block object-tools-items %}
+    <!-- <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li> -->
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  {% endblock %}
+</ul>
+{% endblock %}
+  <style>
+      .object-tools a.addlink{
+          display: none;
+      }
+      .border-grey {
+          border: 1px solid #babebe;
+      } 
+      
+  </style>
+  <style>
+    @media (max-width: 767px){
+      .object-tools{
+          display: none;
+      }
+  }
+  </style>
+{% endblock %}
+
+{% block result_list %}
+<div class="export-btn">
+  <ul class="d-flex">
+    <!-- <li><input type="button" id="btnExport2" value="Export as Excel" onclick="ExportToExcel('xlsx')"/></li> -->
+    <li><input type="button" id="btnExport" value="Export As Pdf" onclick="createPDF()"/></li>
+  </ul>
+</div>
+<div class="container-fluid">
+  <form method="POST">
+    {% csrf_token %}
+        <div class="flex" id="mnt">
+          {{form}}
+          <input class="btn month-btn" type="submit" value="Submit" id="year-btn"><br><br>
+        </div>
+  </form>
+</div>
+  <div class="results" id="results">
+    {% for row in final_data%}
+    
+    <table class="border-grey">
+        <caption  class="report-h4" id="heading">
+            ULB Release Ledger  {{form_year}}
+        </caption>
+        <tr class="border-grey">
+          <th class="border-grey" style="text-align:center;">Scheme</th>
+          <th class="border-grey" style="text-align:center;">ULB</th>
+          <th class="border-grey" style="text-align:center;">District</th>
+          <th class="border-grey" style="text-align:center;">Date of Report</th>
+        </tr>
+        
+        <tr class="border-grey">
+          <td class="border-grey" >{{row.SchemeName}}</td>
+          <td class="border-grey" >{{row.AgencyName}}</td>
+          <td class="border-grey" >{{row.DistrictName}}</td>
+          <td class="border-grey" >{{row.ReportDate}}</td>          
+        </tr>
+        <tr></tr>        
+        <tr>
+          <td colspan="3" style="text-align:right;">Amount (Rs. in Lakhs)</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.ApprovedProjectCost}}</td>
+        </tr>
+        <tr>          
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey" style="text-align:center;">Sl.No.</th>
+          <th class="border-grey" style="text-align:center;">Name of the Work</th>
+          <th class="border-grey" style="text-align:center;">Project Id</th>
+          <th class="border-grey" style="text-align:center;">Sector</th>
+        </tr>
+        <tr>
+          <td class="border-grey" >{{forloop.counter}}</td>
+          <td class="border-grey" >{{row.ProjectName}}</td>
+          <td class="border-grey" >{{row.Project_ID}}</td>
+          <td class="border-grey" >{{row.Sector}}</td>          
+        </tr>
+        <tr>          
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey" style="text-align:center;">Approved Amount <br> (Rs. in Lakhs)</th>
+          <th class="border-grey" style="text-align:center;">Scheme Share <br> (Rs. in Lakhs)</th>
+          <th class="border-grey" style="text-align:center;">TS Amount</th>
+          <th class="border-grey" style="text-align:center;">Status</th>
+        </tr>
+        <tr>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.ApprovedProjectCost}}</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.SchemeShare}}</td>
+          <td class="border-grey" >&nbsp;</td>
+          <td class="border-grey" >{{row.Status}}</td>          
+        </tr>
+
+        <tr>          
+        </tr>
+        <tr class="border-grey">
+          <th class="border-grey" style="text-align:center;">Work Order Amount <br> (Rs. in Lakhs)</th>
+          <th class="border-grey" style="text-align:center;">Value of Work Done <br> (Rs. in Lakhs)</th>
+          <th class="border-grey" style="text-align:center;">Date of Release by TUFIDCO</th>
+          <th class="border-grey" style="text-align:center;">Amount Released by TUFIDCO <br> (Rs. in Lakhs)</th>
+        </tr>
+        <tr>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.WorkAwardedAmount1}}</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.Valueofworkdone}}</td>
+          <td class="border-grey" >{{row.ReleaseDate1}}</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.ReleaseAmount1}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="border-grey" >{{row.ReleaseDate2}}</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.ReleaseAmount2}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="border-grey" >{{row.ReleaseDate3}}</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.ReleaseAmount3}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="border-grey" >{{row.ReleaseDate4}}</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.ReleaseAmount4}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="border-grey" >Grand Total Amount <br> (Rs. in Lakhs)</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.GrandTotalAmount}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="border-grey" >Expenditure <br> (Rs. in Lakhs)</td>
+          <td class="border-grey" style="text-align:right;">&#8377 {{row.Expenditure}}</td>
+        </tr>
+    </table>
+    <div> 
+      <p style="page-break-after:always;"></p>
+   </div> 
+    <hr>
+    {%endfor%}
+    </div>
+
+    {% load static %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+    <script type="text/javascript">
+        function createPDF() {
+        var sTable = document.getElementById('results').innerHTML;
+
+        var style = "<style>";
+        style = style + ".report-h4 {text-align:center; text-transform: uppercase; display:none;}";
+        style = style + "title {text-align:center; text-transform: uppercase; font-weight:bold; font-size:large;}";
+        style = style + "table {width: 100%;font: 14px Calibri;}";
+        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "padding: 2px 3px;text-align: center;}";
+        style = style + ".text a{text-decoration: none; color:black}";
+        style = style + ".footer{text-align: center; height: 3cm; font-family: times new roman;}"
+        style = style + "</style>";
+
+        var win = window.open('', '', 'height=700,width=700');
+        win.document.write('<html><head>');
+        win.document.write(style);
+        win.document.write('<title>'+$(".report-h4").html().toUpperCase()+'</title>');
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);
+        win.document.write('</body></html>');
+        win.document.close();
+        win.print();
+    }
+    </script>
+     <script>
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('results');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" , raw:true});
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                XLSX.writeFile(wb, fn || ('GOReport.' + (type || 'xlsx')));
+        }
+    </script>
+{% endblock %}
+
+{% block pagination %}{% endblock  %}
