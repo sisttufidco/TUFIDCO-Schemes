@@ -493,21 +493,44 @@ class ULBReleaseLedgerAdmin(admin.ModelAdmin):
                 selagencyname = form.cleaned_data['agencyname']
                 if selagencyname == '---':
                     selagencyname = None
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> b408457a3abe2cac0568ee6ae2f7a1391f21a994
 
         fromYear = int(fyear[0:4])
         if fromYear == 2021:
             fromYear = 2020
+<<<<<<< HEAD
+        
+        fromDate = date(fromYear, 4, 1)
+        #fromDate = date(int(fyear[0:4]), 4, 1)
+        toDate = date(int(fyear[5:9]), 3, 31)
+=======
+>>>>>>> b408457a3abe2cac0568ee6ae2f7a1391f21a994
         
         fromDate = date(fromYear, 4, 1)
         toDate = date(int(fyear[5:9]), 3, 31)
         final_data = []
+<<<<<<< HEAD
+
+        if selagencyname:
+            #print(selagencyname)
+            selagency = AgencyName.objects.filter(AgencyName=selagencyname).values().distinct()
+            #print(selagency)
+            if selagency:
+                selagencyid = selagency[0]['id']
+                #print(selagencyid)
+                projects = list(MasterSanctionForm.objects.filter(Date_AS__range=[fromDate, toDate]).filter(AgencyName_id=selagencyid).values())
+=======
         
         if selagencyname:            
             selagency = AgencyName.objects.filter(AgencyName=selagencyname).values().distinct()
             if selagency:
                 selagencyid = selagency[0]['id']
                 projects = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).filter(AgencyName_id=selagencyid).values())
+>>>>>>> b408457a3abe2cac0568ee6ae2f7a1391f21a994
         else:
             projects = list(MasterSanctionForm.objects.filter(Date_AS__range=(fromDate, toDate)).values())
         

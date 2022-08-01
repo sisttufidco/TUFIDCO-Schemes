@@ -2,7 +2,11 @@ from django import forms
 from .models import AgencyName
 
 def agency_name_list():
-    return [(str(c), str(c)) for c in AgencyName.objects.values_list('AgencyName', flat=True).order_by('AgencyName').distinct()]
+    agencies =[('---','---')]
+    for c in AgencyName.objects.values_list('AgencyName', flat=True).order_by('AgencyName').distinct():
+        agencies.append((str(c), str(c)))
+    return agencies
+    #return [(str(c), str(c)) for c in AgencyName.objects.values_list('AgencyName', flat=True).order_by('AgencyName').distinct()]
 
 class FinancialYearForm(forms.Form):
     finyears = [
